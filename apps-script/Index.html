@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<style>
+:root{color-scheme:dark;--bg:#15181e;--panel:#20252e;--ink:#f6f4ef;--muted:#cccdd3;--accent:#ffb45d;--line:#515963}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:1rem/1.75 system-ui,sans-serif}
+main{max-width:55rem;margin:auto;padding:0 clamp(1rem,4vw,3rem) 4rem}
+header{padding:clamp(2.5rem,9vw,6rem) 0 2.5rem;border-bottom:1px solid var(--line)}
+h1,h2,h3,p,ul{margin-top:0}h1{margin-bottom:1rem;font-size:clamp(2.4rem,8vw,5.4rem);line-height:1.02;letter-spacing:-.04em}
+h1 small{display:block;font-size:clamp(1.3rem,4vw,2rem);letter-spacing:.12em;margin-bottom:.6rem}h2{font-size:1.55rem}h3{font-size:1.13rem}
+section{padding:1.8rem 0;border-bottom:1px solid var(--line)}p,li{color:var(--muted)}p:last-child,ul:last-child{margin-bottom:0}
+.date{color:var(--accent);font-weight:750}.button,button{display:inline-block;background:var(--accent);color:#241705;border:0;border-radius:.4rem;padding:.65rem 1.15rem;font:inherit;font-weight:750;text-decoration:none;cursor:pointer}
+button:disabled{opacity:.65;cursor:wait}:focus-visible{outline:3px solid #ffdaaa;outline-offset:3px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,19rem),1fr));gap:1rem}
+fieldset,.notice,#done{min-width:0;margin:0 0 1rem;padding:1rem;border:1px solid var(--line);border-radius:.5rem;background:var(--panel)}
+legend{font-weight:750;padding:0 .4rem}.field{display:grid;gap:.3rem;margin-bottom:1rem;font-weight:650}
+input,select{width:100%;min-width:0;border:1px solid #737c88;border-radius:.3rem;background:var(--bg);color:var(--ink);padding:.55rem;font:inherit}
+input[type=checkbox]{width:1.15rem;height:1.15rem;margin:.3rem 0 0;accent-color:var(--accent);flex:none}.check{display:flex;align-items:flex-start;gap:.6rem;margin-bottom:1rem}
+[hidden]{display:none!important}#message{color:#ffc792;margin-top:1rem}#receipt{overflow-wrap:anywhere}
+table{width:100%;border-collapse:collapse;margin:0 0 1rem}th,td{border-bottom:1px solid var(--line);text-align:left;padding:.45rem .35rem}
+details{margin-bottom:1rem}summary{cursor:pointer;font-weight:700;margin-bottom:.6rem}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="date"><time datetime="2027-01-11">2027年1月11日（月・祝）</time></p>
+    <h1><small>ふろぐ</small>Good Guy Cup</h1>
+    <p>チャッキーを主役にした Dead by Daylight の大会。チャッキー担当1人とサバイバー4人で戦います。</p>
+    <p>暫定ルール・応募要項　2026年11月20日更新</p>
+    <a class="button" href="#entry">応募フォームへ</a>
+  </header>
+  <section id="game-rules">
+    <h2>大会形式・試合進行</h2>
+    <p>基本は18:00開始。応募状況によって16:00・17:00開始も検討し、翌1:00頃の終了を目指します（日本時間）。</p>
+    <ul>
+      <li>各対戦は前半・後半の2ゲーム制。両チームがチャッキー側とサバイバー側を交代し、先攻・後攻は対戦ごとにダイスで決定します。</li>
+      <li>チャッキー担当は原則固定。サバイバー側の4人は対戦ごとに登録済みの5人から選べます。チャッキー担当もサバイバー側のゲームではサバイバーとして出場できます。</li>
+      <li>チャッキー側がマップを選び、運営へ申告します。相手に事前に伝えるのは室内・屋外の区分です。同じチームによる同じマップの再使用は予選・本戦を通じて禁止です。他チームが使用済みのマップは選べます。</li>
+      <li>6チーム以下は総当たり予選あり、7チーム以上はシングルエリミネーションです。参加チーム数は応募状況を見て決定します。</li>
+    </ul>
+    <p class="notice"><strong>マップの室内・屋外の分類は現在調整中です。</strong></p>
+    <p>組み合わせと試合開始時刻は応募締切後に案内します。優勝インタビューはありません。</p>
+  </section>
+  <section id="scoring">
+    <h2>役割ごとの得点</h2>
+    <div class="score-grid">
+      <article class="score-card">
+        <h3>チャッキー側 <span>最大18Pt</span></h3>
+        <ul class="score-terms">
+          <li><b>フック段階</b><small>1段階につき1Pt</small><strong>最大12Pt</strong></li>
+          <li><b>全滅</b><small>4人全員が死亡</small><strong>＋2Pt</strong></li>
+          <li><b>メメント処刑</b><small>1人につき＋1Pt</small><strong>最大＋4Pt</strong></li>
+        </ul>
+        <p>死亡したサバイバーは死亡方法を問わず、その選手の合計を3段階とします。メメントにはオファリング、パーク効果、最後の1人への標準メメントを含みます。</p>
+      </article>
+      <article class="score-card">
+        <h3>サバイバー側 <span>最大9Pt</span></h3>
+        <ul class="score-terms">
+          <li><b>修理完了発電機</b><small>1台につき1Pt</small><strong>最大5Pt</strong></li>
+          <li><b>脱出人数</b><small>1人につき1Pt</small><strong>最大4Pt</strong></li>
+        </ul>
+      </article>
+    </div>
+    <div class="score-result">
+      <h2>勝敗の決め方</h2>
+      <p class="score-equation">自チームのチャッキー得点 <b>＋</b> 自チームのサバイバー得点 <b>＝</b> チーム得点</p>
+      <p>前半と後半で獲得した得点を足し、チーム得点が高い側が勝利します。</p>
+    </div>
+    <h2>チーム得点が同じ場合</h2>
+    <p>上から順に比較し、差がついた時点で決定します。</p>
+    <ol class="tiebreak">
+      <li><strong>チャッキー側の獲得Pt</strong></li>
+      <li><strong>メメントで処刑した人数</strong></li>
+      <li><strong>ゲーム内スコアの合計</strong>（キラー ＋ サバイバー4人のうち2番目に低い選手）</li>
+      <li><strong>キラーのゲーム内スコア</strong></li>
+      <li><strong>運営指定の再試合</strong></li>
+    </ol>
+  </section>
+  <section id="perk-rules">
+    <h2>チャッキー・サバイバーの制限</h2>
+    <p class="notice"><strong>ゲームのアップデート内容によっては、使用制限を変更する場合があります。</strong></p>
+    <div class="grid">
+      <div><h3>チャッキー</h3><p>パーク4枠とアドオンは自由です。使えるオファリングはメメント・モリ関連のみです。</p></div>
+      <div><h3>サバイバー</h3><p>同じゲームの4人で合計最大12パーク。各人0〜4枠で自由に配分でき、同名パークの重複は禁止です。</p></div>
+    </div>
+    <h3>カテゴリ別のチーム上限</h3>
+    <p class="notice"><strong>マップの室内・屋外の分類は現在調整中です。</strong></p>
+    <table aria-label="室内・屋外別のパーク上限">
+      <thead><tr><th scope="col">カテゴリ</th><th scope="col">室内</th><th scope="col">屋外</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">回復系</th><td>4個</td><td>3個</td></tr>
+        <tr><th scope="row">発電機系</th><td>1個</td><td>使用禁止</td></tr>
+        <tr><th scope="row">フック系</th><td>3個</td><td>3個</td></tr>
+        <tr><th scope="row">疲労系</th><td>3個</td><td>2個</td></tr>
+        <tr><th scope="row">隠密・救助系</th><td>2個</td><td>1個</td></tr>
+        <tr><th scope="row">オーラ系</th><td>1個</td><td>1個</td></tr>
+      </tbody>
+    </table>
+    <p>各パークは主催者が指定した1カテゴリに数えます。個別禁止と禁止系統を優先します。チェスト関連、スキルチェック発生増加、呼び出し、恵みは全マップで禁止です。</p>
+    <div class="perk-list">
+      <h3>カテゴリ別の対象パーク</h3>
+      <p>【回復系：13個】きっとやり遂げる／セルフケア／フロー状態／不滅／予想外の展開／共感的つながり／内なる力／害をなすなかれ／影に潜む強み／植物学の知識／独学者／連帯感／苦肉の策</p>
+      <p>【発電機系：1個】吟遊詩人の鼓舞（室内のみ。屋外では発電機系カテゴリそのものが禁止）</p>
+      <p>【フック系：7個】セカンドウィンド／オフレコ／仲間意識／決死の一撃／血の騒ぎ／解放／起死回生</p>
+      <p>【疲労系：7個】しなやか／スマートな着地／全力疾走／大ヒット／打開策／真っ向勝負／デッド・ハード</p>
+      <p>【隠密・救助系：7個】ゴーストノート／与えられた猶予／秘密の場所／身軽／都会の逃走術／鋼の意思／魂の平穏</p>
+      <p>【オーラ系：8個】みんなに見える／刑事の直感／救いの叫び／盗聴／絆／血族／警戒／迅速な対応</p>
+      <h3>個別禁止パーク（暫定）</h3>
+      <p>【従来からの禁止】安心感／有能の証明／邪気／不動の視力／ベビーシッター／加速の策略／重責の引き受け／ESP／切磋琢磨／過剰な熱意／自己防衛／アクセル全開／反対尋問／霧の作法</p>
+      <p>【Good Guy Cupで追加した個別禁止】チームワーク：つながった回路／チームワーク：小さな声／デジャヴ／全集中／劇作法／最高の贈り物</p>
+      <p>【チェスト関連の禁止】コソ泥の本能／ゴミ漁りの名人／スペシャリスト／最後の切り札／調剤学／都会の生存術</p>
+      <p>【呼び出し系の禁止】呼び出し：網を張る蜘蛛／呼び出し：裏切り者のカラス</p>
+      <p>【恵み系の禁止】恵み：イルミネーション／恵み：シャドウステップ／恵み：指数関数／恵み：癒しの輪／恵み：着実／恵み：霊界理論</p>
+      <p>ゲーム内の正式名称と禁止一覧は最終照合予定です。</p>
+    </div>
+    <p>マップのバリエーションの扱い、サバイバーのキャラクター重複・アイテム・オファリング、切断・再試合などの細則は別途案内します。</p>
+  </section>
+  <section id="prizes">
+    <h2>賞金・メメントボーナス</h2>
+    <ul>
+      <li>優勝サバイバー4人は各1,000円。</li>
+      <li>優勝チャッキーは基本2,000円に、大会通算メメント数×200円を加算。</li>
+      <li>メメント特別賞は優勝チャッキーを除く最多メメントの1人に、大会通算メメント数×200円。同数の場合はオファリングとパーク効果によるメメントの合計が多い方を優先し、なお同数の場合は運営が判断します。</li>
+    </ul>
+    <p>得点と賞金には、オファリング、パーク効果、最後の1人への標準メメントを含めます。賞金の集計対象は大会中の正式な全出場試合です。受け渡し方法と全員0件の場合の扱いは別途案内します。</p>
+  </section>
+  <section id="entry">
+    <h2>応募フォーム</h2>
+    <h3>参加条件・応募形式</h3>
+    <p>5人チーム、チャッキー個人、サバイバー個人・2人・4人の5形式で応募できます。</p>
+    <ul>
+      <li>対応機種は Steam、PlayStation 4、PlayStation 5、Nintendo Switch です。</li>
+      <li>日本または韓国に居住していること（国籍不問）。各チームに運営と日本語で連絡できる登録選手が1人以上必要です。</li>
+      <li>登録選手全員が大会Discordサーバーに参加してください。試合用の専用VCを設けます。未成年の選手は保護者の同意が必要です。</li>
+      <li>チャッキー担当は大会当日までにチャッキーを所持し、使用できる状態にしてください。同一選手の複数チームへの兼任・重複登録は禁止です。</li>
+    </ul>
+    <h3>選考基準</h3>
+    <ol>
+      <li>5人チームを最優先します。</li>
+      <li>次に、16:00・17:00それぞれの開始への対応可否を考慮します。</li>
+      <li>次に、チャッキー担当者本人のベストクリップの提出可否を考慮します。技術評価は行いません。</li>
+      <li>同条件で定員を超える場合は抽選します。</li>
+    </ol>
+    <p>個人・ペア・4人組は、運営の編成でチームが成立した場合に参加できます。</p>
+    <? if (state === 'closed') { ?>
+      <p class="notice">現在、応募受付は停止しています。</p>
+    <? } else { ?>
+      <? if (state === 'test') { ?><p class="notice">試験受付です。架空の情報を入力してください。</p><? } ?>
+      <form id="application">
+        <label class="field">応募形式
+          <select id="format" required>
+            <option value="">選択してください</option>
+            <option value="team">5人チーム応募</option>
+            <option value="killer">チャッキー個人応募</option>
+            <option value="solo">サバイバー個人応募</option>
+            <option value="duo">サバイバー2人応募</option>
+            <option value="squad">サバイバー4人応募</option>
+          </select>
+        </label>
+        <fieldset id="details" hidden disabled>
+          <legend>応募情報</legend>
+          <label class="field">連絡用Discordユーザー名（複数人応募は代表者）
+            <input id="discord" maxlength="100" required>
+          </label>
+          <div id="players"></div>
+          <div class="grid">
+            <label class="field">16:00開始に対応できますか
+              <select id="early16" required><option value="">選択してください</option><option value="yes">対応できる</option><option value="no">対応できない</option></select>
+            </label>
+            <label class="field">17:00開始に対応できますか
+              <select id="early17" required><option value="">選択してください</option><option value="yes">対応できる</option><option value="no">対応できない</option></select>
+            </label>
+          </div>
+          <div id="clip-fields" hidden>
+            <p>提出していただいたクリップは、選手紹介動画に使用させていただく予定です。</p>
+            <label class="field">チャッキー担当者は、本人がチャッキーを使用したときのベストクリップを提出できますか
+              <select id="clip" disabled required><option value="">選択してください</option><option value="yes">提出できる</option><option value="no">提出できない</option></select>
+            </label>
+            <label id="url-field" class="field" hidden>クリップ共有URL（任意）
+              <input id="url" type="url" maxlength="1000" disabled>
+            </label>
+            <div id="clip-consent-field" hidden>
+              <p>ギガファイル便などの共有URL、または主催者への直接DMで提出できます。提出本数・期限・ファイル条件は別途案内します。</p>
+              <label class="check"><input id="clip-consent" type="checkbox" disabled required>提出するクリップを大会の選手紹介動画に使用することに同意します。</label>
+            </div>
+          </div>
+          <p>入力情報は大会運営が選考、連絡、チーム編成、進行のために使用します。複数人での応募は、入力する選手全員に確認してください。</p>
+          <label class="check"><input id="eligible" type="checkbox" required>全員が日本または韓国に居住し、大会Discordに参加できること、複数チームへの重複登録がないことを確認しました。5人チームで応募する場合は、日本語で運営と連絡できる登録選手が1人以上います。チャッキー担当は大会当日までにチャッキーを使用できる状態にします。</label>
+          <label class="check"><input id="agree" type="checkbox" required>大会ルール、選考条件、応募情報の利用目的を確認し、同意します。複数人の場合は全員の同意を確認済みです。</label>
+          <button id="send" type="submit">応募を送信</button>
+        </fieldset>
+      </form>
+      <p id="message" role="status"></p>
+      <div id="done" hidden tabindex="-1">
+        <h3 id="done-heading">応募を受け付けました</h3>
+        <p>受付番号 <strong id="receipt"></strong></p>
+        <p>受付番号を控えてください。出場可否は選考後に運営から連絡します。</p>
+      </div>
+    <? } ?>
+  </section>
+</main>
+<? if (state !== 'closed') { ?>
+<template id="player">
+  <fieldset>
+    <legend></legend>
+    <div class="grid">
+      <label class="field">選手名<input name="name" maxlength="80" required></label>
+      <label class="field">ゲーム内の名前・識別番号<input name="gameId" maxlength="100" required></label>
+      <label class="field">プラットフォーム<select name="platform" required>
+        <option value="">選択してください</option>
+        <? platforms.forEach(platform => { ?><option value="<?= platform ?>"><?= platform ?></option><? }); ?>
+      </select></label>
+      <label class="field">年齢区分<select name="minor" required><option value="">選択してください</option><option value="yes">未成年</option><option value="no">成年</option></select></label>
+    </div>
+    <label class="check" hidden><input name="guardian" type="checkbox" disabled required>この選手は保護者の同意を得ています。</label>
+  </fieldset>
+</template>
+<script>
+const mode = <?!= JSON.stringify(state) ?>;
+const formats = <?!= JSON.stringify(formats) ?>;
+const get = id => document.getElementById(id);
+const form = get('application');
+let pending;
+let awaitingConfirmation = false;
+
+function updateClip() {
+  const clip = get('clip');
+  const enabled = !clip.disabled && clip.value === 'yes';
+  get('url-field').hidden = !enabled;
+  get('url').disabled = !enabled;
+  get('clip-consent-field').hidden = !enabled;
+  get('clip-consent').disabled = !enabled;
+  if (!enabled) get('clip-consent').checked = false;
+}
+get('clip').addEventListener('change', updateClip);
+
+get('format').addEventListener('change', () => {
+  const roles = formats[get('format').value] || [];
+  const players = get('players');
+  players.replaceChildren();
+  roles.forEach((role, index) => {
+    const card = get('player').content.cloneNode(true);
+    card.querySelector('legend').textContent = `選手 ${index + 1}　${role}`;
+    const age = card.querySelector('[name=minor]');
+    const consent = card.querySelector('[name=guardian]');
+    age.addEventListener('change', () => {
+      const minor = age.value === 'yes';
+      consent.disabled = !minor;
+      consent.closest('label').hidden = !minor;
+      if (!minor) consent.checked = false;
+    });
+    players.append(card);
+  });
+  const hasKiller = roles.includes('チャッキー');
+  get('clip-fields').hidden = !hasKiller;
+  get('clip').disabled = !hasKiller;
+  get('clip').value = '';
+  get('url').value = '';
+  const details = get('details');
+  details.hidden = roles.length === 0;
+  details.disabled = details.hidden;
+  updateClip();
+});
+
+function application() {
+  return {
+    mode, format: get('format').value, discord: get('discord').value.trim(),
+    early16: get('early16').value === 'yes', early17: get('early17').value === 'yes',
+    clip: get('clip').value === 'yes', url: get('url').disabled ? '' : get('url').value.trim(),
+    agree: get('agree').checked, eligible: get('eligible').checked,
+    clipConsent: get('clip-consent').checked,
+    players: Array.from(get('players').children, card => {
+      const field = name => card.querySelector(`[name=${name}]`);
+      return { name: field('name').value.trim(), gameId: field('gameId').value.trim(),
+        platform: field('platform').value.trim(), minor: field('minor').value === 'yes',
+        guardian: field('guardian').checked };
+    })
+  };
+}
+
+function busy(active, freeze = false) {
+  get('format').disabled = active || freeze;
+  get('details').disabled = active;
+  get('details').inert = active;
+  const button = get('send');
+  button.disabled = active;
+  button.textContent = active ? '送信中…' : freeze ? '同じ内容で再送' : '応募を送信';
+  Array.from(get('details').querySelectorAll('input, select')).forEach(node => {
+    if (freeze) node.disabled = true;
+  });
+}
+
+form.addEventListener('submit', event => {
+  event.preventDefault();
+  if (get('send').disabled) return;
+  const data = pending || { ...application(), id: Array.from(crypto.getRandomValues(new Uint8Array(16)),
+    byte => byte.toString(16).padStart(2, '0')).join('') };
+  pending = data;
+  busy(true);
+  get('message').textContent = '送信中です。';
+  const retry = message => {
+    awaitingConfirmation = true;
+    busy(false, true);
+    get('message').textContent = message;
+  };
+  google.script.run.withFailureHandler(() => {
+    retry('通信結果を確認できませんでした。同じ内容で再送してください。');
+  }).withSuccessHandler(result => {
+    if (result.receipt && result.mode === mode) {
+      form.hidden = true;
+      get('message').textContent = '';
+      get('receipt').textContent = result.receipt;
+      if (mode === 'test') {
+        get('done-heading').textContent = '試験応募を保存しました';
+        get('done').lastElementChild.textContent = '試験用の受付番号です。';
+      }
+      get('done').hidden = false;
+      get('done').focus();
+    } else if (result.retry || awaitingConfirmation) {
+      retry(result.error);
+    } else {
+      pending = undefined;
+      busy(false);
+      get('message').textContent = result.error;
+    }
+  }).submitEntry(data);
+});
+</script>
+<? } ?>
+</body>
+</html>

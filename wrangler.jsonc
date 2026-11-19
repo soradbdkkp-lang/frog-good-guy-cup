@@ -1,0 +1,10 @@
+{
+  "name": "frog-good-guy-cup-entry",
+  "main": "worker/index.mjs",
+  "compatibility_date": "2026-11-19",
+  "assets": {
+    "directory": "./dist/worker",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
+  }
+}

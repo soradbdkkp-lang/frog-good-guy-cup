@@ -1,0 +1,31 @@
+name: Publish Good Guy Cup
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: good-guy-cup-pages
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/configure-pages@v5
+      - run: node --test tests/*.test.cjs
+      - run: node scripts/build.cjs --production
+        env:
+          GGC_FORM_URL: ${{ vars.GGC_FORM_URL }}
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/pages
+      - uses: actions/deploy-pages@v4
+        id: deployment
