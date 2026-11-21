@@ -19,6 +19,11 @@ input[type=checkbox],input[type=radio]{accent-color:#36553b}
 .detail-header h1{font-family:inherit;margin:0}
 .rules-notice{border-left:.35rem solid var(--accent);padding-block:1rem}
 .rules-notice h2{margin-bottom:.45rem}
+.rule-terms dt{font-weight:750;margin-top:.8rem}
+.rule-terms dd{margin:0}
+.perk-table td:nth-child(2),.perk-table td:nth-child(3){width:6.2rem}
+.perk-table th,.perk-table td{vertical-align:top;overflow-wrap:anywhere}
+@media(max-width:34rem){.perk-table td:nth-child(2),.perk-table td:nth-child(3){width:3.5rem}.perk-table th,.perk-table td{padding-inline:.24rem;font-size:.88rem}}
 .site-nav{display:flex;flex-wrap:wrap;gap:.45rem;margin:1rem 0}
 .site-nav a{display:inline-flex;align-items:center;min-height:2.75rem;padding:.35rem .7rem;border:1px solid #a8aa88;border-radius:.2rem;background:#233745;color:#fff1cc;font-size:.9rem;font-weight:700;text-decoration:none}
 .site-nav a:hover,.site-nav a[aria-current=page]{background:#f1e5ce;color:#24291d}

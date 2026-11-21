@@ -50,21 +50,33 @@ const formPage = layout('応募フォーム | ふろぐ Good Guy Cup', `
   ${player}<script type="module" src="./entry.js"></script>`);
 
 const detailDefinitions = [
-  ['game-rules', '主要ルール', '大会形式、試合進行、チーム編成とマップ選択'],
-  ['scoring', '得点・勝敗', 'チャッキー側・サバイバー側の計算と同点時の判定'],
-  ['perk-rules', '使用制限・パーク一覧', '室内・屋外の上限、対象パークと個別禁止一覧（暫定）'],
-  ['prizes', '賞金・メメント特別賞', '優勝賞金とメメント特別賞の計算・同数時の判定'],
-  ['entry-guide', '参加条件・応募要項', '対応機種、参加条件、応募形式と選考基準']
+  ['game-rules', '大会ルール'],
+  ['scoring', '得点と勝敗'],
+  ['perk-rules', 'サバイバー制限'],
+  ['penalties', 'ペナルティ'],
+  ['ranking', '順位決定方法'],
+  ['prizes', '賞金'],
+  ['entry-guide', '応募']
 ];
+const navigation = [['index', '大会概要'], ...detailDefinitions.filter(([id]) =>
+  ['game-rules', 'ranking', 'prizes', 'entry-guide'].includes(id))];
 const siteNavigation = current => `
   <nav class="site-nav" aria-label="大会サイトのページ">
-    ${[['index', '大会トップ'], ...detailDefinitions].map(([id, title]) =>
+    ${navigation.map(([id, title]) =>
       `<a href="./${id}.html"${id === current ? ' aria-current="page"' : ''}>${title}</a>`).join('')}
-    <a href="${safeUrl}">応募フォーム</a>
   </nav>`;
 const details = Object.fromEntries(
   Array.from(rules.matchAll(/<section id="([^"]+)">[\s\S]+?<\/section>/g), ([markup, id]) => [id, markup])
 );
+details['game-rules'] = `<nav class="detail-links" aria-label="大会ルールの目次">
+  <a href="#game-rules">大会形式・試合進行</a>
+  <a href="./perk-rules.html">サバイバー制限</a>
+  <a href="./scoring.html">得点と勝敗</a>
+  <a href="./penalties.html">ペナルティ</a>
+  <a href="#match-operations">Discord・リザルト・配信</a>
+</nav>${details['game-rules']}${readFileSync('web/match-operations.html', 'utf8')}`;
+details.penalties = readFileSync('web/penalties.html', 'utf8');
+details.ranking = '<section><p>順位決定方法は、出場チーム数の確定後に決定し、当選チーム発表後にこのページで公開します。</p></section>';
 details['entry-guide'] = `<section>${applicationPeriod}${eligibility.replace('<h2>応募フォーム</h2>', '<h2>応募資格と選考</h2>')}
   <a class="button" href="${safeUrl}">応募フォームへ</a></section>`;
 
@@ -81,8 +93,8 @@ const approvedSite = layout('ふろぐ Good Guy Cup', `
   </section>
   <section aria-labelledby="detail-heading">
     <h2 id="detail-heading">大会ルール・参加案内</h2>
-    <div class="detail-links">${detailDefinitions.map(([id, title, description]) =>
-      `<a href="./${id}.html"><strong>${title}</strong><span>${description}</span></a>`).join('')}</div>
+    <div class="detail-links">${navigation.slice(1).map(([id, title]) =>
+      `<a href="./${id}.html"><strong>${title}</strong></a>`).join('')}</div>
   </section>`);
 
 const detailPages = Object.fromEntries(detailDefinitions.map(([id, title]) => [

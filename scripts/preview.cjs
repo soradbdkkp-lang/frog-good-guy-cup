@@ -41,6 +41,7 @@ createServer(async (request, response) => {
     '/': 'pages/index.html', '/index.html': 'pages/index.html', '/style.css': 'pages/style.css',
     '/game-rules.html': 'pages/game-rules.html', '/scoring.html': 'pages/scoring.html',
     '/perk-rules.html': 'pages/perk-rules.html',
+    '/penalties.html': 'pages/penalties.html', '/ranking.html': 'pages/ranking.html',
     '/prizes.html': 'pages/prizes.html', '/entry-guide.html': 'pages/entry-guide.html',
     '/form/': 'worker/index.html', '/form/style.css': 'worker/style.css',
     '/form/entry.js': 'worker/entry.js'

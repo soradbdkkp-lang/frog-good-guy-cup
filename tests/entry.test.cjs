@@ -188,12 +188,17 @@ test('built site links to the Worker, and form exposes five choices and four pla
   }
   assert.match(website, /href="http:\/\/127\.0\.0\.1:8787\/"/);
   assert.doesNotMatch(website, /<form/);
-  assert.match(website, /得点・勝敗/);
-  for (const page of ['game-rules', 'scoring', 'perk-rules', 'prizes', 'entry-guide']) {
-    assert.ok(website.includes(`href="./${page}.html"`));
-    assert.doesNotMatch(files[`dist/pages/${page}.html`], /大会トップに戻る/);
-    assert.match(files[`dist/pages/${page}.html`], /href="\.\/index\.html">大会トップ/);
+  const nav = html => html.match(/<nav class="site-nav"[\s\S]*?<\/nav>/)[0];
+  const labels = html => Array.from(nav(html).matchAll(/<a [^>]*>([^<]+)<\/a>/g), match => match[1]);
+  const pages = ['game-rules', 'scoring', 'perk-rules', 'penalties', 'ranking', 'prizes', 'entry-guide'];
+  for (const page of ['index', ...pages]) {
+    assert.deepEqual(labels(files[`dist/pages/${page}.html`]), ['大会概要', '大会ルール', '順位決定方法', '賞金', '応募']);
   }
+  for (const page of pages) {
+    assert.doesNotMatch(files[`dist/pages/${page}.html`], /大会トップに戻る/);
+  }
+  const rules = files['dist/pages/game-rules.html'];
+  for (const page of ['scoring', 'perk-rules', 'penalties']) assert.ok(rules.includes(`href="./${page}.html"`));
   assert.doesNotMatch(website, /安心感／有能の証明/);
   assert.doesNotMatch(website, /各対戦は前半・後半の2ゲーム制/);
   assert.match(files['dist/pages/game-rules.html'], /各対戦は前半・後半の2ゲーム制/);
@@ -203,11 +208,21 @@ test('built site links to the Worker, and form exposes five choices and four pla
   for (const page of [website, files['dist/pages/perk-rules.html']]) {
     assert.match(page, /ゲームのアップデート内容によっては、使用制限を変更する場合があります。/);
   }
-  assert.match(files['dist/pages/perk-rules.html'], /安心感／有能の証明/);
+  const perks = files['dist/pages/perk-rules.html'];
+  assert.match(perks, /いずれの一覧にも記載されていないパークは使用できません/);
+  assert.match(perks, /発電機系<\/th><td>1個<\/td><td>1個<\/td><td>地雷爆破、幻影、盗聴、抑圧の同盟/);
+  assert.match(perks, /その他<\/th><td>総枠内で何個でも可<\/td><td>総枠内で何個でも可/);
+  assert.match(files['dist/pages/scoring.html'], /ハッチ・ゲートのどちらから脱出した場合も/);
+  assert.match(files['dist/pages/penalties.html'], /再試合は合計10枠です/);
+  assert.match(files['dist/pages/ranking.html'], /順位決定方法は、出場チーム数の確定後に決定し、当選チーム発表後にこのページで公開します。/);
+  assert.match(files['dist/pages/prizes.html'], /2,000円＋大会通算メメント数×200円/);
+  for (const page of [website, form, ...pages.map(id => files[`dist/pages/${id}.html`])]) {
+    assert.doesNotMatch(page, /個別禁止パーク|屋外では発電機系|吟遊詩人の鼓舞|地下室|最大2名までの重複|一覧にないパークは使用可/);
+  }
   assert.match(form, /チャッキー担当者は、本人がチャッキーを使用したとき/);
   assert.match(form, /提出していただいたクリップは、選手紹介動画に使用させていただく予定です。/);
-  assert.match(website, /aria-current="page">大会トップ/);
-  assert.match(files['dist/pages/scoring.html'], /aria-current="page">得点・勝敗/);
+  assert.match(website, /aria-current="page">大会概要/);
+  assert.match(files['dist/pages/ranking.html'], /aria-current="page">順位決定方法/);
   assert.equal((form.match(/name="entry-format"/g) || []).length, 5);
   assert.equal((form.match(/<option value="(?:Steam|PlayStation 4|PlayStation 5|Nintendo Switch)"/g) || []).length, 4);
   assert.doesNotMatch(form, /<\?/);
