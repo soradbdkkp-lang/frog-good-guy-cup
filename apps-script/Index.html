@@ -36,7 +36,7 @@ details{margin-bottom:1rem}summary{cursor:pointer;font-weight:700;margin-bottom:
     <p>基本は18:00開始。応募状況によって16:00・17:00開始も検討し、翌1:00頃の終了を目指します（日本時間）。</p>
     <ul>
       <li>各対戦は前半・後半の2ゲーム制。両チームがチャッキー側とサバイバー側を交代し、先攻・後攻は対戦ごとにダイスで決定します。</li>
-      <li id="team-roles">チャッキー担当は原則固定。5人チームは、サバイバー側に出場する4人を対戦ごとにチャッキー担当を含む登録選手5人から選べます。4人チームは、チャッキー担当もサバイバーを兼任し、サバイバー側のゲームには登録選手4人全員が出場します。</li>
+      <li id="team-roles">チャッキー担当は原則固定。サバイバー側の4人は対戦ごとに登録済みの5人から選べます。チャッキー担当もサバイバー側のゲームではサバイバーとして出場できます。</li>
       <li>6チーム以下は総当たり予選あり、7チーム以上はシングルエリミネーションです。参加チーム数は応募状況を見て決定します。</li>
     </ul>
     <p><a href="./killer-rules.html#map-selection">マップの選択・申告と室内・屋外の分類</a></p>
@@ -112,9 +112,13 @@ details{margin-bottom:1rem}summary{cursor:pointer;font-weight:700;margin-bottom:
   </section>
   <section id="perk-rules">
     <h2>サバイバーのパーク制限</h2>
-    <p class="notice"><strong>サバイバーが使用できるパークは、「その他」を含む各カテゴリの一覧に記載されているものに限ります。いずれの一覧にも記載されていないパークは使用できません。</strong></p>
+    <div class="notice perk-limits">
+      <p><strong>サバイバー4人の合計上限（1ゲーム）</strong></p>
+      <ul><li>室内MAP <strong>最大12個</strong></li><li>屋外MAP <strong>最大10個</strong></li></ul>
+      <p><strong>選べるパークは、下記の制限カテゴリ（「その他」を含む）に記載されているもののみです。</strong> いずれの一覧にも記載されていないパークは使用できません。</p>
+    </div>
     <ul>
-      <li>1ゲームにつき4人で合計最大12枠、1人につき最大4枠。4人の間で自由に配分できます。</li>
+      <li>1人につき最大4枠。MAPごとの合計上限内で、4人の間で自由に配分できます。</li>
       <li>同じパークのチーム内での重複装備は禁止です。応募区分による例外はありません。</li>
       <li>カテゴリ別上限は4人の合計です。各パークは表で指定されたカテゴリに1回だけ計上します。「その他」の上限は、同欄に記載されたパークに適用します。</li>
     </ul>
@@ -159,7 +163,7 @@ details{margin-bottom:1rem}summary{cursor:pointer;font-weight:700;margin-bottom:
   <section id="entry">
     <h2>応募フォーム</h2>
     <h3 id="entry-conditions">参加条件・応募形式</h3>
-    <p>チャッキー担当を含む5人チーム・4人チーム、チャッキー個人、サバイバー個人・2人・4人で応募できます。4人チームはチャッキー兼サバイバー1人とサバイバー3人で応募してください。</p>
+    <p>5人チーム、チャッキー個人、サバイバー個人・2人・4人の5形式で応募できます。</p>
     <ul>
       <li>対応機種は Steam、PlayStation 4、PlayStation 5、Nintendo Switch です。</li>
       <li>日本または韓国に居住していること（国籍不問）。各チームに運営と日本語で連絡できる登録選手が1人以上必要です。</li>
@@ -168,12 +172,12 @@ details{margin-bottom:1rem}summary{cursor:pointer;font-weight:700;margin-bottom:
     </ul>
     <h3 id="selection">選考基準</h3>
     <ol>
-      <li>チャッキー担当を含む5人チームと4人チーム（チャッキー兼任）を同じ優先枠で選考します。</li>
+      <li>5人チームを最優先します。</li>
       <li>次に、16:00・17:00それぞれの開始への対応可否を考慮します。</li>
       <li>次に、チャッキー担当者本人のベストクリップの提出可否を考慮します。技術評価は行いません。</li>
       <li>同条件で定員を超える場合は抽選します。</li>
     </ol>
-    <p>個人・サバイバー2人・サバイバー4人での応募は、運営の編成でチームが成立した場合に参加できます。</p>
+    <p>個人・ペア・4人組は、運営の編成でチームが成立した場合に参加できます。</p>
     <? if (state === 'closed') { ?>
       <p class="notice">現在、応募受付は停止しています。</p>
     <? } else { ?>
@@ -182,8 +186,7 @@ details{margin-bottom:1rem}summary{cursor:pointer;font-weight:700;margin-bottom:
         <label class="field">応募形式
           <select id="format" required>
             <option value="">選択してください</option>
-            <option value="team" data-priority>5人チーム応募（チャッキー1人＋サバイバー4人）</option>
-            <option value="team4" data-priority>4人チーム応募（チャッキー兼サバイバー1人＋サバイバー3人）</option>
+            <option value="team">5人チーム応募</option>
             <option value="killer">チャッキー個人応募</option>
             <option value="solo">サバイバー個人応募</option>
             <option value="duo">サバイバー2人応募</option>
@@ -218,7 +221,7 @@ details{margin-bottom:1rem}summary{cursor:pointer;font-weight:700;margin-bottom:
             </div>
           </div>
           <p>入力情報は大会運営が選考、連絡、チーム編成、進行のために使用します。複数人での応募は、入力する選手全員に確認してください。</p>
-          <label class="check"><input id="eligible" type="checkbox" required>全員が日本または韓国に居住し、大会Discordに参加できること、複数チームへの重複登録がないことを確認しました。チャッキー担当を含むチームで応募する場合は、日本語で運営と連絡できる登録選手が1人以上います。チャッキー担当は大会当日までにチャッキーを使用できる状態にします。</label>
+          <label class="check"><input id="eligible" type="checkbox" required>全員が日本または韓国に居住し、大会Discordに参加できること、複数チームへの重複登録がないことを確認しました。5人チームで応募する場合は、日本語で運営と連絡できる登録選手が1人以上います。チャッキー担当は大会当日までにチャッキーを使用できる状態にします。</label>
           <label class="check"><input id="agree" type="checkbox" required>大会ルール、選考条件、応募情報の利用目的を確認し、同意します。複数人の場合は全員の同意を確認済みです。</label>
           <button id="send" type="submit">応募を送信</button>
         </fieldset>
@@ -284,7 +287,7 @@ get('format').addEventListener('change', () => {
     });
     players.append(card);
   });
-  const hasKiller = roles[0]?.startsWith('チャッキー');
+  const hasKiller = roles.includes('チャッキー');
   get('clip-fields').hidden = !hasKiller;
   get('clip').disabled = !hasKiller;
   get('clip').value = '';

@@ -19,6 +19,10 @@ input[type=checkbox],input[type=radio]{accent-color:#36553b}
 .detail-header h1{font-family:inherit;margin:0}
 .rules-notice{border-left:.35rem solid var(--accent);padding-block:1rem}
 .rules-notice h2{margin-bottom:.45rem}
+.perk-limits{border-left:.35rem solid var(--accent)}
+.perk-limits ul{display:flex;flex-wrap:wrap;gap:.55rem;padding:0;list-style:none}
+.perk-limits li{padding:.35rem .7rem;background:#233745;color:#fff1cc}
+.perk-limits li strong{margin-left:.25em;font-size:1.2rem}
 .rule-terms dt{font-weight:750;margin-top:.8rem}
 .rule-terms dd{margin:0}
 .perk-table td:nth-child(2),.perk-table td:nth-child(3){width:6.2rem}
