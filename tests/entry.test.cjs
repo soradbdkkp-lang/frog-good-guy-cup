@@ -196,8 +196,12 @@ test('built site links to the Worker, and form exposes five choices and four pla
   const nav = html => html.match(/<nav id="page-top"[\s\S]*?<\/nav>/)[0];
   const labels = html => Array.from(nav(html).matchAll(/<a [^>]*>([^<]+)<\/a>/g), match => match[1]);
   const pages = ['game-rules', 'scoring', 'perk-rules', 'killer-rules', 'penalties', 'ranking', 'prizes', 'entry-guide'];
+  const icons = ['favicon-32.png', 'favicon.ico', 'apple-touch-icon.png'];
+  for (const name of icons) assert.ok(files[`dist/pages/${name}`].length > 0);
   for (const page of ['index', ...pages]) {
-    assert.deepEqual(labels(files[`dist/pages/${page}.html`]), ['大会概要', '大会ルール', 'サバイバー制限', 'キラー制限', '順位決定方法', '賞金', '応募']);
+    const html = files[`dist/pages/${page}.html`];
+    assert.deepEqual(labels(html), ['大会概要', '大会ルール', 'サバイバー制限', 'キラー制限', '順位決定方法', '賞金', '応募']);
+    for (const name of icons) assert.ok(html.includes(`href="./${name}"`));
   }
   for (const page of pages) {
     const html = files[`dist/pages/${page}.html`];

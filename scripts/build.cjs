@@ -32,6 +32,10 @@ const shareTitle = 'ふろぐ Good Guy Cup';
 const shareDescription = '2027年1月11日（月・祝）開催。チャッキー限定の Dead by Daylight 大会。大会ルール・参加条件・応募はこちら。';
 const shareImageUrl = new URL('share-card.png', siteUrl).href;
 const shareImageAlt = 'ふろぐ Good Guy Cupの大会告知画像。チャッキーとティファニー、開催日2027年1月11日。';
+const faviconMetadata = `
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png">
+<link rel="icon" sizes="any" href="./favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">`;
 const shareMetadata = `
 <meta name="description" content="${shareDescription}">
 <link rel="canonical" href="${siteUrl}">
@@ -145,7 +149,7 @@ const approvedSite = layout('ふろぐ Good Guy Cup', `
     <h2 id="detail-heading">大会ルール・参加案内</h2>
     <div class="detail-links">${navigation.slice(1).map(([id, title]) =>
       `<a href="./${id}.html"><strong>${title}</strong></a>`).join('')}</div>
-  </section>`, shareMetadata);
+  </section>`, shareMetadata + faviconMetadata);
 
 const detailPages = Object.fromEntries(detailDefinitions.map(([id, title]) => [
   `dist/pages/${id}.html`,
@@ -154,7 +158,7 @@ const detailPages = Object.fromEntries(detailDefinitions.map(([id, title]) => [
     <header class="form-header detail-header"><h1>${title}</h1></header>
     ${tableOfContents(title, contents[id])}
     ${details[id]}
-    ${contents[id] ? '<a class="back-to-top" href="#page-top" hidden>上部に戻る</a><script src="./back-to-top.js" defer></script>' : ''}`)
+    ${contents[id] ? '<a class="back-to-top" href="#page-top" hidden>上部に戻る</a><script src="./back-to-top.js" defer></script>' : ''}`, faviconMetadata)
 ]));
 
 let formScript = template.match(/<script>([\s\S]+?)<\/script>/)[1]
@@ -198,6 +202,8 @@ const files = {
   'dist/pages/index.html': approvedSite,
   'dist/pages/style.css': css,
   'dist/pages/share-card.png': readFileSync('web/share-card.png'),
+  ...Object.fromEntries(['favicon-32.png', 'favicon.ico', 'apple-touch-icon.png'].map(name =>
+    [`dist/pages/${name}`, readFileSync(`web/${name}`)])),
   'dist/pages/back-to-top.js': readFileSync('web/back-to-top.js', 'utf8'),
   'dist/pages/.nojekyll': '',
   ...detailPages,

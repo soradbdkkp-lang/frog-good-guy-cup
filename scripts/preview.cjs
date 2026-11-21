@@ -41,6 +41,8 @@ createServer(async (request, response) => {
     '/': 'pages/index.html', '/index.html': 'pages/index.html', '/style.css': 'pages/style.css',
     '/back-to-top.js': 'pages/back-to-top.js',
     '/share-card.png': 'pages/share-card.png',
+    '/favicon-32.png': 'pages/favicon-32.png', '/favicon.ico': 'pages/favicon.ico',
+    '/apple-touch-icon.png': 'pages/apple-touch-icon.png',
     '/game-rules.html': 'pages/game-rules.html', '/scoring.html': 'pages/scoring.html',
     '/perk-rules.html': 'pages/perk-rules.html', '/killer-rules.html': 'pages/killer-rules.html',
     '/penalties.html': 'pages/penalties.html', '/ranking.html': 'pages/ranking.html',
@@ -50,7 +52,7 @@ createServer(async (request, response) => {
   }[pathname];
   if (request.method !== 'GET' || !route) return response.writeHead(404).end();
   const type = { html: 'text/html; charset=utf-8', css: 'text/css; charset=utf-8',
-    js: 'text/javascript; charset=utf-8', png: 'image/png' }[route.split('.').at(-1)];
+    js: 'text/javascript; charset=utf-8', png: 'image/png', ico: 'image/x-icon' }[route.split('.').at(-1)];
   let content = files['dist/' + route];
   if (route.endsWith('index.html')) {
     content = content.replace('</header>', '</header><p class="notice">公開前の確認版です。応募の送信は保存されません。架空の情報でお試しください。</p>');
