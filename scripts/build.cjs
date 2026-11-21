@@ -1,4 +1,5 @@
 const { existsSync, mkdirSync, readFileSync, writeFileSync } = require('node:fs');
+const { createHash } = require('node:crypto');
 const vm = require('node:vm');
 
 const template = readFileSync('apps-script/Index.html', 'utf8');
@@ -15,6 +16,8 @@ const player = template.match(/<template id="player">[\s\S]+?<\/template>/)[0]
   .replace(/<\? platforms\.forEach[\s\S]+?<\? \}\); \?>/,
     PLATFORMS.map(platform => `<option value="${platform}">${platform}</option>`).join(''));
 const theme = readFileSync('web/theme.css', 'utf8');
+const css = baseCss + '\n' + theme;
+const styleVersion = createHash('sha256').update(css).digest('hex').slice(0, 12);
 
 const configuredUrl = process.env.GGC_FORM_URL || 'http://127.0.0.1:8787/';
 const formUrl = new URL(configuredUrl);
@@ -27,7 +30,7 @@ const safeUrl = formUrl.href.replaceAll('&', '&amp;').replaceAll('"', '&quot;');
 const layout = (title, content) => `<!doctype html>
 <html lang="ja"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${title}</title><link rel="stylesheet" href="./style.css"></head>
+<title>${title}</title><link rel="stylesheet" href="./style.css?v=${styleVersion}"></head>
 <body><main>${content}</main></body></html>`;
 
 const labels = [...form.matchAll(/<option value="(team|killer|solo|duo|squad)">([^<]+)<\/option>/g)];
@@ -164,7 +167,6 @@ async function loadStatus() {
 loadStatus();
 `;
 new vm.Script(formScript);
-const css = baseCss + '\n' + theme;
 const files = {
   'dist/pages/index.html': approvedSite,
   'dist/pages/style.css': css,
