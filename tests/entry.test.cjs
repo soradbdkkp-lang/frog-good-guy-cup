@@ -190,7 +190,7 @@ test('built site links to the Worker, and form exposes five choices and four pla
   assert.doesNotMatch(website, /<form/);
   const nav = html => html.match(/<nav class="site-nav"[\s\S]*?<\/nav>/)[0];
   const labels = html => Array.from(nav(html).matchAll(/<a [^>]*>([^<]+)<\/a>/g), match => match[1]);
-  const pages = ['game-rules', 'scoring', 'perk-rules', 'penalties', 'ranking', 'prizes', 'entry-guide'];
+  const pages = ['game-rules', 'scoring', 'perk-rules', 'killer-rules', 'penalties', 'ranking', 'prizes', 'entry-guide'];
   for (const page of ['index', ...pages]) {
     assert.deepEqual(labels(files[`dist/pages/${page}.html`]), ['大会概要', '大会ルール', '順位決定方法', '賞金', '応募']);
   }
@@ -198,7 +198,9 @@ test('built site links to the Worker, and form exposes five choices and four pla
     assert.doesNotMatch(files[`dist/pages/${page}.html`], /大会トップに戻る/);
   }
   const rules = files['dist/pages/game-rules.html'];
-  for (const page of ['scoring', 'perk-rules', 'penalties']) assert.ok(rules.includes(`href="./${page}.html"`));
+  for (const page of ['scoring', 'perk-rules', 'killer-rules', 'penalties']) assert.ok(rules.includes(`href="./${page}.html"`));
+  assert.match(files['dist/pages/killer-rules.html'], /「隠れ場なし」「露見する闇」/);
+  assert.doesNotMatch(rules, /隠れ場なし|露見する闇/);
   assert.doesNotMatch(website, /安心感／有能の証明/);
   assert.doesNotMatch(website, /各対戦は前半・後半の2ゲーム制/);
   assert.match(files['dist/pages/game-rules.html'], /各対戦は前半・後半の2ゲーム制/);

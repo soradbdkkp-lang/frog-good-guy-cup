@@ -53,6 +53,7 @@ const detailDefinitions = [
   ['game-rules', '大会ルール'],
   ['scoring', '得点と勝敗'],
   ['perk-rules', 'サバイバー制限'],
+  ['killer-rules', 'キラー制限'],
   ['penalties', 'ペナルティ'],
   ['ranking', '順位決定方法'],
   ['prizes', '賞金'],
@@ -71,6 +72,7 @@ const details = Object.fromEntries(
 details['game-rules'] = `<nav class="detail-links" aria-label="大会ルールの目次">
   <a href="#game-rules">大会形式・試合進行</a>
   <a href="./perk-rules.html">サバイバー制限</a>
+  <a href="./killer-rules.html">キラー制限</a>
   <a href="./scoring.html">得点と勝敗</a>
   <a href="./penalties.html">ペナルティ</a>
   <a href="#match-operations">Discord・リザルト・配信</a>
