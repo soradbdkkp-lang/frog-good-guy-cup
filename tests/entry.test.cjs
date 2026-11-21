@@ -182,6 +182,11 @@ test('built site links to the Worker, and form exposes five choices and four pla
   const files = require('../scripts/build.cjs');
   const website = files['dist/pages/index.html'];
   const form = files['dist/worker/index.html'];
+  assert.match(website, /property="og:image" content="https:\/\/soradbdkkp-lang\.github\.io\/frog-good-guy-cup\/share-card\.png"/);
+  assert.match(website, /name="twitter:card" content="summary_large_image"/);
+  const shareImage = files['dist/pages/share-card.png'];
+  assert.equal(shareImage.readUInt32BE(16), 1200);
+  assert.equal(shareImage.readUInt32BE(20), 630);
   for (const page of [website, form, files['dist/pages/entry-guide.html']]) {
     assert.match(page, /2026年11月20日（金）～11月30日（月）23:59（日本時間）/);
     assert.match(page, /応募状況によっては、募集期間が前後する可能性があります。/);

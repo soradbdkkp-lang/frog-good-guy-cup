@@ -27,10 +27,34 @@ if (formUrl.username || formUrl.password || !(formUrl.protocol === 'https:' || (
 }
 if (process.argv.includes('--production') && isLocal) throw Error('Set the deployed GGC_FORM_URL before building for GitHub Pages.');
 const safeUrl = formUrl.href.replaceAll('&', '&amp;').replaceAll('"', '&quot;');
-const layout = (title, content) => `<!doctype html>
+const siteUrl = 'https://soradbdkkp-lang.github.io/frog-good-guy-cup/';
+const shareTitle = 'ふろぐ Good Guy Cup';
+const shareDescription = '2027年1月11日（月・祝）開催。チャッキー限定の Dead by Daylight 大会。大会ルール・参加条件・応募はこちら。';
+const shareImageUrl = new URL('share-card.png', siteUrl).href;
+const shareImageAlt = 'ふろぐ Good Guy Cupの大会告知画像。チャッキーとティファニー、開催日2027年1月11日。';
+const shareMetadata = `
+<meta name="description" content="${shareDescription}">
+<link rel="canonical" href="${siteUrl}">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="${shareTitle}">
+<meta property="og:title" content="${shareTitle}">
+<meta property="og:description" content="${shareDescription}">
+<meta property="og:url" content="${siteUrl}">
+<meta property="og:image" content="${shareImageUrl}">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="${shareImageAlt}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${shareTitle}">
+<meta name="twitter:description" content="${shareDescription}">
+<meta name="twitter:image" content="${shareImageUrl}">
+<meta name="twitter:image:alt" content="${shareImageAlt}">`;
+const layout = (title, content, metadata = '') => `<!doctype html>
 <html lang="ja"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${title}</title><link rel="stylesheet" href="./style.css?v=${styleVersion}"></head>
+<title>${title}</title><link rel="stylesheet" href="./style.css?v=${styleVersion}">${metadata}</head>
 <body><main>${content}</main></body></html>`;
 
 const labels = [...form.matchAll(/<option value="(team|killer|solo|duo|squad)">([^<]+)<\/option>/g)];
@@ -121,7 +145,7 @@ const approvedSite = layout('ふろぐ Good Guy Cup', `
     <h2 id="detail-heading">大会ルール・参加案内</h2>
     <div class="detail-links">${navigation.slice(1).map(([id, title]) =>
       `<a href="./${id}.html"><strong>${title}</strong></a>`).join('')}</div>
-  </section>`);
+  </section>`, shareMetadata);
 
 const detailPages = Object.fromEntries(detailDefinitions.map(([id, title]) => [
   `dist/pages/${id}.html`,
@@ -173,6 +197,7 @@ new vm.Script(formScript);
 const files = {
   'dist/pages/index.html': approvedSite,
   'dist/pages/style.css': css,
+  'dist/pages/share-card.png': readFileSync('web/share-card.png'),
   'dist/pages/back-to-top.js': readFileSync('web/back-to-top.js', 'utf8'),
   'dist/pages/.nojekyll': '',
   ...detailPages,

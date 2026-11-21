@@ -40,6 +40,7 @@ createServer(async (request, response) => {
   const route = {
     '/': 'pages/index.html', '/index.html': 'pages/index.html', '/style.css': 'pages/style.css',
     '/back-to-top.js': 'pages/back-to-top.js',
+    '/share-card.png': 'pages/share-card.png',
     '/game-rules.html': 'pages/game-rules.html', '/scoring.html': 'pages/scoring.html',
     '/perk-rules.html': 'pages/perk-rules.html', '/killer-rules.html': 'pages/killer-rules.html',
     '/penalties.html': 'pages/penalties.html', '/ranking.html': 'pages/ranking.html',
@@ -48,7 +49,8 @@ createServer(async (request, response) => {
     '/form/entry.js': 'worker/entry.js'
   }[pathname];
   if (request.method !== 'GET' || !route) return response.writeHead(404).end();
-  const type = { html: 'text/html', css: 'text/css', js: 'text/javascript' }[route.split('.').at(-1)];
+  const type = { html: 'text/html; charset=utf-8', css: 'text/css; charset=utf-8',
+    js: 'text/javascript; charset=utf-8', png: 'image/png' }[route.split('.').at(-1)];
   let content = files['dist/' + route];
   if (route.endsWith('index.html')) {
     content = content.replace('</header>', '</header><p class="notice">公開前の確認版です。応募の送信は保存されません。架空の情報でお試しください。</p>');
@@ -56,6 +58,6 @@ createServer(async (request, response) => {
     content = content.replace('試験応募を保存しました', '試験送信が完了しました')
       .replace('試験用の受付番号です。', '確認用の番号です。応募は保存されていません。');
   }
-  response.writeHead(200, { 'Content-Type': type + '; charset=utf-8', 'Cache-Control': 'no-store' });
+  response.writeHead(200, { 'Content-Type': type, 'Cache-Control': 'no-store' });
   response.end(content);
 }).listen(port, '127.0.0.1', () => console.log(origin + '/'));
