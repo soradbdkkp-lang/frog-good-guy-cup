@@ -61,10 +61,11 @@ const layout = (title, content, metadata = '') => `<!doctype html>
 <title>${title}</title><link rel="stylesheet" href="./style.css?v=${styleVersion}">${metadata}</head>
 <body><main>${content}</main></body></html>`;
 
-const labels = [...form.matchAll(/<option value="(team|killer|solo|duo|squad)">([^<]+)<\/option>/g)];
+const formatOptions = form.match(/<select id="format"[^>]*>([\s\S]*?)<\/select>/)[1];
+const labels = [...formatOptions.matchAll(/<option value="([a-z0-9]+)"( data-priority)?>([^<]+)<\/option>/g)];
 const formatCards = `<fieldset id="format"><legend>応募形式を選択</legend><div class="format-list">
-  ${labels.map(([, key, label]) => `<label class="format-card"><input type="radio" name="entry-format" value="${key}" required>
-    <span>${label}</span>${key === 'team' ? '<small>選考優先</small>' : ''}</label>`).join('\n')}
+  ${labels.map(([, key, priority, label]) => `<label class="format-card"><input type="radio" name="entry-format" value="${key}" required>
+    <span>${label}</span>${priority ? '<small>選考優先</small>' : ''}</label>`).join('\n')}
   </div></fieldset>`;
 const formMarkup = form
   .replace(/<label class="field">応募形式[\s\S]+?<\/label>/, formatCards)
