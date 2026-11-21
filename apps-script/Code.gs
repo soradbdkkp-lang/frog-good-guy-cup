@@ -1,5 +1,6 @@
 const FORMATS = {
   team: ['チャッキー', 'サバイバー', 'サバイバー', 'サバイバー', 'サバイバー'],
+  team4: ['チャッキー兼サバイバー', 'サバイバー', 'サバイバー', 'サバイバー'],
   killer: ['チャッキー'],
   solo: ['サバイバー'],
   duo: ['サバイバー', 'サバイバー'],
@@ -122,7 +123,7 @@ function validate_(raw) {
       guardian: minor ? true : null
     };
   });
-  const clip = roles.includes('チャッキー') ? yesNo_(raw.clip, 'クリップ提出可否') : null;
+  const clip = roles[0].startsWith('チャッキー') ? yesNo_(raw.clip, 'クリップ提出可否') : null;
   if (clip && raw.clipConsent !== true) throw Error('提出クリップの選手紹介動画への利用同意が必要です。');
   const url = clip && raw.url ? requiredText_(raw.url, 1000, '共有URL') : '';
   if (url && !/^https?:\/\/[^\s/?#@]+(?:[/?#][^\s]*)?$/i.test(url)) throw Error('共有URLは http または https で入力してください。');
