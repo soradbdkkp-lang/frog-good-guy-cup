@@ -55,11 +55,14 @@ const shareMetadata = `
 <meta name="twitter:description" content="${shareDescription}">
 <meta name="twitter:image" content="${shareImageUrl}">
 <meta name="twitter:image:alt" content="${shareImageAlt}">`;
-const layout = (title, content, metadata = '') => `<!doctype html>
+const layout = (title, content, metadata = '', siteMotion = false) => `<!doctype html>
 <html lang="ja"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${title}</title><link rel="stylesheet" href="./style.css?v=${styleVersion}">${metadata}</head>
-<body><main>${content}</main></body></html>`;
+<title>${title}</title><link rel="stylesheet" href="./style.css?v=${styleVersion}">${metadata}${siteMotion ? '<link rel="stylesheet" href="./site-motion.css">' : ''}</head>
+<body><main>${content}</main>${siteMotion ? `
+<img id="cursor-doll" src="./chucky.png" alt="" width="83" height="120" draggable="false">
+<script src="./site-motion.js" defer></script>` : ''}
+</body></html>`;
 
 const formatOptions = form.match(/<select id="format"[^>]*>([\s\S]*?)<\/select>/)[1];
 const labels = [...formatOptions.matchAll(/<option value="([a-z0-9]+)"( data-priority)?>([^<]+)<\/option>/g)];
@@ -150,7 +153,7 @@ const approvedSite = layout('ふろぐ Good Guy Cup', `
     <h2 id="detail-heading">大会ルール・参加案内</h2>
     <div class="detail-links">${navigation.slice(1).map(([id, title]) =>
       `<a href="./${id}.html"><strong>${title}</strong></a>`).join('')}</div>
-  </section>`, shareMetadata + faviconMetadata);
+  </section>`, shareMetadata + faviconMetadata, true);
 
 const detailPages = Object.fromEntries(detailDefinitions.map(([id, title]) => [
   `dist/pages/${id}.html`,
@@ -159,7 +162,7 @@ const detailPages = Object.fromEntries(detailDefinitions.map(([id, title]) => [
     <header class="form-header detail-header"><h1>${title}</h1></header>
     ${tableOfContents(title, contents[id])}
     ${details[id]}
-    ${contents[id] ? '<a class="back-to-top" href="#page-top" hidden>上部に戻る</a><script src="./back-to-top.js" defer></script>' : ''}`, faviconMetadata)
+    ${contents[id] ? '<a class="back-to-top" href="#page-top" hidden>上部に戻る</a><script src="./back-to-top.js" defer></script>' : ''}`, faviconMetadata, true)
 ]));
 
 let formScript = template.match(/<script>([\s\S]+?)<\/script>/)[1]
@@ -206,6 +209,8 @@ const files = {
   ...Object.fromEntries(['favicon-32.png', 'favicon.ico', 'apple-touch-icon.png'].map(name =>
     [`dist/pages/${name}`, readFileSync(`web/${name}`)])),
   'dist/pages/back-to-top.js': readFileSync('web/back-to-top.js', 'utf8'),
+  ...Object.fromEntries(['site-motion.css', 'site-motion.js', 'chucky.png', 'tiffany.png'].map(name =>
+    [`dist/pages/${name}`, readFileSync(`web/${name}`)])),
   'dist/pages/.nojekyll': '',
   ...detailPages,
   'dist/worker/index.html': formPage,
