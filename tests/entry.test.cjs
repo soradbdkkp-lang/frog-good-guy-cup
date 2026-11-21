@@ -88,23 +88,26 @@ function entry(format, count) {
   };
 }
 
-test('all five submission formats save the expected roles and return test receipts', () => {
+test('all six submission formats save the expected roles and return test receipts', () => {
   const { tables, submit } = runtime();
-  const formats = [['team', 5], ['killer', 1], ['solo', 1], ['duo', 2], ['squad', 4]];
-  for (const [format, count] of formats) {
+  const formats = [
+    ['team', 5, 'チャッキー'], ['team4', 4, 'チャッキー兼サバイバー'], ['killer', 1, 'チャッキー'],
+    ['solo', 1], ['duo', 2], ['squad', 4]
+  ];
+  for (const [format, count, killerRole] of formats) {
     const data = entry(format, count);
     const result = submit(data);
     assert.match(result.receipt, /^TEST-/);
     const row = tables.test.rows.at(-1);
-    const hasKiller = format === 'team' || format === 'killer';
     const players = JSON.parse(row[11]);
     assert.equal(row[1], result.receipt);
     assert.equal(row[4], format);
-    assert.equal(row[9], hasKiller ? data.url : '');
+    assert.equal(row[9], killerRole ? data.url : '');
     assert.equal(players.length, count);
-    assert.equal(players.filter(player => player.role === 'チャッキー').length, Number(hasKiller));
+    assert.equal(players[0].role, killerRole || 'サバイバー');
+    assert.ok(players.slice(1).every(player => player.role === 'サバイバー'));
   }
-  assert.equal(tables.test.rows.length, 6);
+  assert.equal(tables.test.rows.length, 7);
   assert.equal(tables.live.rows.length, 1);
 });
 
@@ -121,6 +124,9 @@ test('rejects missing data, wrong counts and missing guardian consent', () => {
   assert.ok(submit({ ...data, players: [{ ...data.players[0], platform: 'Xbox' }, data.players[1]] }).error);
   assert.ok(submit({ ...data, discord: ' ' }).error);
   assert.ok(submit({ ...entry('killer', 1), clipConsent: false }).error);
+  assert.match(submit(entry('team4', 3)).error, /選手人数/);
+  assert.match(submit(entry('team4', 5)).error, /選手人数/);
+  assert.match(submit({ ...entry('team4', 4), clipConsent: false }).error, /利用同意/);
   assert.ok(submit({ ...entry('killer', 1), url: 'javascript:example' }).error);
   assert.equal(tables.test.rows.length, 1);
   assert.match(submit(data).receipt, /^TEST-/);
@@ -178,7 +184,7 @@ test('browser script parses after Apps Script template substitution', () => {
   assert.ok(new vm.Script(script));
 });
 
-test('built site links to the Worker, and form exposes five choices and four platforms', () => {
+test('built site links to the Worker, and form exposes six choices and four platforms', () => {
   const files = require('../scripts/build.cjs');
   const website = files['dist/pages/index.html'];
   const form = files['dist/worker/index.html'];
@@ -242,7 +248,9 @@ test('built site links to the Worker, and form exposes five choices and four pla
   assert.match(form, /提出していただいたクリップは、選手紹介動画に使用させていただく予定です。/);
   assert.match(website, /aria-current="page">大会概要/);
   assert.match(files['dist/pages/ranking.html'], /aria-current="page">順位決定方法/);
-  assert.equal((form.match(/name="entry-format"/g) || []).length, 5);
+  const cards = [...form.matchAll(/name="entry-format" value="([^"]+)"[^>]*>\s*<span>[^<]+<\/span>(<small>選考優先<\/small>)?/g)];
+  assert.equal(cards.length, 6);
+  assert.deepEqual(cards.filter(([, , priority]) => priority).map(([, key]) => key), ['team', 'team4']);
   assert.equal((form.match(/<option value="(?:Steam|PlayStation 4|PlayStation 5|Nintendo Switch)"/g) || []).length, 4);
   assert.doesNotMatch(form, /<\?/);
   assert.match(files['dist/worker/entry.js'], /fetch\('\.\/api\/entry'/);
@@ -260,7 +268,7 @@ test('Worker relay reaches the authenticated save handler and strips private res
     method: 'POST', headers: { 'Content-Type': 'application/json', Origin: source }, body: JSON.stringify(data)
   });
   assert.deepEqual(await (await worker.fetch(new Request(origin + '/api/status'), env)).json(), { mode: 'test' });
-  const data = entry('killer', 1);
+  const data = entry('team4', 4);
   assert.equal((await worker.fetch(req(data, 'https://other.example.test'), env)).status, 403);
   assert.equal(upstream.mock.callCount(), 1);
   assert.equal((await worker.fetch(req(data), { ...env, GGC_WORKER_SHARED_KEY: 'wrong'.repeat(8) })).status, 503);
