@@ -52,9 +52,9 @@ details{margin-bottom:1rem}summary{cursor:pointer;font-weight:700;margin-bottom:
   <section id="killer-rules">
     <h2>チャッキーの使用制限</h2>
     <dl class="rule-terms">
-      <dt>パーク</dt><dd>禁止パークは<strong>「隠れ場なし」「露見する闇」</strong>の2つです。その他のパークは最大4枠まで使用できます。</dd>
-      <dt>アドオン</dt><dd>自由に使用できます。</dd>
-      <dt>オファリング</dt><dd>メメント・モリ関連のみ使用できます。装備し忘れても再試合は行いません。</dd>
+      <dt id="killer-perks">パーク</dt><dd>禁止パークは<strong>「隠れ場なし」「露見する闇」</strong>の2つです。その他のパークは最大4枠まで使用できます。</dd>
+      <dt id="killer-add-ons">アドオン</dt><dd>自由に使用できます。</dd>
+      <dt id="killer-offerings">オファリング</dt><dd>メメント・モリ関連のみ使用できます。装備し忘れても再試合は行いません。</dd>
     </dl>
   </section>
   <section id="scoring">
@@ -78,15 +78,15 @@ details{margin-bottom:1rem}summary{cursor:pointer;font-weight:700;margin-bottom:
       </article>
     </div>
     <div class="score-result">
-      <h2>勝敗の決め方</h2>
+      <h2 id="match-result">勝敗の決め方</h2>
       <p class="score-equation">自チームのチャッキー得点 <b>＋</b> 自チームのサバイバー得点 <b>＝</b> チーム得点</p>
       <p>前半と後半で獲得した得点を足し、チーム得点が高い側が勝利します。</p>
     </div>
-    <h2>発電機5台の修理完了前に脱出した場合</h2>
+    <h2 id="early-escape">発電機5台の修理完了前に脱出した場合</h2>
     <p>ハッチ・ゲートのどちらから脱出した場合も、該当者は3吊り、チャッキー側は全滅扱いとし、該当する脱出は0Ptです。ハッチ閉鎖によってゲートが通電しても、発電機5台の修理完了前は同じ扱いです。</p>
     <p>試合を引き延ばす行為はなるべく控えてください。</p>
     <p>鍵を使用した場合は、消費が確認できたトークン1つにつきサバイバー側の得点から1Ptを差し引きます。<a href="./perk-rules.html">鍵の取り扱い</a></p>
-    <h2>チーム得点が同じ場合</h2>
+    <h2 id="tiebreak">チーム得点が同じ場合</h2>
     <p>上から順に比較し、差がついた時点で決定します。</p>
     <ol class="tiebreak">
       <li><strong>チャッキー側の獲得Pt</strong></li>
@@ -104,7 +104,7 @@ details{margin-bottom:1rem}summary{cursor:pointer;font-weight:700;margin-bottom:
       <li>同じパークのチーム内での重複装備は禁止です。応募区分による例外はありません。</li>
       <li>カテゴリ別上限は4人の合計です。各パークは表で指定されたカテゴリに1回だけ計上します。「その他」の上限は、同欄に記載されたパークに適用します。</li>
     </ul>
-    <h3>カテゴリ別の上限と使用可能パーク</h3>
+    <h3 id="perk-categories">カテゴリ別の上限と使用可能パーク</h3>
     <p>マップの室内・屋外の分類は現在調整中です。ゲームのアップデート内容によっては、使用制限を変更する場合があります。</p>
     <table class="perk-table" aria-label="室内・屋外別のパーク上限と使用可能パーク">
       <thead><tr><th scope="col">カテゴリ</th><th scope="col">室内MAP</th><th scope="col">屋外MAP</th><th scope="col">使用可能パーク</th></tr></thead>
@@ -118,7 +118,7 @@ details{margin-bottom:1rem}summary{cursor:pointer;font-weight:700;margin-bottom:
         <tr><th scope="row">その他</th><td>総枠内で何個でも可</td><td>総枠内で何個でも可</td><td>陽動、ベルトを締めろ！、化学的な罠、ソウルガード、ジャ・ジャ・ジャ・ジャーン、リーダー、欺き</td></tr>
       </tbody>
     </table>
-    <h2>キャラクター・アイテム</h2>
+    <h2 id="equipment">キャラクター・アイテム</h2>
     <dl class="rule-terms">
       <dt>キャラクター</dt><dd>同一ゲームのサバイバー4人で重複禁止です。レジェンダリースキンでゲーム内のキャラクター名が変わる場合は別キャラクターとして扱います。同じ名前のレジェンダリー同士は重複できません。</dd>
       <dt>オファリング</dt><dd>サバイバー側はすべて使用禁止です。</dd>
@@ -137,13 +137,14 @@ details{margin-bottom:1rem}summary{cursor:pointer;font-weight:700;margin-bottom:
         <tr><th scope="row">メメント特別賞</th><td>優勝チャッキーを除き、通算メメント数が最多の1人に、その通算メメント数×200円</td></tr>
       </tbody>
     </table>
+    <h3 id="memento-tiebreak">メメント特別賞の同数判定</h3>
     <p>メメント特別賞で通算数が同じ場合は、オファリング・パーク効果によるメメント数が多い方を優先します。それでも同数なら運営判断です。</p>
     <p>正式なゲームでのメメントを集計し、最後の1人への標準メメントも含めます。無効試合のメメント数は得点・賞金の集計対象外です。</p>
     <p>賞金の受け渡し方法と全員0件の場合の扱いは別途案内します。</p>
   </section>
   <section id="entry">
     <h2>応募フォーム</h2>
-    <h3>参加条件・応募形式</h3>
+    <h3 id="entry-conditions">参加条件・応募形式</h3>
     <p>5人チーム、チャッキー個人、サバイバー個人・2人・4人の5形式で応募できます。</p>
     <ul>
       <li>対応機種は Steam、PlayStation 4、PlayStation 5、Nintendo Switch です。</li>
@@ -151,7 +152,7 @@ details{margin-bottom:1rem}summary{cursor:pointer;font-weight:700;margin-bottom:
       <li>登録選手全員が大会Discordサーバーに参加してください。試合用の専用VCを設けます。未成年の選手は保護者の同意が必要です。</li>
       <li>チャッキー担当は大会当日までにチャッキーを所持し、使用できる状態にしてください。同一選手の複数チームへの兼任・重複登録は禁止です。</li>
     </ul>
-    <h3>選考基準</h3>
+    <h3 id="selection">選考基準</h3>
     <ol>
       <li>5人チームを最優先します。</li>
       <li>次に、16:00・17:00それぞれの開始への対応可否を考慮します。</li>

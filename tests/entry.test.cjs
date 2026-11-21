@@ -188,14 +188,19 @@ test('built site links to the Worker, and form exposes five choices and four pla
   }
   assert.match(website, /href="http:\/\/127\.0\.0\.1:8787\/"/);
   assert.doesNotMatch(website, /<form/);
-  const nav = html => html.match(/<nav class="site-nav"[\s\S]*?<\/nav>/)[0];
+  const nav = html => html.match(/<nav id="page-top"[\s\S]*?<\/nav>/)[0];
   const labels = html => Array.from(nav(html).matchAll(/<a [^>]*>([^<]+)<\/a>/g), match => match[1]);
   const pages = ['game-rules', 'scoring', 'perk-rules', 'killer-rules', 'penalties', 'ranking', 'prizes', 'entry-guide'];
   for (const page of ['index', ...pages]) {
-    assert.deepEqual(labels(files[`dist/pages/${page}.html`]), ['大会概要', '大会ルール', '順位決定方法', '賞金', '応募']);
+    assert.deepEqual(labels(files[`dist/pages/${page}.html`]), ['大会概要', '大会ルール', 'サバイバー制限', 'キラー制限', '順位決定方法', '賞金', '応募']);
   }
   for (const page of pages) {
-    assert.doesNotMatch(files[`dist/pages/${page}.html`], /大会トップに戻る/);
+    const html = files[`dist/pages/${page}.html`];
+    assert.doesNotMatch(html, /大会トップに戻る/);
+    if (page === 'ranking') continue;
+    const toc = html.match(/<nav class="page-toc"[\s\S]+?<\/nav>/)[0];
+    for (const [, target] of toc.matchAll(/href="#([^"]+)"/g)) assert.ok(html.includes(`id="${target}"`));
+    assert.match(html, /class="back-to-top" href="#page-top" hidden/);
   }
   const rules = files['dist/pages/game-rules.html'];
   for (const page of ['scoring', 'perk-rules', 'killer-rules', 'penalties']) assert.ok(rules.includes(`href="./${page}.html"`));

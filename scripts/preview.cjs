@@ -39,6 +39,7 @@ createServer(async (request, response) => {
   }
   const route = {
     '/': 'pages/index.html', '/index.html': 'pages/index.html', '/style.css': 'pages/style.css',
+    '/back-to-top.js': 'pages/back-to-top.js',
     '/game-rules.html': 'pages/game-rules.html', '/scoring.html': 'pages/scoring.html',
     '/perk-rules.html': 'pages/perk-rules.html', '/killer-rules.html': 'pages/killer-rules.html',
     '/penalties.html': 'pages/penalties.html', '/ranking.html': 'pages/ranking.html',

@@ -60,27 +60,45 @@ const detailDefinitions = [
   ['entry-guide', '応募']
 ];
 const navigation = [['index', '大会概要'], ...detailDefinitions.filter(([id]) =>
-  ['game-rules', 'ranking', 'prizes', 'entry-guide'].includes(id))];
+  ['game-rules', 'perk-rules', 'killer-rules', 'ranking', 'prizes', 'entry-guide'].includes(id))];
 const siteNavigation = current => `
-  <nav class="site-nav" aria-label="大会サイトのページ">
+  <nav id="page-top" tabindex="-1" class="site-nav" aria-label="大会サイトのページ">
     ${navigation.map(([id, title]) =>
       `<a href="./${id}.html"${id === current ? ' aria-current="page"' : ''}>${title}</a>`).join('')}
   </nav>`;
 const details = Object.fromEntries(
   Array.from(rules.matchAll(/<section id="([^"]+)">[\s\S]+?<\/section>/g), ([markup, id]) => [id, markup])
 );
-details['game-rules'] = `<nav class="detail-links" aria-label="大会ルールの目次">
-  <a href="#game-rules">大会形式・試合進行</a>
-  <a href="./perk-rules.html">サバイバー制限</a>
-  <a href="./killer-rules.html">キラー制限</a>
-  <a href="./scoring.html">得点と勝敗</a>
-  <a href="./penalties.html">ペナルティ</a>
-  <a href="#match-operations">Discord・リザルト・配信</a>
-</nav>${details['game-rules']}${readFileSync('web/match-operations.html', 'utf8')}`;
+details['game-rules'] += readFileSync('web/match-operations.html', 'utf8');
+const contents = {
+  'game-rules': [
+    ['#game-rules', '大会形式・試合進行'], ['#in-match', '試合中のルール'],
+    ['#match-operations', 'Discord・リザルト・配信'], ['./perk-rules.html', 'サバイバー制限'],
+    ['./killer-rules.html', 'キラー制限'], ['./scoring.html', '得点と勝敗'], ['./penalties.html', 'ペナルティ']
+  ],
+  'scoring': [
+    ['#scoring', '役割ごとの得点'], ['#match-result', '勝敗の決め方'],
+    ['#early-escape', '発電機5台の修理前の脱出'], ['#tiebreak', 'チーム得点が同じ場合']
+  ],
+  'perk-rules': [['#perk-rules', 'パーク制限'], ['#perk-categories', 'カテゴリ別一覧'], ['#equipment', 'キャラクター・アイテム']],
+  'killer-rules': [['#killer-perks', 'パーク'], ['#killer-add-ons', 'アドオン'], ['#killer-offerings', 'オファリング']],
+  penalties: [
+    ['#loadout', 'パーク構成違反・再試合'], ['#report', '違反の申告・試合停止と再開'],
+    ['#connection', '事故切断・クラッシュ・高Ping'], ['#common-penalties', 'バグ・グリッチと共通ペナルティ'],
+    ['#void-match', '無効試合'], ['#late-absence', '遅刻・欠員']
+  ],
+  prizes: [['#prizes', '賞金と対象'], ['#memento-tiebreak', 'メメント特別賞の同数判定']],
+  'entry-guide': [['#entry-conditions', '参加条件・応募形式'], ['#selection', '選考基準'], ['#apply', '応募フォーム']]
+};
+const tableOfContents = (title, links) => links ? `
+  <nav class="page-toc" aria-label="${title}の目次">
+    <h2>目次</h2>
+    <ul>${links.map(([href, label]) => `<li><a href="${href}">${label}</a></li>`).join('')}</ul>
+  </nav>` : '';
 details.penalties = readFileSync('web/penalties.html', 'utf8');
 details.ranking = '<section><p>順位決定方法は、出場チーム数の確定後に決定し、当選チーム発表後にこのページで公開します。</p></section>';
 details['entry-guide'] = `<section>${applicationPeriod}${eligibility.replace('<h2>応募フォーム</h2>', '<h2>応募資格と選考</h2>')}
-  <a class="button" href="${safeUrl}">応募フォームへ</a></section>`;
+  <a id="apply" class="button" href="${safeUrl}">応募フォームへ</a></section>`;
 
 const approvedSite = layout('ふろぐ Good Guy Cup', `
   ${siteNavigation('index')}
@@ -104,7 +122,9 @@ const detailPages = Object.fromEntries(detailDefinitions.map(([id, title]) => [
   layout(`${title} | ふろぐ Good Guy Cup`, `
     ${siteNavigation(id)}
     <header class="form-header detail-header"><h1>${title}</h1></header>
-    ${details[id]}`)
+    ${tableOfContents(title, contents[id])}
+    ${details[id]}
+    ${contents[id] ? '<a class="back-to-top" href="#page-top" hidden>上部に戻る</a><script src="./back-to-top.js" defer></script>' : ''}`)
 ]));
 
 let formScript = template.match(/<script>([\s\S]+?)<\/script>/)[1]
@@ -148,6 +168,7 @@ const css = baseCss + '\n' + theme;
 const files = {
   'dist/pages/index.html': approvedSite,
   'dist/pages/style.css': css,
+  'dist/pages/back-to-top.js': readFileSync('web/back-to-top.js', 'utf8'),
   'dist/pages/.nojekyll': '',
   ...detailPages,
   'dist/worker/index.html': formPage,
