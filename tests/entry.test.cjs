@@ -209,7 +209,7 @@ test('built site links to the Worker, and form exposes five choices and four pla
   assert.doesNotMatch(website, /安心感／有能の証明/);
   assert.doesNotMatch(website, /各対戦は前半・後半の2ゲーム制/);
   assert.match(files['dist/pages/game-rules.html'], /各対戦は前半・後半の2ゲーム制/);
-  for (const page of [website, files['dist/pages/game-rules.html'], files['dist/pages/perk-rules.html']]) {
+  for (const page of [website, files['dist/pages/killer-rules.html'], files['dist/pages/perk-rules.html']]) {
     assert.match(page, /マップの室内・屋外の分類は現在調整中です。/);
   }
   for (const page of [website, files['dist/pages/perk-rules.html']]) {

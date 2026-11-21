@@ -36,18 +36,17 @@ details{margin-bottom:1rem}summary{cursor:pointer;font-weight:700;margin-bottom:
     <p>基本は18:00開始。応募状況によって16:00・17:00開始も検討し、翌1:00頃の終了を目指します（日本時間）。</p>
     <ul>
       <li>各対戦は前半・後半の2ゲーム制。両チームがチャッキー側とサバイバー側を交代し、先攻・後攻は対戦ごとにダイスで決定します。</li>
-      <li>チャッキー担当は原則固定。サバイバー側の4人は対戦ごとに登録済みの5人から選べます。チャッキー担当もサバイバー側のゲームではサバイバーとして出場できます。</li>
-      <li>チャッキー側がマップを選び、運営へ申告します。相手に事前に伝えるのは室内・屋外の区分です。同じチームによる同じマップの再使用は予選・本戦を通じて禁止です。他チームが使用済みのマップは選べます。</li>
+      <li id="team-roles">チャッキー担当は原則固定。サバイバー側の4人は対戦ごとに登録済みの5人から選べます。チャッキー担当もサバイバー側のゲームではサバイバーとして出場できます。</li>
       <li>6チーム以下は総当たり予選あり、7チーム以上はシングルエリミネーションです。参加チーム数は応募状況を見て決定します。</li>
     </ul>
-    <p class="notice"><strong>マップの室内・屋外の分類は現在調整中です。</strong></p>
+    <p><a href="./killer-rules.html#map-selection">マップの選択・申告と室内・屋外の分類</a></p>
     <p>組み合わせと試合開始時刻は応募締切後に案内します。優勝インタビューはありません。</p>
     <h2 id="in-match">試合中のルール</h2>
     <dl class="rule-terms">
       <dt>トーテム</dt><dd>無力なトーテムは開幕から破壊できます。呪いのトーテムは発電機1台目の修理完了まで破壊できません。早期に破壊した場合は再試合です。</dd>
-      <dt>AFC（アンチフェイスキャンプ）</dt><dd>キラーがカスタムロビーを作る際にオフにしてください。AFCによる自力脱出は禁止です。ただし、自力脱出パークが使用可能な状態で、ゲームの仕様によりAFCが優先された場合は違反としません。</dd>
       <dt>挑発行為</dt><dd>挑発目的の屈伸、ライト連打、エモートの使用は禁止です。</dd>
     </dl>
+    <p><a href="./killer-rules.html#afc">AFCの設定と自力脱出の扱い</a></p>
   </section>
   <section id="killer-rules">
     <h2>チャッキーの使用制限</h2>
@@ -56,6 +55,21 @@ details{margin-bottom:1rem}summary{cursor:pointer;font-weight:700;margin-bottom:
       <dt id="killer-add-ons">アドオン</dt><dd>自由に使用できます。</dd>
       <dt id="killer-offerings">オファリング</dt><dd>メメント・モリ関連のみ使用できます。装備し忘れても再試合は行いません。</dd>
     </dl>
+    <h2 id="map-selection">マップの選択・申告</h2>
+    <p>チャッキー側がマップを選び、運営へ申告します。相手に事前に伝えるのは室内・屋外の区分です。同じチームによる同じマップの再使用は予選・本戦を通じて禁止です。他チームが使用済みのマップは選べます。</p>
+    <p class="notice"><strong>マップの室内・屋外の分類は現在調整中です。</strong></p>
+    <h2 id="afc">AFC（アンチフェイスキャンプ）</h2>
+    <p>キラーがカスタムロビーを作る際にオフにしてください。AFCによる自力脱出は禁止です。ただし、自力脱出パークが使用可能な状態で、ゲームの仕様によりAFCが優先された場合は違反としません。</p>
+    <h2 id="carry-drop">試合中の禁止行為</h2>
+    <p>得点稼ぎ目的の担ぎ降ろしは禁止です。違反時の扱いは<a href="./penalties.html#common-penalties">共通ペナルティ</a>を参照してください。</p>
+    <h2 id="killer-related">関連ルール</h2>
+    <ul>
+      <li><a href="./game-rules.html#team-roles">チャッキー担当の固定とサバイバー兼任</a></li>
+      <li><a href="./entry-guide.html#chucky-ownership">チャッキーの所持要件</a></li>
+      <li><a href="./scoring.html#scoring">メメントの得点</a>と<a href="./prizes.html#prizes">賞金</a></li>
+      <li><a href="./penalties.html#connection">切断・クラッシュ時の再試合</a></li>
+      <li><a href="./game-rules.html#voice-chat">VCの入退室</a></li>
+    </ul>
   </section>
   <section id="scoring">
     <h2>役割ごとの得点</h2>
@@ -125,7 +139,7 @@ details{margin-bottom:1rem}summary{cursor:pointer;font-weight:700;margin-bottom:
       <dt>アイテム</dt><dd>持ち込みは禁止です。試合中に入手・生成したアイテムは、鍵を除き使用できます。</dd>
       <dt>鍵</dt><dd>チェストから取り出す目的に限り一時的に拾えます。取り出したらすぐに手放してください。ハッチを開ける目的での所持は禁止です。オーラの可視化やハッチの開錠など、鍵を使用した時点で違反です。消費を確認できたトークン1つにつきサバイバー側の得点から1Ptを差し引きます。消費を確認できなくても、使用が確認できれば違反です。</dd>
     </dl>
-    <p><a href="./game-rules.html#in-match">トーテム・AFC・試合中の行為</a> ／ <a href="./penalties.html#loadout">パーク構成違反・再試合</a></p>
+    <p><a href="./game-rules.html#in-match">トーテム・試合中の行為</a> ／ <a href="./killer-rules.html#afc">AFCと自力脱出</a> ／ <a href="./penalties.html#loadout">パーク構成違反・再試合</a></p>
   </section>
   <section id="prizes">
     <h2>賞金・メメント特別賞</h2>
@@ -150,7 +164,7 @@ details{margin-bottom:1rem}summary{cursor:pointer;font-weight:700;margin-bottom:
       <li>対応機種は Steam、PlayStation 4、PlayStation 5、Nintendo Switch です。</li>
       <li>日本または韓国に居住していること（国籍不問）。各チームに運営と日本語で連絡できる登録選手が1人以上必要です。</li>
       <li>登録選手全員が大会Discordサーバーに参加してください。試合用の専用VCを設けます。未成年の選手は保護者の同意が必要です。</li>
-      <li>チャッキー担当は大会当日までにチャッキーを所持し、使用できる状態にしてください。同一選手の複数チームへの兼任・重複登録は禁止です。</li>
+      <li id="chucky-ownership">チャッキー担当は大会当日までにチャッキーを所持し、使用できる状態にしてください。同一選手の複数チームへの兼任・重複登録は禁止です。</li>
     </ul>
     <h3 id="selection">選考基準</h3>
     <ol>

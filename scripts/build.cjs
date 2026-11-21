@@ -84,7 +84,10 @@ const contents = {
     ['#early-escape', '発電機5台の修理前の脱出'], ['#tiebreak', 'チーム得点が同じ場合']
   ],
   'perk-rules': [['#perk-rules', 'パーク制限'], ['#perk-categories', 'カテゴリ別一覧'], ['#equipment', 'キャラクター・アイテム']],
-  'killer-rules': [['#killer-perks', 'パーク'], ['#killer-add-ons', 'アドオン'], ['#killer-offerings', 'オファリング']],
+  'killer-rules': [
+    ['#killer-perks', 'パーク'], ['#killer-add-ons', 'アドオン'], ['#killer-offerings', 'オファリング'],
+    ['#map-selection', 'マップの選択・申告'], ['#afc', 'AFC'], ['#carry-drop', '試合中の禁止行為'], ['#killer-related', '関連ルール']
+  ],
   penalties: [
     ['#loadout', 'パーク構成違反・再試合'], ['#report', '違反の申告・試合停止と再開'],
     ['#connection', '事故切断・クラッシュ・高Ping'], ['#common-penalties', 'バグ・グリッチと共通ペナルティ'],
