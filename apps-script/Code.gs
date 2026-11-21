@@ -12,7 +12,7 @@ const TAB = '応募一覧';
 const PLATFORMS = ['Steam', 'PlayStation 4', 'PlayStation 5', 'Nintendo Switch'];
 const ENTRY_START = Date.parse('2026-11-20T00:00:00+09:00');
 const ENTRY_END_EXCLUSIVE = Date.parse('2026-12-01T00:00:00+09:00');
-const ENTRY_PERIOD_LABEL = '2026年11月20日（金）～11月30日（月）23:59（日本時間）';
+const ENTRY_PERIOD_LABEL = '2026年11月21日（土）～11月30日（月）23:59（日本時間）';
 
 function doGet() {
   return ContentService.createTextOutput('Good Guy Cup');

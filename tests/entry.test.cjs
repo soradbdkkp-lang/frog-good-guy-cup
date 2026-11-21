@@ -194,7 +194,7 @@ test('built site links to the Worker, and form exposes six choices and four plat
   assert.equal(shareImage.readUInt32BE(16), 1200);
   assert.equal(shareImage.readUInt32BE(20), 630);
   for (const page of [website, form, files['dist/pages/entry-guide.html']]) {
-    assert.match(page, /2026年11月20日（金）～11月30日（月）23:59（日本時間）/);
+    assert.match(page, /2026年11月21日（土）～11月30日（月）23:59（日本時間）/);
     assert.match(page, /応募状況によっては、募集期間が前後する可能性があります。/);
   }
   assert.match(website, /href="http:\/\/127\.0\.0\.1:8787\/"/);
