@@ -96,6 +96,7 @@ const detailDefinitions = [
 ];
 const navigation = [['index', '大会概要'], ...detailDefinitions.filter(([id]) =>
   ['game-rules', 'perk-rules', 'killer-rules', 'ranking', 'prizes', 'entry-guide'].includes(id))];
+navigation.splice(navigation.findIndex(([id]) => id === 'killer-rules') + 1, 0, ['perk-search', 'パーク検索']);
 const siteNavigation = current => `
   <nav id="page-top" tabindex="-1" class="site-nav" aria-label="大会サイトのページ">
     ${navigation.map(([id, title]) =>
@@ -105,6 +106,14 @@ const details = Object.fromEntries(
   Array.from(rules.matchAll(/<section id="([^"]+)">[\s\S]+?<\/section>/g), ([markup, id]) => [id, markup])
 );
 details['game-rules'] += readFileSync('web/match-operations.html', 'utf8');
+const perkSearchLink = (role, label) =>
+  `<a class="button" href="./perk-search.html?role=${role}">${label}</a>`;
+details['perk-rules'] = details['perk-rules'].replace('<h3 id="perk-categories">', `
+    <p>${perkSearchLink('survivor', 'サバイバーのパークを検索')}</p>
+    <h3 id="perk-categories">`);
+details['killer-rules'] = details['killer-rules'].replace('<h2 id="map-selection">', `
+    <p>${perkSearchLink('killer', 'チャッキーのパークを検索')}</p>
+    <h2 id="map-selection">`);
 const contents = {
   'game-rules': [
     ['#game-rules', '大会形式・試合進行'], ['#in-match', '試合中のルール'],
@@ -205,6 +214,7 @@ loadStatus();
 new vm.Script(formScript);
 const files = {
   'dist/pages/index.html': approvedSite,
+  'dist/pages/perk-search.html': readFileSync('web/perk-search.html', 'utf8'),
   'dist/pages/style.css': css,
   'dist/pages/inu-le.png': readFileSync('web/inu-le.png'),
   'dist/pages/share-card.png': readFileSync('web/share-card.png'),
