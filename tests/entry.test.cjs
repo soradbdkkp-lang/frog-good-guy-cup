@@ -206,7 +206,7 @@ test('built site links to the Worker, and form exposes six choices and four plat
   for (const name of icons) assert.ok(files[`dist/pages/${name}`].length > 0);
   for (const page of ['index', ...pages]) {
     const html = files[`dist/pages/${page}.html`];
-    assert.deepEqual(labels(html), ['大会概要', '大会ルール', 'サバイバー制限', 'キラー制限', '順位決定方法', '賞金', '応募']);
+    assert.deepEqual(labels(html), ['大会概要', '大会ルール', 'サバイバー制限', 'キラー制限', 'パーク検索', '順位決定方法', '賞金', '応募']);
     for (const name of icons) assert.ok(html.includes(`href="./${name}"`));
   }
   for (const page of pages) {
@@ -231,6 +231,9 @@ test('built site links to the Worker, and form exposes six choices and four plat
     assert.match(page, /ゲームのアップデート内容によっては、使用制限を変更する場合があります。/);
   }
   const perks = files['dist/pages/perk-rules.html'];
+  assert.ok(perks.includes('./perk-search.html?role=survivor'));
+  assert.ok(files['dist/pages/killer-rules.html'].includes('./perk-search.html?role=killer'));
+  assert.match(files['dist/pages/perk-search.html'], /<h1>パーク検索<\/h1>/);
   assert.match(perks, /いずれの一覧にも記載されていないパークは使用できません/);
   assert.match(perks, /室内MAP <strong>最大12個<\/strong>/);
   assert.match(perks, /屋外MAP <strong>最大10個<\/strong>/);
