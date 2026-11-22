@@ -89,6 +89,8 @@
   .add-perk{grid-column:1/-1;justify-self:start;min-height:38px;border:1px solid #5b7255;border-radius:7px;background:#253626;color:var(--accent);padding:5px 10px;font-size:.875rem}
   .add-perk:hover{background:#354b32}
   .card-feedback{grid-column:1/-1;color:var(--muted);font-size:.875rem}
+  .card-undo{grid-column:1/-1;justify-self:start}
+  .copy-fallback textarea{display:block;width:100%;min-height:8rem;margin-top:.5rem;padding:.5rem;color:var(--text);background:var(--panel);border:1px solid var(--line);font:inherit}
   .player-picker{width:min(27rem,calc(100% - 2rem));max-height:calc(100% - 2rem);color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:.35rem;padding:clamp(1rem,4vw,1.5rem)}
   .player-picker::backdrop{background:#111b19b3}
   .player-picker p{margin-top:.45rem;color:var(--muted)}
@@ -216,7 +218,11 @@
     <div class="players" id="builder-players"></div>
     <div class="builder-controls">
       <a href="#results-title">検索結果を見る</a>
+      <button class="clear" type="button" id="copy-build" disabled>Discord用にコピー</button>
     </div>
+    <label class="copy-fallback" id="copy-fallback" hidden>コピー用の構成テキスト
+      <textarea id="copy-text" readonly></textarea>
+    </label>
     <div class="saved-controls">
       <form class="save-row" id="save-form">
         <label class="field"><span>保存名</span><input id="build-name" maxlength="50" required placeholder="例　屋外用"></label>
@@ -236,9 +242,10 @@
     <ul id="results" class="grid"></ul>
   </section>
 </main>
-<dialog class="player-picker" id="player-picker" aria-labelledby="picker-title" aria-describedby="picker-perk">
+<dialog class="player-picker" id="player-picker" aria-labelledby="picker-title" aria-describedby="picker-perk picker-warnings">
   <h2 id="picker-title">追加先を選ぶ</h2>
   <p id="picker-perk"></p>
+  <ul class="violations" id="picker-warnings" hidden></ul>
   <div class="player-picker-options" id="picker-options"></div>
   <form method="dialog"><button class="clear" type="submit">キャンセル</button></form>
 </dialog>
@@ -341,11 +348,15 @@
     const add = element('button', 'add-perk', '構成に追加');
     const addFeedback = element('p', 'card-feedback');
     addFeedback.setAttribute('role', 'status');
+    const undo = element('button', 'clear card-undo', '追加を取り消す');
+    undo.type = 'button';
+    undo.hidden = true;
     add.type = 'button';
     add.setAttribute('aria-label', perk.names.ja + 'を構成に追加');
-    if (tournament.roles[perk.role].playerCount > 1) add.setAttribute('aria-haspopup', 'dialog');
-    add.addEventListener('click', () => choosePlayer(perk, addFeedback));
-    card.append(add, addFeedback);
+    add.addEventListener('click', () => choosePlayer(perk, addFeedback, undo));
+    undo.addEventListener('click', () => undoPerk(perk, add, addFeedback));
+    showUndoFor(perk, undo);
+    card.append(add, undo, addFeedback);
     return card;
   }
 
@@ -394,6 +405,8 @@
   const picker = document.getElementById('player-picker');
   const pickerPerk = document.getElementById('picker-perk');
   const pickerOptions = document.getElementById('picker-options');
+  const pickerWarnings = document.getElementById('picker-warnings');
+  const pickerTitle = document.getElementById('picker-title');
   const buildState = document.getElementById('builder-state');
   const buildCounts = document.getElementById('builder-counts');
   const violations = document.getElementById('builder-violations');
@@ -401,8 +414,12 @@
   const savedBuilds = document.getElementById('saved-builds');
   const loadButton = document.getElementById('load-build');
   const feedback = document.getElementById('save-feedback');
+  const copyBuild = document.getElementById('copy-build');
+  const copyFallback = document.getElementById('copy-fallback');
+  const copyText = document.getElementById('copy-text');
   const drafts = new Map();
   const slotControls = [];
+  let lastAddition;
 
   function selectedRole() {
     return fields.namedItem('role').value;
@@ -447,6 +464,7 @@
         }
         control.value = perkId;
         control.addEventListener('change', () => {
+          if (lastAddition?.slots === slots && lastAddition.slotIndex === slotIndex) clearUndo();
           slots[slotIndex] = control.value;
           validateBuild();
         });
@@ -526,23 +544,46 @@
     violations.hidden = issues.length === 0;
     buildState.classList.toggle('invalid', issues.length > 0);
     buildState.textContent = issues.length ? '要修正' : used ? 'パーク制限に適合' : 'パーク未選択';
+    copyBuild.disabled = !used;
+    copyFallback.hidden = true;
     return {used, issues};
   }
 
-  function choosePlayer(perk, cardFeedback) {
+  function additionWarnings(perk, role) {
+    const rules = tournament.roles[role];
+    const limits = tournament.mapProfiles[selectedMap()].roles[role];
+    const selected = draft(role).flat().filter(Boolean);
+    const warnings = [];
+    if (!isAllowed(rules, perk.id)) warnings.push('大会ルールで使用できないパークです。');
+    const owners = draft(role).flatMap((slots, index) =>
+      slots.includes(perk.id) ? [playerName(role, index)] : []);
+    if (selected.filter(id => id === perk.id).length >= rules.maxCopiesPerTeam) {
+      warnings.push('装備済みの選手　' + owners.join('、') + '。追加すると重複制限にかかります。');
+    }
+    const excess = selected.length + 1 - limits.maxTeamTotal;
+    if (excess > 0) warnings.push('追加すると構成の合計上限を' + excess + '枠超えます。');
+    const category = rules.categoryByPerkId[perk.id];
+    const cap = limits.categoryCaps[category];
+    if (cap != null) {
+      const categoryExcess = selected.filter(id => rules.categoryByPerkId[id] === category).length + 1 - cap;
+      if (categoryExcess > 0) warnings.push(tournament.categories[category] + 'の上限を' + categoryExcess + '個超えます。');
+    }
+    return warnings;
+  }
+
+  function choosePlayer(perk, cardFeedback, undo) {
     const role = selectedRole();
-    const {playerCount, maxPerPlayer, maxCopiesPerTeam} = tournament.roles[role];
+    const {playerCount, maxPerPlayer} = tournament.roles[role];
     const rows = draft(role);
-    if (playerCount === 1) {
-      cardFeedback.textContent = addPerk(perk, 0);
+    const warnings = additionWarnings(perk, role);
+    if (playerCount === 1 && (!warnings.length || rows[0].includes(perk.id) || rows[0].filter(Boolean).length >= maxPerPlayer)) {
+      cardFeedback.textContent = addPerk(perk, 0, undo);
       return;
     }
-    const currentPlayers = rows.flatMap((slots, index) =>
-      slots.includes(perk.id) ? [playerName(role, index)] : []);
-    const warning = currentPlayers.length >= maxCopiesPerTeam
-      ? ' ／ 装備済みの選手　' + currentPlayers.join('、') + '。別の選手に追加すると重複制限にかかります。'
-      : '';
-    pickerPerk.textContent = perk.names.ja + warning;
+    pickerTitle.textContent = playerCount === 1 ? '追加内容を確認' : '追加先を選ぶ';
+    pickerPerk.textContent = perk.names.ja;
+    pickerWarnings.replaceChildren(...warnings.map(warning => element('li', '', warning)));
+    pickerWarnings.hidden = !warnings.length;
     pickerOptions.replaceChildren(...rows.slice(0, playerCount).map((slots, index) => {
       const used = slots.filter(Boolean).length;
       const equipped = slots.includes(perk.id);
@@ -551,17 +592,42 @@
       button.type = 'button';
       button.disabled = equipped || full;
       const status = used + ' / ' + maxPerPlayer + '枠' + (equipped ? '・装備済み' : full ? '・満枠' : '');
-      button.append(element('span', '', playerName(role, index)), element('span', '', status));
+      const label = playerCount === 1 ? 'チャッキーに追加' : playerName(role, index);
+      button.append(element('span', '', label), element('span', '', status));
       button.addEventListener('click', () => {
         picker.close();
-        cardFeedback.textContent = addPerk(perk, index);
+        cardFeedback.textContent = addPerk(perk, index, undo);
       });
       return button;
     }));
     picker.showModal();
   }
 
-  function addPerk(perk, playerIndex) {
+  function showUndoFor(perk, button) {
+    if (lastAddition?.perkId !== perk.id || lastAddition.role !== selectedRole()) return;
+    lastAddition.button = button;
+    button.hidden = false;
+  }
+
+  function clearUndo() {
+    if (lastAddition) lastAddition.button.hidden = true;
+    lastAddition = undefined;
+  }
+
+  function undoPerk(perk, addButton, cardFeedback) {
+    if (lastAddition?.perkId !== perk.id || lastAddition.role !== selectedRole()) return;
+    const { slots, playerIndex, slotIndex, role } = lastAddition;
+    if (draft(role)[playerIndex] !== slots || slots[slotIndex] !== perk.id) return;
+    slots[slotIndex] = '';
+    slotControls[playerIndex][slotIndex].value = '';
+    clearUndo();
+    validateBuild();
+    cardFeedback.textContent = playerName(role, playerIndex) + ' への追加を取り消しました。';
+    feedback.textContent = cardFeedback.textContent;
+    addButton.focus();
+  }
+
+  function addPerk(perk, playerIndex, undo) {
     const role = selectedRole();
     const slots = draft(role)[playerIndex];
     if (slots.includes(perk.id)) return playerName(role, playerIndex) + ' に装備済みです。';
@@ -572,10 +638,36 @@
     }
     slots[slotIndex] = perk.id;
     slotControls[playerIndex][slotIndex].value = perk.id;
+    clearUndo();
+    lastAddition = { role, perkId:perk.id, slots, playerIndex, slotIndex, button:undo };
+    showUndoFor(perk, undo);
     validateBuild();
     feedback.textContent = playerName(role, playerIndex) + ' に「' + perk.names.ja + '」を追加しました。';
     return playerName(role, playerIndex) + ' に追加しました。';
   }
+
+  copyBuild.addEventListener('click', async () => {
+    const role = selectedRole();
+    const map = tournament.mapProfiles[selectedMap()].label;
+    const { used, issues } = validateBuild();
+    if (!used) return;
+    const formatted = draft(role).map((slots, index) => {
+      const names = slots.filter(Boolean).map(id => byPerkId.get(id)?.names.ja ?? id);
+      return playerName(role, index) + '：' + (names.join(' ／ ') || 'なし');
+    });
+    const report = issues.length ? ['構成チェック　要修正', ...issues.map(issue => '・' + issue)] : [];
+    const message = ['【' + tournament.name + '｜' + map + 'マップ】', ...formatted, ...report].join('\n');
+    try {
+      await navigator.clipboard.writeText(message);
+      feedback.textContent = 'Discordに貼れる形式でコピーしました。';
+    } catch {
+      copyText.value = message;
+      copyFallback.hidden = false;
+      copyText.focus();
+      copyText.select();
+      feedback.textContent = '表示された構成テキストを選択してコピーできます。';
+    }
+  });
 
   function readSavedBuilds() {
     const stored = JSON.parse(localStorage.getItem(storageKey) ?? '[]');
@@ -644,6 +736,7 @@
         return Array.from({length:Math.max(rules.maxPerPlayer, slots.length)}, (_, slot) => slots[slot] ?? '');
       });
       drafts.set(record.role, restored);
+      clearUndo();
       fields.namedItem('role').value = record.role;
       fields.namedItem('map').value = record.map;
       updateCategoryOptions(record.role);
