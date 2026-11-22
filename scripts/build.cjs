@@ -141,6 +141,7 @@ details['entry-guide'] = `<section>${applicationPeriod}${eligibility.replace('<h
 const approvedSite = layout('ふろぐ Good Guy Cup', `
   ${siteNavigation('index')}
   ${rules.replace('href="#entry"', `href="${safeUrl}"`).replace(/<section id="[^"]+">[\s\S]+?<\/section>/g, '')}
+  ${readFileSync('web/commentator.html', 'utf8')}
   ${applicationPeriod}
   <section class="rules-notice" aria-labelledby="rules-notice-heading">
     <h2 id="rules-notice-heading">大会ルールに関するお知らせ</h2>
@@ -205,6 +206,7 @@ new vm.Script(formScript);
 const files = {
   'dist/pages/index.html': approvedSite,
   'dist/pages/style.css': css,
+  'dist/pages/inu-le.png': readFileSync('web/inu-le.png'),
   'dist/pages/share-card.png': readFileSync('web/share-card.png'),
   ...Object.fromEntries(['favicon-32.png', 'favicon.ico', 'apple-touch-icon.png'].map(name =>
     [`dist/pages/${name}`, readFileSync(`web/${name}`)])),

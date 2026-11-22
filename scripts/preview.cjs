@@ -42,6 +42,7 @@ createServer(async (request, response) => {
     '/back-to-top.js': 'pages/back-to-top.js',
     '/site-motion.css': 'pages/site-motion.css', '/site-motion.js': 'pages/site-motion.js',
     '/chucky.png': 'pages/chucky.png', '/tiffany.png': 'pages/tiffany.png',
+    '/inu-le.png': 'pages/inu-le.png',
     '/share-card.png': 'pages/share-card.png',
     '/favicon-32.png': 'pages/favicon-32.png', '/favicon.ico': 'pages/favicon.ico',
     '/apple-touch-icon.png': 'pages/apple-touch-icon.png',
