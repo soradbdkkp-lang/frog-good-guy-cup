@@ -46,6 +46,13 @@
   select{appearance:none;padding-right:31px;background-image:linear-gradient(45deg,transparent 50%,#aab8a7 50%),linear-gradient(135deg,#aab8a7 50%,transparent 50%);background-position:calc(100% - 15px) 19px,calc(100% - 10px) 19px;background-size:5px 5px;background-repeat:no-repeat}
   .clear{padding-inline:15px;color:var(--warm)}
   .clear:hover{background:#2c362b}
+  .addition-filters{display:flex;flex-wrap:wrap;align-items:end;gap:8px 16px;border-top:1px solid var(--line);padding-top:12px}
+  .addition-filters .field{flex:0 1 15rem;min-width:0}
+  .addition-toggle{display:flex;align-items:center;gap:8px;min-height:44px;cursor:pointer}
+  .addition-toggle input{width:1.15rem;height:1.15rem;margin:0;accent-color:var(--accent)}
+  .addition-toggle:has(:disabled){color:var(--muted);cursor:default}
+  .addition-status{grid-column:1/-1;font-size:.875rem;color:var(--accent);overflow-wrap:anywhere}
+  .addition-status.blocked{color:var(--danger)}
   .filter-note{color:var(--muted);font-size:.875rem}
   .results-heading{display:flex;align-items:baseline;flex-wrap:wrap;gap:10px 16px;margin:25px 0 13px}
   h2{font-size:1.3rem}
@@ -75,19 +82,68 @@
   .violations{margin:0 0 12px;padding-left:1.35em}
   .players{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
   .player{display:grid;gap:6px;padding:10px;border:1px solid var(--line);background:#151e17;border-radius:10px}
-  .player legend{padding:0 5px}
+  .player legend{padding:0 5px;max-width:100%;overflow-wrap:anywhere}
+  .player-name input{display:block;width:100%;min-width:0;min-height:44px;border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:8px 11px}
+  .violations,.card-feedback{overflow-wrap:anywhere}
   .slot{display:grid;grid-template-columns:1.1em minmax(0,1fr);gap:6px;align-items:center;color:var(--muted);font-size:.875rem}
   .slot select{min-height:37px;padding-block:5px;background-position:calc(100% - 15px) 16px,calc(100% - 10px) 16px}
   .slot select[aria-invalid=true]{border-color:#e7a391;color:var(--danger)}
+  .slot-edit-row{display:flex;align-items:center;gap:5px}
+  .slot-edit-row .slot{flex:1;min-width:0}
+  .slot-tool{padding:4px 7px;min-height:44px}
+  .warning-target{padding:4px 0;border:0;background:none;color:inherit;text-align:left;text-decoration:underline;text-underline-offset:.2em}
+  .tool-dialog .field{display:block}
+  .tool-dialog select{min-width:0}
+  .favorite-button{grid-column:1/-1;justify-self:start}
+  .favorite-button[aria-pressed=true]{font-weight:750}
+  .comparison-dialog{width:min(48rem,calc(100% - 2rem))}
+  .comparison-choices{display:grid;gap:8px;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .comparison-table{width:100%;border-collapse:collapse;table-layout:fixed;margin-top:12px;font-size:.875rem;overflow-wrap:anywhere}
+  .comparison-table th,.comparison-table td{padding:6px;border:1px solid var(--line);text-align:left;vertical-align:top}
+  .comparison-table th:first-child{width:29%}
+  .comparison-table .changed{background:var(--bg);font-weight:700;color:var(--accent)}
+  .comparison-table caption{text-align:left;font-weight:700}
   .builder-controls{margin-top:14px;justify-content:space-between;align-items:end}
   .builder-controls>.field{width:min(100%,235px)}
   .save-row{align-items:end;gap:8px}
   .save-row .field{min-width:145px;flex:1}
-  .save-row input{width:100%;min-height:44px;border:1px solid var(--line);border-radius:8px;background:#121913;padding:8px 11px}
+  .save-row input,.saved-dialog input{width:100%;min-height:44px;border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:8px 11px}
   .saved-controls{border-top:1px solid var(--line);margin-top:14px;padding-top:13px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .saved-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+  .saved-actions[hidden]{display:none}
+  .saved-actions a{align-self:center}
+  .saved-actions .clear{min-height:44px}
+  .saved-dialog form,.saved-dialog .field{margin-top:12px}
+  .saved-dialog .field[hidden]{display:none}
+  .saved-dialog p{overflow-wrap:anywhere}
+  .saved-dialog .saved-actions{justify-content:flex-end}
   .save-feedback{min-height:1.55em;margin-top:6px;color:var(--muted);overflow-wrap:anywhere;font-size:.875rem}
+  .draft-feedback{margin-top:8px;font-size:.875rem;color:var(--muted)}
+  .draft-feedback.error{color:var(--danger)}
+  .shared-build{margin:0 0 18px;border-color:var(--accent)}
+  .shared-build p,.share-controls p{overflow-wrap:anywhere}
+  .composition-sheet{margin-top:18px}
+  .composition-summary{margin:6px 0 12px;font-weight:650;overflow-wrap:anywhere}
+  .composition-players{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0}
+  .composition-players .player{min-width:0;align-content:start;overflow-wrap:anywhere}
+  .composition-player-heading{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 8px}
+  .composition-player-heading span{color:var(--muted);font-size:.875rem}
+  .composition-slots{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;list-style:none;margin:0;padding:0}
+  .composition-slot{position:relative;display:grid;justify-items:center;align-content:center;gap:4px;min-width:0;min-height:88px;padding:8px 4px 4px;border:1px solid var(--line);background:var(--panel);text-align:center;font-size:.875rem;line-height:1.35}
+  .composition-slot.invalid{border-color:var(--danger);color:var(--danger)}
+  .composition-slot .media{width:42px;height:42px}
+  .composition-slot .media[hidden]{display:none}
+  .composition-slot-number{position:absolute;top:3px;left:5px;font-size:.75rem;color:var(--muted)}
+  .composition-slot-empty{color:var(--muted)}
+  @media(max-width:950px){.composition-players{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(max-width:565px){.composition-players{grid-template-columns:minmax(0,1fr)}}
+  .share-controls{margin-top:16px;padding-top:12px;border-top:1px solid var(--line)}
+  .share-controls .filter-note{margin-top:6px}
+  .share-controls h3{font-size:1rem}
+  #open-share-feedback{color:var(--danger)}
   .add-perk{grid-column:1/-1;justify-self:start;min-height:38px;border:1px solid #5b7255;border-radius:7px;background:#253626;color:var(--accent);padding:5px 10px;font-size:.875rem}
   .add-perk:hover{background:#354b32}
+  .mobile-build-nav{display:none}
   .card-feedback{grid-column:1/-1;color:var(--muted);font-size:.875rem}
   .card-undo{grid-column:1/-1;justify-self:start}
   .copy-fallback textarea{display:block;width:100%;min-height:8rem;margin-top:.5rem;padding:.5rem;color:var(--text);background:var(--panel);border:1px solid var(--line);font:inherit}
@@ -99,15 +155,31 @@
   .player-picker-options button:not(:disabled):hover{border-color:var(--accent)}
   .player-picker-options button:disabled{color:var(--muted);cursor:default}
   .player-picker-options button span:last-child{font-size:.875rem}
+  .player-picker-options button span:first-child{min-width:0;overflow-wrap:anywhere}
   footer{border-top:1px solid var(--line);padding:20px 0 28px;color:var(--muted);font-size:.875rem}
   @media(max-width:820px){.grid,.players{grid-template-columns:repeat(2,minmax(0,1fr))}}
   @media(max-width:565px){
+    html{scroll-padding-bottom:calc(8.5rem + env(safe-area-inset-bottom,0px))}
+    body{padding-bottom:calc(8.5rem + env(safe-area-inset-bottom,0px))}
+    .mobile-build-nav{display:grid;gap:6px;position:fixed;z-index:5;inset:auto 0 0;padding:8px max(10px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-left,0px));background:var(--panel);border-top:1px solid var(--line);box-shadow:0 -4px 16px #0002}
+    body:has(:is(input[type=search],input[type=text],input:not([type]),textarea):focus) .mobile-build-nav{display:none}
+    .mobile-build-meta{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:8px;align-items:end}
+    .mobile-build-meta .field>span{margin-bottom:2px}
+    .mobile-build-status{font-size:.875rem;line-height:1.3;overflow-wrap:anywhere}
+    .mobile-build-status .invalid{color:var(--danger);font-weight:700}
+    .mobile-jumps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+    .mobile-jumps .clear{justify-self:stretch;padding-inline:4px}
+    .add-perk{min-height:44px;padding-inline:12px}
+    .slot select{min-height:44px}
+    .warning-target{min-height:44px}
+    #builder-players{grid-template-columns:minmax(0,1fr)}
     .shell{width:calc(100% - 30px)} .hero .shell{padding-block:31px 34px}
     .hero .shell::after{right:-115px;opacity:.34}
     .settings,.search-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
     .choices span{padding:7px 8px;font-size:.875rem}.search-field{grid-column:1/-1}
     .clear{justify-self:start}.filters{padding:13px;gap:13px}.grid{grid-template-columns:1fr}
     .builder{padding:13px}.saved-controls{grid-template-columns:1fr}
+    .saved-actions .clear{flex:1 0 auto}
   }
   @media(max-width:365px){.settings,.players{grid-template-columns:1fr}.choices{width:max-content}}
   .cup-nav{display:none}
@@ -149,7 +221,7 @@
   [data-theme="good-guy-cup"] .hero p{color:#f5dfaa}
   [data-theme="good-guy-cup"] :focus-visible{outline-color:#95443a}
   [data-theme="good-guy-cup"] :is(.filters,.builder,.card,.player,.choices,input,select,.clear,.context span,.empty,.add-perk,.status){border-radius:.2rem}
-  [data-theme="good-guy-cup"] :is(input[type=search],select,.save-row input){background-color:#fffbef}
+  [data-theme="good-guy-cup"] :is(input[type=search],select,.save-row input,.saved-dialog input,.player-name input){background-color:#fffbef}
   [data-theme="good-guy-cup"] input::placeholder{color:#645f51}
   [data-theme="good-guy-cup"] .choices{background:#efe3c9}
   [data-theme="good-guy-cup"] .choices input:checked+span{background:var(--accent);color:#fff7e7}
@@ -190,6 +262,22 @@
   <p>名前や効果からパークを探し、マップ区分ごとの使用可否と制限を確認できます。</p>
 </div></section>
 <main class="shell">
+  <section class="builder shared-build" id="shared-build" aria-labelledby="shared-build-title" hidden>
+    <h2 id="shared-build-title" tabindex="-1">共有された構成</h2>
+    <p class="composition-summary" id="shared-summary" role="status"></p>
+    <p class="filter-note" id="shared-version" hidden></p>
+    <div class="composition-players" id="shared-players"></div>
+    <ul class="violations" id="shared-violations" hidden></ul>
+    <div class="saved-actions">
+      <button class="clear" type="button" id="copy-shared-build" hidden>コピーして編集</button>
+      <button class="clear" type="button" id="dismiss-shared-build">編集中の構成に戻る</button>
+    </div>
+    <div class="saved-actions" id="shared-png-controls" hidden>
+      <button class="clear" type="button" id="save-shared-png">PNGで保存</button>
+      <a id="shared-png-link" target="_blank" rel="noopener" hidden>PNGを開く／保存</a>
+    </div>
+    <p class="filter-note" id="shared-png-status" role="status"></p>
+  </section>
   <form class="filters" id="filters" aria-label="検索条件">
     <div class="settings">
       <fieldset><legend>役割</legend><div class="choices">
@@ -202,52 +290,185 @@
       </div></fieldset>
     </div>
     <div class="search-row">
-      <label class="field search-field"><span>キーワード</span><input type="search" name="query" placeholder="例　デッハ、自己治療、Dead Hard" autocomplete="off"></label>
+      <label class="field search-field"><span>キーワード</span><input type="search" id="perk-query" name="query" placeholder="例　デッハ、自己治療、Dead Hard" autocomplete="off"></label>
       <label class="field select-field"><span>制限カテゴリ</span><select name="category"></select></label>
-      <label class="field select-field"><span>使用可否</span><select name="availability">
+      <label class="field select-field"><span>大会ルールの使用可否</span><select name="availability">
         <option value="">すべて</option><option value="allowed">使用可のみ</option><option value="blocked">使用不可のみ</option>
       </select></label>
       <button type="button" class="clear" id="clear">絞り込み解除</button>
     </div>
+    <div class="addition-filters">
+      <label class="field"><span>追加先の選手</span><select name="addition-player"></select></label>
+      <label class="addition-toggle"><input type="checkbox" name="only-addable" disabled>追加可能なパークのみ</label>
+      <label class="addition-toggle"><input type="checkbox" name="favorites-only">お気に入りのみ</label>
+    </div>
+    <p class="filter-note" id="favorite-feedback" role="status"></p>
     <p class="filter-note" id="catalog-note"></p>
   </form>
   <section class="builder" id="builder" aria-labelledby="builder-title">
-    <div class="builder-head"><h2 id="builder-title">パーク構成</h2><p class="builder-state" id="builder-state" role="status"></p></div>
+    <div class="builder-head"><h2 id="builder-title" tabindex="-1">パーク構成</h2><p class="builder-state" id="builder-state" role="status"></p></div>
+    <button class="clear" type="button" id="view-composition-sheet">構成表を見る</button>
     <div class="context" id="builder-counts" aria-label="現在の使用枠"></div>
     <ul class="violations" id="builder-violations" aria-label="構成の違反" hidden></ul>
     <div class="players" id="builder-players"></div>
     <div class="builder-controls">
       <a href="#results-title">検索結果を見る</a>
+      <button class="clear" type="button" id="copy-map-build" disabled></button>
       <button class="clear" type="button" id="copy-build" disabled>Discord用にコピー</button>
     </div>
     <label class="copy-fallback" id="copy-fallback" hidden>コピー用の構成テキスト
       <textarea id="copy-text" readonly></textarea>
     </label>
+    <section class="share-controls" aria-labelledby="share-controls-title">
+      <h3 id="share-controls-title" tabindex="-1">URL共有</h3>
+      <div class="saved-actions">
+        <button class="clear" type="button" id="copy-share-url" aria-describedby="share-note" disabled>リンクをコピー</button>
+        <button class="clear" type="button" id="open-shared-build">共有構成を開く</button>
+      </div>
+      <p class="filter-note" id="share-note">リンクを知っている人は、パーク構成と入力した選手名を閲覧できます。</p>
+      <p class="filter-note" id="share-feedback" role="status"></p>
+      <label class="copy-fallback" id="share-fallback" hidden>コピー用の共有URL<textarea id="share-url" readonly></textarea></label>
+    </section>
     <div class="saved-controls">
       <form class="save-row" id="save-form">
         <label class="field"><span>保存名</span><input id="build-name" maxlength="50" required placeholder="例　屋外用"></label>
-        <button type="submit" class="clear">保存</button>
+        <button type="submit" class="clear">新規保存</button>
       </form>
       <form class="save-row" id="load-form">
         <label class="field"><span>保存済みの構成</span><select id="saved-builds"></select></label>
-        <button type="submit" class="clear" id="load-build">読み込む</button>
+        <button type="submit" class="clear" id="load-build" disabled>開く</button>
       </form>
     </div>
+    <div class="saved-actions" role="group" aria-label="選択した保存済み構成の操作">
+      <button type="button" class="clear" data-saved-action="rename" disabled>名前変更</button>
+      <button type="button" class="clear" data-saved-action="overwrite" disabled>上書き保存</button>
+      <button type="button" class="clear" data-saved-action="duplicate" disabled>複製</button>
+      <button type="button" class="clear" data-saved-action="delete" disabled>削除</button>
+      <button type="button" class="clear" id="compare-saved" disabled>保存構成を比較</button>
+    </div>
+    <div class="saved-actions" role="group" aria-label="編集中の構成の操作">
+      <button type="button" class="clear" id="clear-draft" disabled>編集中の構成を全消去</button>
+      <button type="button" class="clear" id="undo-clear-draft" hidden>全消去を取り消す</button>
+    </div>
+    <p class="draft-feedback" id="draft-feedback" role="status"></p>
     <p class="save-feedback" id="save-feedback" role="status"></p>
   </section>
+  <section class="builder composition-sheet" id="composition-sheet" aria-labelledby="composition-sheet-title">
+    <h2 id="composition-sheet-title" tabindex="-1">編集中の構成表</h2>
+    <p class="composition-summary" id="composition-summary"></p>
+    <div class="composition-players" id="composition-players"></div>
+    <ul class="violations" id="composition-violations" aria-label="構成表の違反" hidden></ul>
+    <div class="saved-actions">
+      <button class="clear" type="button" id="save-composition-png" disabled>PNGで保存</button>
+      <a id="composition-png-link" target="_blank" rel="noopener" hidden>PNGを開く／保存</a>
+    </div>
+    <p class="filter-note" id="composition-png-status" role="status"></p>
+  </section>
   <section aria-labelledby="results-title">
-    <div class="results-heading"><h2 id="results-title">検索結果</h2><p id="result-count" role="status"></p></div>
+    <div class="results-heading"><h2 id="results-title" tabindex="-1">検索結果</h2><p id="result-count" role="status" tabindex="-1"></p>
+      <button type="button" class="clear" id="filtered-undo" hidden>直前の追加を取り消す</button>
+    </div>
     <div class="context" id="context" aria-label="選択中の制限"></div>
-    <p class="empty" id="empty" hidden>該当するパークが見つかりません。キーワードや絞り込み条件を変更してください。</p>
+    <p class="empty" id="empty" role="status" hidden></p>
     <ul id="results" class="grid"></ul>
   </section>
 </main>
+<nav class="mobile-build-nav" aria-label="スマホ操作">
+  <div class="mobile-build-meta">
+    <label class="field"><span>追加先</span><select id="mobile-addition-player"></select></label>
+    <div class="mobile-build-status" role="status" aria-atomic="true">
+      <p id="mobile-team-capacity"></p><p id="mobile-player-capacity"></p><p id="mobile-rule-status"></p>
+    </div>
+  </div>
+  <div class="mobile-jumps">
+    <button type="button" class="clear" data-jump-to="perk-query">検索</button>
+    <button type="button" class="clear" data-jump-to="results-title">結果</button>
+    <button type="button" class="clear" data-jump-to="builder-title">構成</button>
+    <button type="button" class="clear" data-jump-to="share-controls-title">共有</button>
+  </div>
+</nav>
 <dialog class="player-picker" id="player-picker" aria-labelledby="picker-title" aria-describedby="picker-perk picker-warnings">
   <h2 id="picker-title">追加先を選ぶ</h2>
   <p id="picker-perk"></p>
   <ul class="violations" id="picker-warnings" hidden></ul>
   <div class="player-picker-options" id="picker-options"></div>
   <form method="dialog"><button class="clear" type="submit">キャンセル</button></form>
+</dialog>
+<dialog class="player-picker saved-dialog" id="saved-dialog" aria-labelledby="saved-dialog-title" aria-describedby="saved-dialog-description">
+  <h2 id="saved-dialog-title"></h2>
+  <p id="saved-dialog-description"></p>
+  <form id="saved-dialog-form">
+    <label class="field" id="saved-dialog-name-field" hidden><span>新しい保存名</span><input id="saved-dialog-name" maxlength="50"></label>
+    <div class="saved-actions">
+      <button type="button" class="clear" id="saved-dialog-cancel">キャンセル</button>
+      <button type="submit" class="clear" id="saved-dialog-submit"></button>
+    </div>
+  </form>
+</dialog>
+<dialog class="player-picker saved-dialog" id="copy-map-dialog" aria-labelledby="copy-map-title" aria-describedby="copy-map-description">
+  <h2 id="copy-map-title">コピー先の構成を置き換える</h2>
+  <p id="copy-map-description"></p>
+  <form method="dialog" class="saved-actions">
+    <button type="submit" class="clear" value="cancel" autofocus>キャンセル</button>
+    <button type="submit" class="clear" value="copy">置き換えて複製</button>
+  </form>
+</dialog>
+<dialog class="player-picker saved-dialog" id="clear-draft-dialog" aria-labelledby="clear-draft-title" aria-describedby="clear-draft-description">
+  <h2 id="clear-draft-title">編集中の構成を全消去</h2>
+  <p id="clear-draft-description"></p>
+  <form method="dialog" class="saved-actions">
+    <button type="submit" class="clear" value="cancel" autofocus>キャンセル</button>
+    <button type="submit" class="clear" value="clear">全消去する</button>
+  </form>
+</dialog>
+<dialog class="player-picker saved-dialog" id="import-shared-dialog" aria-labelledby="import-shared-title" aria-describedby="import-shared-description">
+  <h2 id="import-shared-title">編集中の構成を置き換える</h2>
+  <p id="import-shared-description"></p>
+  <form method="dialog" class="saved-actions">
+    <button type="submit" class="clear" value="cancel" autofocus>キャンセル</button>
+    <button type="submit" class="clear" value="import">置き換えて編集</button>
+  </form>
+</dialog>
+<dialog class="player-picker saved-dialog" id="open-share-dialog" aria-labelledby="open-share-title">
+  <h2 id="open-share-title">共有構成を開く</h2>
+  <form id="open-share-form">
+    <label class="field"><span>受け取った共有URL</span><input type="text" inputmode="url" id="open-share-url" autocapitalize="none" autocomplete="off" spellcheck="false" required autofocus></label>
+    <p id="open-share-feedback" role="alert"></p>
+    <div class="saved-actions">
+      <button type="button" class="clear" id="cancel-open-share">キャンセル</button>
+      <button type="submit" class="clear">閲覧する</button>
+    </div>
+  </form>
+</dialog>
+<dialog class="player-picker saved-dialog tool-dialog" id="move-perk-dialog" aria-labelledby="move-perk-title">
+  <h2 id="move-perk-title">パークを移動</h2>
+  <p id="move-perk-from"></p>
+  <form id="move-perk-form">
+    <label class="field"><span>移動先の枠</span><select id="move-perk-to" required></select></label>
+    <p id="move-perk-effect" role="status"></p>
+    <div class="saved-actions"><button type="button" class="clear" data-close-tool>キャンセル</button><button type="submit" class="clear" id="move-perk-submit" disabled>移動する</button></div>
+  </form>
+</dialog>
+<dialog class="player-picker saved-dialog tool-dialog" id="fix-perk-dialog" aria-labelledby="fix-perk-title">
+  <h2 id="fix-perk-title">違反箇所の確認</h2>
+  <p id="fix-perk-issue"></p>
+  <label class="field"><span>確認する枠</span><select id="fix-perk-slot"></select></label>
+  <div class="saved-actions">
+    <button type="button" class="clear" id="jump-fix-perk">該当枠へ移動</button>
+    <button type="button" class="clear" id="remove-fix-perk">この枠から削除</button>
+    <button type="button" class="clear" id="search-fix-perk">別の候補を探す</button>
+    <button type="button" class="clear" data-close-tool>閉じる</button>
+  </div>
+</dialog>
+<dialog class="player-picker saved-dialog tool-dialog comparison-dialog" id="compare-saved-dialog" aria-labelledby="compare-saved-title">
+  <h2 id="compare-saved-title">保存構成の比較</h2>
+  <div class="comparison-choices">
+    <label class="field"><span>構成 A</span><select id="comparison-a"></select></label>
+    <label class="field"><span>構成 B</span><select id="comparison-b"></select></label>
+  </div>
+  <p id="comparison-status" role="status"></p>
+  <div id="comparison-output"></div>
+  <div class="saved-actions"><button type="button" class="clear" data-close-tool>閉じる</button></div>
 </dialog>
 <footer><div class="shell"><a id="rules">参照したパーク判定表</a><span id="version"></span></div></footer>
 </div>
@@ -283,6 +504,15 @@
     return node;
   }
 
+  function perkImage(path, onError) {
+    const image = element('img');
+    image.alt = '';
+    image.loading = 'lazy';
+    image.addEventListener('error', onError, {once:true});
+    image.src = path;
+    return image;
+  }
+
   function updateCategoryOptions(role) {
     const select = fields.namedItem('category');
     const categories = new Set(Object.values(tournament.roles[role].categoryByPerkId));
@@ -293,21 +523,22 @@
     select.disabled = options.length === 0;
   }
 
-  function isAllowed(rules, perkId) {
-    return rules.eligibility.perkIds.includes(perkId) === (rules.eligibility.mode === 'allowlist');
+  function perkRestriction(rules, limits, perkId) {
+    const listed = rules.eligibility.perkIds.includes(perkId);
+    if (!listed && rules.eligibility.mode === 'allowlist') return '大会の使用可能一覧に未掲載';
+    if (listed && rules.eligibility.mode === 'denylist') return '大会ルールで使用禁止';
+    if (limits.categoryCaps[rules.categoryByPerkId[perkId]] === 0) return 'このマップ区分で使用不可';
+    return '';
   }
 
-  function perkCard(perk, allowed, category, cap, mode) {
+  function perkCard(perk, restriction, category, cap, check) {
+    const allowed = !restriction;
     const card = element('li', 'card');
+    card.dataset.perkId = perk.id;
     const media = element('div', 'media');
     media.setAttribute('aria-hidden', 'true');
     if (perk.image?.path) {
-      const image = element('img');
-      image.alt = '';
-      image.loading = 'lazy';
-      image.addEventListener('error', () => { media.textContent = '画像取得不可'; }, {once: true});
-      image.src = perk.image.path;
-      media.append(image);
+      media.append(perkImage(perk.image.path, () => { media.textContent = '画像取得不可'; }));
     } else {
       media.textContent = '画像未登録';
     }
@@ -321,11 +552,11 @@
     heading.append(element('span', allowed ? 'status' : 'status blocked', allowed ? '使用可' : '使用不可'));
     card.append(media, heading);
 
-    if (category) {
+    if (!allowed) {
+      card.append(element('p', 'category', restriction));
+    } else if (category) {
       const limit = cap == null ? 'チームの総枠内' : 'チームで最大' + cap + '個';
       card.append(element('p', 'category', tournament.categories[category] + ' ／ ' + limit));
-    } else if (!allowed) {
-      card.append(element('p', 'category', mode === 'allowlist' ? '大会の使用可能一覧に未掲載' : '大会ルールで使用禁止'));
     } else {
       card.append(element('p', 'category', '大会の個別パーク制限なし'));
     }
@@ -345,6 +576,12 @@
       sources.append(link);
     }
     if (sources.childElementCount) card.append(sources);
+    card.append(favoriteButton(perk));
+    if (check) {
+      const name = playerLabel(selectedRole(), additionPlayerIndex());
+      const label = check.length ? name + 'への追加不可。' + check.map(issue => issue.message).join(' ') : name + 'に追加可能';
+      card.append(element('p', check.length ? 'addition-status blocked' : 'addition-status', label));
+    }
     const add = element('button', 'add-perk', '構成に追加');
     const addFeedback = element('p', 'card-feedback');
     addFeedback.setAttribute('role', 'status');
@@ -369,7 +606,9 @@
     const rules = tournament.roles[role];
     const profile = tournament.mapProfiles[map];
     const limits = profile.roles[role];
-    const {mode} = rules.eligibility;
+    const target = additionPlayerIndex();
+    const addableOnly = onlyAddable();
+    const excluded = new Map();
     const visible = document.createDocumentFragment();
     let matches = 0;
     let total = 0;
@@ -377,12 +616,21 @@
     for (const perk of perks) {
       if (perk.role !== role) continue;
       total += 1;
+      if (fields.namedItem('favorites-only').checked && !favorites.has(perk.id)) continue;
       const category = rules.categoryByPerkId[perk.id];
-      const allowed = isAllowed(rules, perk.id);
+      const restriction = perkRestriction(rules, limits, perk.id);
+      const allowed = !restriction;
       if (categoryFilter && category !== categoryFilter) continue;
       if (availability && allowed !== (availability === 'allowed')) continue;
       if (!terms.every(term => perk.searchable.some(value => value.includes(term)))) continue;
-      visible.append(perkCard(perk, allowed, category, limits.categoryCaps[category], mode));
+      const check = target < 0 ? null : additionIssues(perk, role, target);
+      if (addableOnly && check.length) {
+        for (const reason of new Set(check.map(issue => issue.reason))) {
+          excluded.set(reason, (excluded.get(reason) ?? 0) + 1);
+        }
+        continue;
+      }
+      visible.append(perkCard(perk, restriction, category, limits.categoryCaps[category], check));
       matches += 1;
     }
 
@@ -394,14 +642,28 @@
         element('span', '', 'チーム内重複不可'));
     }
     count.textContent = matches + ' / ' + total + '件';
+    if (matches === 0) {
+      empty.textContent = excluded.size ? playerLabel(role, target) + 'に追加できるパークがありません。' +
+        [...excluded].map(([reason, number]) => reason + ' ' + number + '件').join('、') +
+        '。「追加可能なパークのみ」を外すと各パークの理由を確認できます。' :
+        '現在の検索条件に該当するパークがありません。キーワードや絞り込みを確認してください。';
+    }
     empty.hidden = matches > 0;
+    filteredUndo.hidden = !addableOnly || !lastAdditionInCurrentDraft();
     results.replaceChildren(visible);
   }
 
 
   const byPerkId = new Map(perks.map(perk => [perk.id, perk]));
+  const playerNameMaxLength = 32;
   const storageKey = 'frog-cup:perk-builds:v1:' + tournament.tournamentId;
+  const draftKeyPrefix = 'frog-cup:perk-draft:v1:' + tournament.tournamentId + ':';
+  const draftFeedback = document.getElementById('draft-feedback');
+  const clearDraft = document.getElementById('clear-draft');
+  const undoClearDraft = document.getElementById('undo-clear-draft');
+  const clearDraftDialog = document.getElementById('clear-draft-dialog');
   const players = document.getElementById('builder-players');
+  const builderTitle = document.getElementById('builder-title');
   const picker = document.getElementById('player-picker');
   const pickerPerk = document.getElementById('picker-perk');
   const pickerOptions = document.getElementById('picker-options');
@@ -409,17 +671,39 @@
   const pickerTitle = document.getElementById('picker-title');
   const buildState = document.getElementById('builder-state');
   const buildCounts = document.getElementById('builder-counts');
+  const compositionSummary = document.getElementById('composition-summary');
+  const compositionPlayers = document.getElementById('composition-players');
+  const compositionViolations = document.getElementById('composition-violations');
+  const compositionSignatures = new WeakMap();
   const violations = document.getElementById('builder-violations');
   const buildName = document.getElementById('build-name');
   const savedBuilds = document.getElementById('saved-builds');
   const loadButton = document.getElementById('load-build');
+  const savedActions = [...document.querySelectorAll('[data-saved-action]')];
+  const savedDialog = document.getElementById('saved-dialog');
+  const savedDialogName = document.getElementById('saved-dialog-name');
+  const savedDialogCancel = document.getElementById('saved-dialog-cancel');
   const feedback = document.getElementById('save-feedback');
   const copyBuild = document.getElementById('copy-build');
+  const copyMapBuild = document.getElementById('copy-map-build');
+  const copyMapDialog = document.getElementById('copy-map-dialog');
   const copyFallback = document.getElementById('copy-fallback');
   const copyText = document.getElementById('copy-text');
+  const additionPlayer = fields.namedItem('addition-player');
+  const additionToggle = fields.namedItem('only-addable');
+  const mobileAdditionPlayer = document.getElementById('mobile-addition-player');
+  const mobileTeamCapacity = document.getElementById('mobile-team-capacity');
+  const mobilePlayerCapacity = document.getElementById('mobile-player-capacity');
+  const mobileRuleStatus = document.getElementById('mobile-rule-status');
+  const filteredUndo = document.getElementById('filtered-undo');
   const drafts = new Map();
   const slotControls = [];
   let lastAddition;
+  let pendingSavedAction;
+
+  document.getElementById('view-composition-sheet').addEventListener('click', () => {
+    document.getElementById('composition-sheet-title').focus();
+  });
 
   function selectedRole() {
     return fields.namedItem('role').value;
@@ -429,35 +713,217 @@
     return fields.namedItem('map').value;
   }
 
-  function playerName(role, index) {
+  function defaultPlayerName(role, index) {
     return role === 'survivor' ? 'サバイバー ' + (index + 1) : tournament.roles[role].label ?? 'キラー';
   }
 
-  function draft(role) {
+  function playerName(role, index, map = selectedMap()) {
+    return draft(role, map).playerNames[index] || defaultPlayerName(role, index);
+  }
+
+  function playerLabel(role, index, map = selectedMap()) {
+    return labelPlayerName(role, index, playerName(role, index, map));
+  }
+
+  function labelPlayerName(role, index, name) {
+    const fallback = defaultPlayerName(role, index);
+    return name === fallback ? name : name + '（' + fallback + '）';
+  }
+
+  function additionPlayerIndex() {
+    return additionPlayer.value === '' ? -1 : Number(additionPlayer.value);
+  }
+
+  function onlyAddable() {
+    return additionToggle.checked && additionPlayerIndex() >= 0;
+  }
+
+  function updateAdditionToggle() {
+    additionToggle.disabled = additionPlayerIndex() < 0;
+    if (additionToggle.disabled) additionToggle.checked = false;
+    syncMobileAdditionPlayer();
+  }
+
+  function updateMobilePlayerCapacity() {
+    const index = additionPlayerIndex();
+    const max = tournament.roles[selectedRole()].maxPerPlayer;
+    const used = index < 0 ? 0 : draft().players[index].filter(Boolean).length;
+    const text = index < 0 ? '' : '選手残り ' + Math.max(0,max - used) + '枠';
+    if (mobilePlayerCapacity.textContent !== text) mobilePlayerCapacity.textContent = text;
+  }
+
+  function syncMobileAdditionPlayer() {
+    mobileAdditionPlayer.value = additionPlayer.value;
+    updateMobilePlayerCapacity();
+  }
+
+  mobileAdditionPlayer.addEventListener('change', () => {
+    additionPlayer.value = mobileAdditionPlayer.value;
+    updateAdditionToggle();
+    render();
+  });
+
+  for (const button of document.querySelectorAll('[data-jump-to]')) {
+    button.addEventListener('click', () => {
+      const target = document.getElementById(button.dataset.jumpTo);
+      target.focus({preventScroll:true});
+      target.scrollIntoView({block:'start'});
+    });
+  }
+
+  function restorePlayers(role, savedPlayers = []) {
     const {playerCount, maxPerPlayer} = tournament.roles[role];
-    if (!drafts.has(role)) {
-      drafts.set(role, Array.from({length:playerCount}, () => Array(maxPerPlayer).fill('')));
+    return Array.from({length:Math.max(playerCount, savedPlayers.length)}, (_, index) => {
+      const slots = savedPlayers[index] ?? [];
+      return Array.from({length:Math.max(maxPerPlayer, slots.length)}, (_, slot) => slots[slot] ?? '');
+    });
+  }
+
+  function emptyDraft(role) {
+    return {players:restorePlayers(role), playerNames:[], saveName:''};
+  }
+
+  function isDraftContent(value) {
+    return value && Array.isArray(value.players) && value.players.every(slots =>
+      Array.isArray(slots) && slots.every(id => typeof id === 'string')) &&
+      Array.isArray(value.playerNames) && value.playerNames.every(name => typeof name === 'string') &&
+      typeof value.saveName === 'string';
+  }
+
+  function readDraft(role, key) {
+    const current = emptyDraft(role);
+    try {
+      current.storedValue = localStorage.getItem(draftKeyPrefix + key);
+      if (current.storedValue === null) return current;
+      const {schemaVersion, content, beforeClear} = JSON.parse(current.storedValue);
+      if (schemaVersion !== 1 || !isDraftContent(content) || (beforeClear != null && !isDraftContent(beforeClear))) {
+        throw new Error('Invalid draft');
+      }
+      Object.assign(current, draftContent(content), {players:restorePlayers(role, content.players), beforeClear, restored:true});
+    } catch {
+      current.readFailed = true;
+      current.error = '一時保存した構成を読み込めません。作成した構成を残すには「新規保存」を試してください。';
     }
-    return drafts.get(role);
+    return current;
+  }
+
+  function draft(role = selectedRole(), map = selectedMap()) {
+    const key = role + ':' + map;
+    if (!drafts.has(key)) drafts.set(key, readDraft(role, key));
+    return drafts.get(key);
+  }
+
+  function draftContent({players, playerNames, saveName}) {
+    return {players, playerNames:Array.from(playerNames, name => name ?? ''), saveName};
+  }
+
+  function saveDraft({keepUndo = false} = {}) {
+    const role = selectedRole();
+    const map = selectedMap();
+    const current = draft(role, map);
+    if (!keepUndo) current.beforeClear = null;
+    if (!current.readFailed) {
+      const key = draftKeyPrefix + role + ':' + map;
+      try {
+        if (localStorage.getItem(key) !== current.storedValue) {
+          current.error = '別のタブで同じ構成が更新されたため、一時保存を停止しました。この編集を残すには「新規保存」を使ってください。';
+        } else {
+          const value = JSON.stringify({schemaVersion:1, content:draftContent(current), beforeClear:current.beforeClear});
+          localStorage.setItem(key, value);
+          current.storedValue = value;
+          current.restored = false;
+          current.error = '';
+        }
+      } catch {
+        current.error = '一時保存できませんでした。ブラウザーの保存設定や空き容量を確認してください。';
+      }
+    }
+    updateDraftControls();
+  }
+
+  function updateDraftControls() {
+    const current = draft();
+    clearDraft.disabled = !hasDraftContent(current, selectedRole());
+    undoClearDraft.hidden = !current.beforeClear;
+    draftFeedback.classList.toggle('error', Boolean(current.error));
+    const message = current.error || (current.restored ? '一時保存した構成を復元しました。' : current.storedValue ? '編集中の構成をブラウザーに一時保存しました。' : '');
+    if (draftFeedback.textContent !== message) draftFeedback.textContent = message;
+  }
+
+  function hasDraftContent(current, role) {
+    return current.players.some(slots => slots.some(Boolean)) || Boolean(current.saveName.trim()) ||
+      current.playerNames.some((name, index) => name && name !== defaultPlayerName(role, index));
+  }
+
+  function restoreDraftView(requestedRole) {
+    let view;
+    try { view = JSON.parse(sessionStorage.getItem(draftKeyPrefix + 'view')); } catch { /* Keep default view. */ }
+    const role = Object.hasOwn(tournament.roles, requestedRole) ? requestedRole : view?.role;
+    if (Object.hasOwn(tournament.roles, role)) fields.namedItem('role').value = role;
+    if (Object.hasOwn(tournament.mapProfiles, view?.map)) fields.namedItem('map').value = view.map;
+  }
+
+  function otherMap(map) {
+    return map === 'indoor' ? 'outdoor' : 'indoor';
+  }
+
+  function lastAdditionInCurrentDraft() {
+    return lastAddition?.role === selectedRole() && lastAddition.map === selectedMap();
+  }
+
+  function playerNameField(role, playerIndex, currentDraft, legend) {
+    const fallback = defaultPlayerName(role, playerIndex);
+    const label = element('label', 'field player-name');
+    const input = element('input');
+    input.type = 'text';
+    input.maxLength = playerNameMaxLength;
+    input.placeholder = fallback;
+    input.value = playerName(role, playerIndex) === fallback ? '' : playerName(role, playerIndex);
+    label.append(element('span', '', fallback + 'の名前'), input);
+    input.addEventListener('input', () => {
+      currentDraft.playerNames[playerIndex] = input.value.trim();
+      legend.textContent = playerName(role, playerIndex);
+      const display = playerLabel(role, playerIndex);
+      slotControls[playerIndex].forEach((control, slotIndex) => {
+        control.setAttribute('aria-label', display + ' パーク ' + (slotIndex + 1));
+      });
+      const option = additionPlayer.options[playerIndex + 1];
+      if (option) {
+        option.textContent = display;
+        mobileAdditionPlayer.options[playerIndex + 1].textContent = display;
+      }
+      saveDraft();
+      validateBuild();
+      if (additionPlayerIndex() >= 0) render();
+    });
+    return label;
   }
 
   function renderPlayerSlots() {
     const role = selectedRole();
+    const map = selectedMap();
+    try { sessionStorage.setItem(draftKeyPrefix + 'view', JSON.stringify({role, map})); } catch { /* Draft storage is separate. */ }
     const rules = tournament.roles[role];
+    const limits = tournament.mapProfiles[map].roles[role];
+    builderTitle.textContent = tournament.mapProfiles[map].label + '用パーク構成';
+    copyMapBuild.textContent = tournament.mapProfiles[map].label + '構成を' + tournament.mapProfiles[otherMap(map)].label + '用に複製';
     const options = perks.filter(perk => perk.role === role).map(perk => {
-      const suffix = isAllowed(rules, perk.id) ? '' : '（使用不可）';
+      const suffix = perkRestriction(rules, limits, perk.id) ? '（使用不可）' : '';
       return new Option(perk.names.ja + suffix, perk.id);
     });
-    const rows = draft(role);
+    const currentDraft = draft(role, map);
+    buildName.value = currentDraft.saveName;
     slotControls.length = 0;
-    const groups = rows.map((slots, playerIndex) => {
+    const groups = currentDraft.players.map((slots, playerIndex) => {
       const group = element('fieldset', 'player');
-      const name = playerName(role, playerIndex);
-      group.append(element('legend', '', name));
+      const legend = element('legend', '', playerName(role, playerIndex));
+      const labelWithNumber = playerLabel(role, playerIndex);
+      group.append(legend);
+      if (role === 'survivor') group.append(playerNameField(role, playerIndex, currentDraft, legend));
       const controls = slots.map((perkId, slotIndex) => {
         const label = element('label', 'slot');
         const control = element('select');
-        control.setAttribute('aria-label', name + ' パーク ' + (slotIndex + 1));
+        control.setAttribute('aria-label', labelWithNumber + ' パーク ' + (slotIndex + 1));
         control.append(new Option('空き枠', ''), ...options.map(option => option.cloneNode(true)));
         if (perkId && !options.some(option => option.value === perkId)) {
           control.add(new Option((byPerkId.get(perkId)?.names.ja ?? perkId) + '（確認が必要）', perkId));
@@ -466,133 +932,217 @@
         control.addEventListener('change', () => {
           if (lastAddition?.slots === slots && lastAddition.slotIndex === slotIndex) clearUndo();
           slots[slotIndex] = control.value;
+          saveDraft();
           validateBuild();
+          if (additionPlayerIndex() >= 0) render();
         });
         label.append(element('span', '', String(slotIndex + 1)), control);
-        group.append(label);
+        group.append(slotEditor(label, control, playerIndex, slotIndex));
         return control;
       });
       slotControls.push(controls);
       return group;
     });
     players.replaceChildren(...groups);
+    const target = additionPlayer.dataset.role === role ? additionPlayer.value : '';
+    additionPlayer.replaceChildren(new Option('選手を選ぶ', ''), ...Array.from({length:rules.playerCount},
+      (_, index) => new Option(playerLabel(role, index), String(index))));
+    additionPlayer.dataset.role = role;
+    additionPlayer.value = target;
+    if (additionPlayer.selectedIndex === -1) additionPlayer.value = '';
+    mobileAdditionPlayer.replaceChildren(...Array.from(additionPlayer.options,option => option.cloneNode(true)));
+    updateAdditionToggle();
+    updateDraftControls();
     validateBuild();
+  }
+
+  function evaluateComposition(rows, role, map, proposedPerkId = '', names = draft(role, map).playerNames) {
+    const rules = tournament.roles[role];
+    const limits = tournament.mapProfiles[map].roles[role];
+    const selected = rows.flatMap((slots, playerIndex) => slots.flatMap((id, slotIndex) =>
+      id ? [{id, playerIndex, slotIndex}] : []));
+    if (proposedPerkId) selected.push({id:proposedPerkId, playerIndex:-1, slotIndex:-1});
+
+    const categories = Object.entries(limits.categoryCaps).map(([id, cap]) => {
+      const items = selected.filter(item => rules.categoryByPerkId[item.id] === id);
+      return {id, label:tournament.categories[id], cap, items};
+    });
+    const issues = [];
+    const report = (type, items, message, detail = {}) => issues.push({type, items, message, ...detail});
+    const labelPlayer = index => labelPlayerName(role, index, names[index] || defaultPlayerName(role, index));
+
+    for (const item of selected) {
+      const perk = byPerkId.get(item.id);
+      const label = item.playerIndex < 0 ? '' : labelPlayer(item.playerIndex) + ' の';
+      if (!perk || perk.role !== role) {
+        report('unknown', [item], label + ' ' + (perk?.names.ja ?? item.id) + ' は、この役割のパーク辞書で確認できません。');
+      } else {
+        const restriction = perkRestriction(rules, limits, item.id);
+        if (restriction) report('ineligible', [item], label + '「' + perk.names.ja + '」は使用不可です。' + restriction + '。', {restriction});
+      }
+    }
+    for (const [playerIndex] of rows.entries()) {
+      const items = selected.filter(item => item.playerIndex === playerIndex);
+      if (items.length > rules.maxPerPlayer) {
+        report('player', items, labelPlayer(playerIndex) + ' は最大' + rules.maxPerPlayer + '枠です。');
+      }
+      if (playerIndex >= rules.playerCount && items.length) {
+        report('roster', items, labelPlayer(playerIndex) + ' は今回の出場枠に含まれません。');
+      }
+    }
+
+    const totalExcess = selected.length - limits.maxTeamTotal;
+    if (totalExcess > 0) report('total', [], '合計枠を' + totalExcess + '枠超えています。', {excess:totalExcess});
+    for (const id of new Set(selected.map(item => item.id))) {
+      const items = selected.filter(item => item.id === id);
+      if (items.length <= rules.maxCopiesPerTeam) continue;
+      const owners = [...new Set(items.filter(item => item.playerIndex >= 0).map(item => item.playerIndex))]
+        .map(labelPlayer);
+      report('duplicate', items, '「' + (byPerkId.get(id)?.names.ja ?? id) + '」の重複（' + owners.join('、') + '）。', {owners});
+    }
+    for (const {label, cap, items} of categories) {
+      if (cap == null || cap === 0 || items.length <= cap) continue;
+      const excess = items.length - cap;
+      report('category', items, label + 'を' + excess + '個超えています。', {label, excess});
+    }
+    return {used:selected.length, maxTotal:limits.maxTeamTotal, categories, issues};
+  }
+
+  function compositionVerdictText({used, issues}) {
+    return issues.length ? '要修正' : used ? 'パーク制限に適合' : 'パーク未選択';
+  }
+
+  function renderCompositionTable({summary, roster, violations}, {role, map, players, playerNames}, verdict) {
+    const signature = JSON.stringify([role, map, players, playerNames, verdict]);
+    if (compositionSignatures.get(roster) === signature) return;
+    compositionSignatures.set(roster, signature);
+    const slotLimit = tournament.roles[role].maxPerPlayer;
+    const invalidSlots = new Set(verdict.issues.flatMap(issue => issue.items.map(item => `${item.playerIndex}:${item.slotIndex}`)));
+    summary.textContent = savedBuildContext({role,map}) + '　合計 ' + verdict.used + ' / ' + verdict.maxTotal + '枠　' + compositionVerdictText(verdict);
+    roster.replaceChildren(...players.map((slots, playerIndex) => {
+      const card = element('div', 'player');
+      const heading = element('div', 'composition-player-heading');
+      const name = playerNames[playerIndex] || defaultPlayerName(role, playerIndex);
+      heading.append(element('h3', '', labelPlayerName(role, playerIndex, name)),
+        element('span', '', slots.filter(Boolean).length + ' / ' + slotLimit + '枠'));
+      const list = element('ol', 'composition-slots');
+      list.setAttribute('role', 'list');
+      list.append(...slots.map((id, slotIndex) => {
+        const perk = byPerkId.get(id);
+        const slot = element('li', 'composition-slot');
+        slot.classList.toggle('invalid', invalidSlots.has(`${playerIndex}:${slotIndex}`));
+        const number = element('span', 'composition-slot-number', String(slotIndex + 1));
+        number.setAttribute('aria-hidden', 'true');
+        slot.append(number);
+        if (perk?.image?.path) {
+          const media = element('span', 'media');
+          media.setAttribute('aria-hidden', 'true');
+          media.append(perkImage(perk.image.path, () => { media.hidden = true; media.replaceChildren(); }));
+          slot.append(media);
+        }
+        const label = id ? perk?.names.ja ?? id + '（辞書未登録）' : '空き枠';
+        slot.append(element('span', id ? 'composition-perk-name' : 'composition-perk-name composition-slot-empty', label));
+        return slot;
+      }));
+      card.append(heading, list);
+      return card;
+    }));
+    if (roster === compositionPlayers) renderDraftWarnings(violations, verdict.issues);
+    else violations.replaceChildren(...verdict.issues.map(issue => element('li', '', issue.message)));
+    violations.hidden = verdict.issues.length === 0;
   }
 
   function validateBuild() {
     const role = selectedRole();
-    const rules = tournament.roles[role];
-    const limits = tournament.mapProfiles[selectedMap()].roles[role];
-    const issues = [];
-    const selections = [];
-    const byCategory = new Map();
-    const byId = new Map();
-    const mark = (items, message) => {
-      issues.push(message);
-      for (const item of items) item.control.setAttribute('aria-invalid', 'true');
-    };
-
-    for (const [playerIndex, slots] of draft(role).entries()) {
-      const playerSelections = [];
-      for (const [slotIndex, perkId] of slots.entries()) {
-        const control = slotControls[playerIndex][slotIndex];
-        control.removeAttribute('aria-invalid');
-        if (!perkId) continue;
-        const selection = {control, playerIndex};
-        playerSelections.push(selection);
-        selections.push(selection);
-        const perk = byPerkId.get(perkId);
-        if (!perk || perk.role !== role) {
-          mark([selection], playerName(role, playerIndex) + ' の ' + (perk?.names.ja ?? perkId) + ' は、この役割のパーク辞書で確認できません。');
-        } else if (!isAllowed(rules, perkId)) {
-          mark([selection], playerName(role, playerIndex) + ' の「' + perk.names.ja + '」は使用不可です。');
-        }
-        const category = rules.categoryByPerkId[perkId];
-        if (category) byCategory.set(category, [...(byCategory.get(category) ?? []), selection]);
-        byId.set(perkId, [...(byId.get(perkId) ?? []), selection]);
-      }
-      if (playerSelections.length > rules.maxPerPlayer) {
-        mark(playerSelections, playerName(role, playerIndex) + ' は最大' + rules.maxPerPlayer + '枠です。');
-      }
-      if (playerIndex >= rules.playerCount && playerSelections.length) {
-        mark(playerSelections, playerName(role, playerIndex) + ' は今回の出場枠に含まれません。');
+    const map = selectedMap();
+    const {players, playerNames} = draft(role, map);
+    const result = evaluateComposition(players, role, map);
+    const {used, maxTotal, categories} = result;
+    const issues = result.issues.map(issue => issue.message);
+    for (const controls of slotControls) {
+      for (const control of controls) control.removeAttribute('aria-invalid');
+    }
+    for (const {items} of result.issues) {
+      for (const {playerIndex, slotIndex} of items) {
+        slotControls[playerIndex][slotIndex].setAttribute('aria-invalid', 'true');
       }
     }
-
-    const used = selections.length;
-    if (used > limits.maxTeamTotal) {
-      issues.push('合計枠を' + (used - limits.maxTeamTotal) + '枠超えています。');
-    }
-    for (const [id, items] of byId) {
-      if (items.length <= rules.maxCopiesPerTeam) continue;
-      const names = [...new Set(items.map(item => playerName(role, item.playerIndex)))];
-      mark(items, '「' + (byPerkId.get(id)?.names.ja ?? id) + '」の重複（' + names.join('、') + '）。');
-    }
-
-    const labels = [element('span', '', '合計 ' + used + ' / ' + limits.maxTeamTotal + '枠')];
-    for (const [category, cap] of Object.entries(limits.categoryCaps)) {
-      const items = byCategory.get(category) ?? [];
-      const label = tournament.categories[category];
+    const labels = [element('span', '', '合計 ' + used + ' / ' + maxTotal + '枠')];
+    for (const {label, cap, items} of categories) {
       const usage = cap == null ? items.length + '個（総枠内）' : items.length + ' / ' + cap;
       labels.push(element('span', '', label + ' ' + usage));
-      if (cap != null && items.length > cap) {
-        mark(items, label + 'を' + (items.length - cap) + '個超えています。');
-      }
     }
     buildCounts.replaceChildren(...labels);
-    violations.replaceChildren(...issues.map(issue => element('li', '', issue)));
+    renderDraftWarnings(violations, result.issues);
+    syncMoveButtons();
     violations.hidden = issues.length === 0;
     buildState.classList.toggle('invalid', issues.length > 0);
-    buildState.textContent = issues.length ? '要修正' : used ? 'パーク制限に適合' : 'パーク未選択';
+    buildState.textContent = compositionVerdictText(result);
+    const mapLabel = tournament.mapProfiles[map].label;
+    const teamText = mapLabel + '　チーム' + (used > maxTotal ? (used - maxTotal) + '枠超過' : '残り ' + (maxTotal - used) + '枠');
+    const statusText = issues.length ? '要修正 ' + issues.length + '件' : compositionVerdictText(result);
+    if (mobileTeamCapacity.textContent !== teamText) mobileTeamCapacity.textContent = teamText;
+    if (mobileRuleStatus.textContent !== statusText) mobileRuleStatus.textContent = statusText;
+    mobileRuleStatus.classList.toggle('invalid',issues.length > 0);
+    updateMobilePlayerCapacity();
+    renderCompositionTable({summary:compositionSummary, roster:compositionPlayers, violations:compositionViolations},
+      {role, map, players, playerNames}, result);
     copyBuild.disabled = !used;
+    updateShareButton(used);
+    updateCompositionPng(used);
+    copyMapBuild.disabled = !used;
     copyFallback.hidden = true;
     return {used, issues};
   }
 
-  function additionWarnings(perk, role) {
-    const rules = tournament.roles[role];
-    const limits = tournament.mapProfiles[selectedMap()].roles[role];
-    const selected = draft(role).flat().filter(Boolean);
-    const warnings = [];
-    if (!isAllowed(rules, perk.id)) warnings.push('大会ルールで使用できないパークです。');
-    const owners = draft(role).flatMap((slots, index) =>
-      slots.includes(perk.id) ? [playerName(role, index)] : []);
-    if (selected.filter(id => id === perk.id).length >= rules.maxCopiesPerTeam) {
-      warnings.push('装備済みの選手　' + owners.join('、') + '。追加すると重複制限にかかります。');
+  function playerAdditionSlot(slots, max, perkId) {
+    const used = slots.filter(Boolean).length;
+    const slotIndex = slots.slice(0, max).indexOf('');
+    if (slots.includes(perkId)) return {used, reason:'装備済み', message:'この選手は装備済みです。'};
+    if (used >= max || slotIndex < 0) return {used, reason:'選手が満枠', message:'この選手に空き枠がありません。'};
+    return {used, slotIndex};
+  }
+
+  function additionIssues(perk, role, playerIndex = -1) {
+    const rows = draft(role).players;
+    const {issues} = evaluateComposition(rows, role, selectedMap(), perk.id);
+    const reasons = issues.filter(issue => issue.type === 'total' || issue.items.some(item => item.playerIndex === -1))
+      .map(issue => {
+        switch (issue.type) {
+          case 'ineligible': return {reason:issue.restriction, message:issue.restriction + 'です。'};
+          case 'duplicate': return {reason:'チーム内で装備済み', message:'装備済みの選手　' + issue.owners.join('、') + '。追加すると重複制限にかかります。'};
+          case 'total': return {reason:'チームの合計枠超過', message:'追加すると構成の合計上限を' + issue.excess + '枠超えます。'};
+          case 'category': return {reason:issue.label + 'の上限超過', message:issue.label + 'の上限を' + issue.excess + '個超えます。'};
+          default: return {reason:'パークを確認できない', message:issue.message};
+        }
+      });
+    if (playerIndex >= 0) {
+      const slot = playerAdditionSlot(rows[playerIndex], tournament.roles[role].maxPerPlayer, perk.id);
+      if (slot.reason) reasons.unshift(slot);
     }
-    const excess = selected.length + 1 - limits.maxTeamTotal;
-    if (excess > 0) warnings.push('追加すると構成の合計上限を' + excess + '枠超えます。');
-    const category = rules.categoryByPerkId[perk.id];
-    const cap = limits.categoryCaps[category];
-    if (cap != null) {
-      const categoryExcess = selected.filter(id => rules.categoryByPerkId[id] === category).length + 1 - cap;
-      if (categoryExcess > 0) warnings.push(tournament.categories[category] + 'の上限を' + categoryExcess + '個超えます。');
-    }
-    return warnings;
+    return reasons;
   }
 
   function choosePlayer(perk, cardFeedback, undo) {
     const role = selectedRole();
     const {playerCount, maxPerPlayer} = tournament.roles[role];
-    const rows = draft(role);
-    const warnings = additionWarnings(perk, role);
-    if (playerCount === 1 && (!warnings.length || rows[0].includes(perk.id) || rows[0].filter(Boolean).length >= maxPerPlayer)) {
+    const rows = draft(role).players;
+    const warnings = additionIssues(perk, role);
+    if (playerCount === 1 && (!warnings.length || playerAdditionSlot(rows[0], maxPerPlayer, perk.id).reason)) {
       cardFeedback.textContent = addPerk(perk, 0, undo);
       return;
     }
     pickerTitle.textContent = playerCount === 1 ? '追加内容を確認' : '追加先を選ぶ';
     pickerPerk.textContent = perk.names.ja;
-    pickerWarnings.replaceChildren(...warnings.map(warning => element('li', '', warning)));
+    pickerWarnings.replaceChildren(...warnings.map(issue => element('li', '', issue.message)));
     pickerWarnings.hidden = !warnings.length;
     pickerOptions.replaceChildren(...rows.slice(0, playerCount).map((slots, index) => {
-      const used = slots.filter(Boolean).length;
-      const equipped = slots.includes(perk.id);
-      const full = used >= maxPerPlayer;
+      const {used, reason} = playerAdditionSlot(slots, maxPerPlayer, perk.id);
       const button = element('button');
       button.type = 'button';
-      button.disabled = equipped || full;
-      const status = used + ' / ' + maxPerPlayer + '枠' + (equipped ? '・装備済み' : full ? '・満枠' : '');
-      const label = playerCount === 1 ? 'チャッキーに追加' : playerName(role, index);
+      button.disabled = Boolean(reason);
+      const status = used + ' / ' + maxPerPlayer + '枠' + (reason ? '・' + reason : '');
+      const label = playerCount === 1 ? 'チャッキーに追加' : playerLabel(role, index);
       button.append(element('span', '', label), element('span', '', status));
       button.addEventListener('click', () => {
         picker.close();
@@ -601,10 +1151,11 @@
       return button;
     }));
     picker.showModal();
+    pickerOptions.children[additionPlayerIndex()]?.focus();
   }
 
   function showUndoFor(perk, button) {
-    if (lastAddition?.perkId !== perk.id || lastAddition.role !== selectedRole()) return;
+    if (onlyAddable() || !lastAdditionInCurrentDraft() || lastAddition.perkId !== perk.id) return;
     lastAddition.button = button;
     button.hidden = false;
   }
@@ -612,46 +1163,133 @@
   function clearUndo() {
     if (lastAddition) lastAddition.button.hidden = true;
     lastAddition = undefined;
+    filteredUndo.hidden = true;
+  }
+
+  function refreshAdditionCards(perkId) {
+    render();
+    const card = results.querySelector('[data-perk-id="' + CSS.escape(perkId) + '"]');
+    if (card) card.querySelector('.card-feedback').textContent = feedback.textContent;
+    (card?.querySelector('.add-perk') ?? count).focus();
   }
 
   function undoPerk(perk, addButton, cardFeedback) {
-    if (lastAddition?.perkId !== perk.id || lastAddition.role !== selectedRole()) return;
+    if (!lastAdditionInCurrentDraft() || lastAddition.perkId !== perk.id) return;
     const { slots, playerIndex, slotIndex, role } = lastAddition;
-    if (draft(role)[playerIndex] !== slots || slots[slotIndex] !== perk.id) return;
+    if (draft(role).players[playerIndex] !== slots || slots[slotIndex] !== perk.id) return;
     slots[slotIndex] = '';
     slotControls[playerIndex][slotIndex].value = '';
     clearUndo();
+    saveDraft();
     validateBuild();
-    cardFeedback.textContent = playerName(role, playerIndex) + ' への追加を取り消しました。';
-    feedback.textContent = cardFeedback.textContent;
-    addButton.focus();
+    feedback.textContent = playerName(role, playerIndex) + ' への追加を取り消しました。';
+    if (cardFeedback) cardFeedback.textContent = feedback.textContent;
+    if (additionPlayerIndex() >= 0) refreshAdditionCards(perk.id);
+    else addButton?.focus();
   }
+
+  filteredUndo.addEventListener('click', () => {
+    if (lastAddition) undoPerk(byPerkId.get(lastAddition.perkId));
+  });
 
   function addPerk(perk, playerIndex, undo) {
     const role = selectedRole();
-    const slots = draft(role)[playerIndex];
-    if (slots.includes(perk.id)) return playerName(role, playerIndex) + ' に装備済みです。';
-    const slotIndex = slots.slice(0,tournament.roles[role].maxPerPlayer).indexOf('');
-    if (slotIndex === -1) {
-      feedback.textContent = playerName(role, playerIndex) + ' に空き枠がありません。';
+    const slots = draft(role).players[playerIndex];
+    const {slotIndex, reason, message} = playerAdditionSlot(slots, tournament.roles[role].maxPerPlayer, perk.id);
+    if (reason) {
+      feedback.textContent = message.replace('この選手', playerName(role, playerIndex));
       return feedback.textContent;
     }
     slots[slotIndex] = perk.id;
     slotControls[playerIndex][slotIndex].value = perk.id;
     clearUndo();
-    lastAddition = { role, perkId:perk.id, slots, playerIndex, slotIndex, button:undo };
+    lastAddition = {role, map:selectedMap(), perkId:perk.id, slots, playerIndex, slotIndex, button:undo};
     showUndoFor(perk, undo);
+    saveDraft();
     validateBuild();
     feedback.textContent = playerName(role, playerIndex) + ' に「' + perk.names.ja + '」を追加しました。';
+    if (additionPlayerIndex() >= 0) refreshAdditionCards(perk.id);
     return playerName(role, playerIndex) + ' に追加しました。';
   }
+
+  function copyDraftToOtherMap() {
+    const role = selectedRole();
+    const from = selectedMap();
+    const to = otherMap(from);
+    const source = draft(role, from);
+    const destination = draft(role, to);
+    destination.players = source.players.map(slots => [...slots]);
+    destination.playerNames = [...source.playerNames];
+    if (lastAddition?.role === role && lastAddition.map === to) clearUndo();
+    fields.namedItem('map').value = to;
+    saveDraft();
+    renderPlayerSlots();
+    render();
+    feedback.textContent = tournament.mapProfiles[to].label + '用の編集中の構成に複製しました。' +
+      (violations.hidden ? '' : ' コピー先のルールに合わない箇所を確認してください。');
+  }
+
+  copyMapBuild.addEventListener('click', () => {
+    const role = selectedRole();
+    const to = otherMap(selectedMap());
+    const destination = draft(role, to);
+    const hasCustomNames = destination.playerNames.some((name, index) => name && name !== defaultPlayerName(role, index));
+    if (!destination.players.some(slots => slots.some(Boolean)) && !hasCustomNames) {
+      copyDraftToOtherMap();
+      return;
+    }
+    document.getElementById('copy-map-description').textContent =
+      tournament.mapProfiles[to].label + '用の編集中の構成を置き換えます。';
+    copyMapDialog.showModal();
+  });
+
+  copyMapDialog.querySelector('form').addEventListener('submit', event => {
+    event.preventDefault();
+    copyMapDialog.close();
+    if (event.submitter?.value === 'copy') copyDraftToOtherMap();
+  });
+
+  clearDraft.addEventListener('click', () => {
+    const map = tournament.mapProfiles[selectedMap()].label;
+    const role = selectedRole() === 'survivor' ? 'サバイバー' : defaultPlayerName(selectedRole(), 0);
+    document.getElementById('clear-draft-description').textContent =
+      map + '用の' + role + '構成から、パーク、選手名、入力中の保存名を消去します。';
+    clearDraftDialog.showModal();
+  });
+
+  clearDraftDialog.querySelector('form').addEventListener('submit', event => {
+    event.preventDefault();
+    clearDraftDialog.close();
+    if (event.submitter?.value !== 'clear') return;
+    const current = draft();
+    current.beforeClear = draftContent(current);
+    Object.assign(current, emptyDraft(selectedRole()));
+    if (lastAdditionInCurrentDraft()) clearUndo();
+    saveDraft({keepUndo:true});
+    renderPlayerSlots();
+    render();
+    feedback.textContent = '編集中の構成を全消去しました。';
+    undoClearDraft.focus();
+  });
+
+  undoClearDraft.addEventListener('click', () => {
+    const current = draft();
+    if (!current.beforeClear) return;
+    const restored = current.beforeClear;
+    Object.assign(current, draftContent(restored), {players:restorePlayers(selectedRole(), restored.players)});
+    saveDraft();
+    renderPlayerSlots();
+    render();
+    feedback.textContent = '全消去した構成を復元しました。';
+    clearDraft.focus();
+  });
 
   copyBuild.addEventListener('click', async () => {
     const role = selectedRole();
     const map = tournament.mapProfiles[selectedMap()].label;
     const { used, issues } = validateBuild();
     if (!used) return;
-    const formatted = draft(role).map((slots, index) => {
+    const formatted = draft(role).players.map((slots, index) => {
       const names = slots.filter(Boolean).map(id => byPerkId.get(id)?.names.ja ?? id);
       return playerName(role, index) + '：' + (names.join(' ／ ') || 'なし');
     });
@@ -672,34 +1310,87 @@
   function readSavedBuilds() {
     const stored = JSON.parse(localStorage.getItem(storageKey) ?? '[]');
     if (!Array.isArray(stored)) throw new Error('Invalid saved builds');
-    return stored.filter(build =>
-      build && typeof build.id === 'string' && typeof build.name === 'string' &&
+    return stored;
+  }
+
+  function isSavedBuild(build) {
+    return build && typeof build.id === 'string' && build.id.length > 0 && typeof build.name === 'string' &&
+      (build.schemaVersion === undefined || build.schemaVersion === 2) &&
       typeof build.rulesVersion === 'string' &&
       Object.hasOwn(tournament.roles, build.role) && Object.hasOwn(tournament.mapProfiles, build.map) &&
       Array.isArray(build.players) &&
-      build.players.every(slots => Array.isArray(slots) && slots.every(id => typeof id === 'string'))
-    );
+      build.players.every(slots => Array.isArray(slots) && slots.every(id => typeof id === 'string'));
+  }
+
+  function savedBuildContext(record) {
+    const role = record.role === 'survivor' ? 'サバイバー' : defaultPlayerName(record.role, 0);
+    return '（' + role + '・' + tournament.mapProfiles[record.map].label + '）';
+  }
+
+  function savedBuildLabel(record) {
+    return record.name + savedBuildContext(record);
+  }
+
+  function updateSavedActions() {
+    for (const button of [loadButton, ...savedActions]) button.disabled = !savedBuilds.value;
   }
 
   function refreshSavedBuilds(selectedId = savedBuilds.value) {
     let records = [];
     try {
-      records = readSavedBuilds();
+      records = readSavedBuilds().filter(isSavedBuild);
     } catch {
       feedback.textContent = 'このブラウザで保存済みの構成を読み込めません。';
     }
-    const options = records.map(record => {
-      const label = playerName(record.role, 0).replace(/ 1$/, '');
-      const map = tournament.mapProfiles[record.map].label;
-      return new Option(record.name + '（' + label + '・' + map + '）', record.id);
-    });
+    const options = records.map(record => new Option(savedBuildLabel(record), record.id));
     savedBuilds.replaceChildren(new Option(options.length ? '構成を選ぶ' : '保存済みの構成なし', ''), ...options);
     savedBuilds.value = records.some(record => record.id === selectedId) ? selectedId : '';
     savedBuilds.disabled = !options.length;
-    loadButton.disabled = !savedBuilds.value;
+    updateSavedComparison(records);
+    updateSavedActions();
   }
 
-  savedBuilds.addEventListener('change', () => { loadButton.disabled = !savedBuilds.value; });
+  function newSavedId() {
+    return Array.from(crypto.getRandomValues(new Uint32Array(4)), value => value.toString(16).padStart(8, '0')).join('');
+  }
+
+  function versionSavedBuild(build, savedAt) {
+    return {
+      ...build,
+      schemaVersion: 2,
+      playerNames: build.players.map((_, index) => {
+        const name = build.playerNames?.[index];
+        return typeof name === 'string' && name.trim() ? name : defaultPlayerName(build.role, index);
+      }),
+      savedAt
+    };
+  }
+
+  function currentBuildContent() {
+    const role = selectedRole();
+    const players = draft(role).players.map(slots => [...slots]);
+    const playerNames = players.map((_, index) => playerName(role, index));
+    return {role, map:selectedMap(), rulesVersion:tournament.rulesVersion, players, playerNames};
+  }
+
+  function currentSavedBuild(id, name) {
+    return versionSavedBuild({id, name, ...currentBuildContent()}, new Date().toISOString());
+  }
+
+  function writeSavedBuilds(records, id, message) {
+    localStorage.setItem(storageKey, JSON.stringify(records));
+    refreshSavedBuilds(id);
+    feedback.textContent = message;
+  }
+
+  savedBuilds.addEventListener('change', updateSavedActions);
+  buildName.addEventListener('input', () => {
+    draft().saveName = buildName.value;
+    saveDraft();
+  });
+  window.addEventListener('storage', event => {
+    if (event.key === storageKey || event.key === null) refreshSavedBuilds();
+  });
 
   document.getElementById('save-form').addEventListener('submit', event => {
     event.preventDefault();
@@ -713,13 +1404,10 @@
       feedback.textContent = '保存するパークを選んでください。';
       return;
     }
-    const role = selectedRole();
     try {
-      const id = Array.from(crypto.getRandomValues(new Uint32Array(4)), value => value.toString(16).padStart(8, '0')).join('');
-      const record = {id, name, role, map: selectedMap(), rulesVersion: tournament.rulesVersion, players: draft(role)};
-      localStorage.setItem(storageKey, JSON.stringify([record, ...readSavedBuilds()]));
-      refreshSavedBuilds(record.id);
-      feedback.textContent = result.issues.length ? '要修正の構成を下書きとして保存しました。' : '構成を保存しました。';
+      const record = currentSavedBuild(newSavedId(), name);
+      writeSavedBuilds([record, ...readSavedBuilds()], record.id,
+        result.issues.length ? '要修正の構成を下書きとして保存しました。' : '構成を保存しました。');
     } catch {
       feedback.textContent = '構成を保存できませんでした。ブラウザの保存設定を確認してください。';
     }
@@ -728,27 +1416,835 @@
   document.getElementById('load-form').addEventListener('submit', event => {
     event.preventDefault();
     try {
-      const record = readSavedBuilds().find(build => build.id === savedBuilds.value);
+      const record = readSavedBuilds().find(build => isSavedBuild(build) && build.id === savedBuilds.value);
       if (!record) return;
-      const rules = tournament.roles[record.role];
-      const restored = Array.from({length:Math.max(rules.playerCount, record.players.length)}, (_, index) => {
-        const slots = record.players[index] ?? [];
-        return Array.from({length:Math.max(rules.maxPerPlayer, slots.length)}, (_, slot) => slots[slot] ?? '');
+      Object.assign(draft(record.role, record.map), {
+        players: restorePlayers(record.role, record.players),
+        playerNames: versionSavedBuild(record, record.savedAt).playerNames,
+        saveName: record.name
       });
-      drafts.set(record.role, restored);
-      clearUndo();
+      if (lastAddition?.role === record.role && lastAddition.map === record.map) clearUndo();
       fields.namedItem('role').value = record.role;
       fields.namedItem('map').value = record.map;
+      saveDraft();
       updateCategoryOptions(record.role);
       renderPlayerSlots();
       render();
-      buildName.value = record.name;
       const previous = record.rulesVersion !== tournament.rulesVersion ? '（保存時のルール版 ' + record.rulesVersion + '）' : '';
       feedback.textContent = '構成を読み込み、現在のルールで判定しました。' + previous;
     } catch {
       feedback.textContent = '構成を読み込めませんでした。';
     }
   });
+
+  function mutateSavedBuild(action, target, name, replacement, hasIssues) {
+    const records = readSavedBuilds();
+    const index = records.findIndex(build => isSavedBuild(build) && build.id === target.id);
+    if (index === -1 || JSON.stringify(records[index]) !== JSON.stringify(target)) {
+      refreshSavedBuilds();
+      feedback.textContent = '保存済みの構成が変更されました。対象を選び直してください。';
+      return;
+    }
+    const now = new Date().toISOString();
+    switch (action) {
+      case 'rename':
+        records[index] = versionSavedBuild({...target, name}, now);
+        writeSavedBuilds(records, target.id, '保存名を変更しました。');
+        break;
+      case 'overwrite':
+        records[index] = replacement;
+        writeSavedBuilds(records, target.id, hasIssues ? '要修正の構成を下書きとして上書きしました。' : '構成を上書き保存しました。');
+        break;
+      case 'duplicate': {
+        const id = newSavedId();
+        const copyName = target.name.slice(0, 45) + '（コピー）';
+        records.unshift(versionSavedBuild({...target, id, name:copyName}, now));
+        writeSavedBuilds(records, id, '保存済みの構成を複製しました。');
+        break;
+      }
+      case 'delete':
+        records.splice(index, 1);
+        writeSavedBuilds(records, '', '保存済みの構成を削除しました。');
+        savedBuilds.focus();
+        break;
+    }
+  }
+
+  for (const button of savedActions) {
+    button.addEventListener('click', () => {
+      try {
+        const action = button.dataset.savedAction;
+        const record = readSavedBuilds().find(build => isSavedBuild(build) && build.id === savedBuilds.value);
+        if (!record) return;
+        if (action === 'duplicate') {
+          mutateSavedBuild(action, record);
+          return;
+        }
+        const rename = action === 'rename';
+        let description = '「' + savedBuildLabel(record) + '」';
+        if (action === 'overwrite') {
+          const result = validateBuild();
+          if (!result.used) {
+            feedback.textContent = '保存するパークを選んでください。';
+            return;
+          }
+          const replacement = currentSavedBuild(record.id, record.name);
+          description += 'を、編集中の構成' + savedBuildContext(replacement) + 'で置き換えます。';
+          pendingSavedAction = {action, record, replacement, hasIssues:result.issues.length > 0};
+        } else {
+          description += rename ? 'の保存名を変更します。' : 'を削除します。';
+          pendingSavedAction = {action, record};
+        }
+        document.getElementById('saved-dialog-title').textContent = button.textContent;
+        document.getElementById('saved-dialog-description').textContent = description;
+        document.getElementById('saved-dialog-submit').textContent = rename ? '変更を保存' : button.textContent;
+        document.getElementById('saved-dialog-name-field').hidden = !rename;
+        savedDialogName.required = rename;
+        savedDialogName.value = rename ? record.name : '';
+        savedDialogName.setCustomValidity('');
+        savedDialog.showModal();
+        if (rename) savedDialogName.select();
+        else savedDialogCancel.focus();
+      } catch {
+        feedback.textContent = '保存済みの構成を操作できませんでした。';
+      }
+    });
+  }
+
+  savedDialogName.addEventListener('input', () => savedDialogName.setCustomValidity(''));
+  savedDialogCancel.addEventListener('click', () => savedDialog.close());
+  savedDialog.addEventListener('close', () => { pendingSavedAction = undefined; });
+  document.getElementById('saved-dialog-form').addEventListener('submit', event => {
+    event.preventDefault();
+    if (!pendingSavedAction) return;
+    const {action, record, replacement, hasIssues} = pendingSavedAction;
+    const name = savedDialogName.value.trim();
+    if (action === 'rename' && !name) {
+      savedDialogName.setCustomValidity('保存名を入力してください。');
+      savedDialogName.reportValidity();
+      return;
+    }
+    savedDialog.close();
+    try {
+      mutateSavedBuild(action, record, name, replacement, hasIssues);
+    } catch {
+      feedback.textContent = '保存済みの構成を更新できませんでした。';
+    }
+  });
+
+  const sharePrefix = '#build=';
+  const shareVersion = 1;
+  const shareUrlLimit = 2000;
+  const shareTokenLimit = 1900;
+  const copyShareUrl = document.getElementById('copy-share-url');
+  const shareFeedback = document.getElementById('share-feedback');
+  const shareFallback = document.getElementById('share-fallback');
+  const shareUrl = document.getElementById('share-url');
+  const sharedSection = document.getElementById('shared-build');
+  const sharedTitle = document.getElementById('shared-build-title');
+  const sharedSummary = document.getElementById('shared-summary');
+  const sharedVersion = document.getElementById('shared-version');
+  const sharedPlayers = document.getElementById('shared-players');
+  const sharedViolations = document.getElementById('shared-violations');
+  const copySharedBuild = document.getElementById('copy-shared-build');
+  const importSharedDialog = document.getElementById('import-shared-dialog');
+  const openShareDialog = document.getElementById('open-share-dialog');
+  const openShareUrl = document.getElementById('open-share-url');
+  const openShareFeedback = document.getElementById('open-share-feedback');
+  let sharedBuild;
+
+  function encodeShareBytes(bytes) {
+    return btoa(Array.from(bytes, byte => String.fromCharCode(byte)).join(''))
+      .replaceAll('+','-').replaceAll('/','_').replace(/=+$/,'');
+  }
+
+  function readSharePayload(payload) {
+    if (!payload || typeof payload !== 'object') throw new Error('共有データの形式が正しくありません。');
+    if (payload.version !== shareVersion) throw new Error('この共有リンクの形式には対応していません。');
+    if (payload.tournamentId !== tournament.tournamentId) throw new Error('別の大会の共有リンクです。');
+    const {role, map, rulesVersion, players, playerNames} = payload;
+    const validSlots = Array.isArray(players) && players.length > 0 && players.length <= 8 &&
+      players.every(slots => Array.isArray(slots) && slots.length <= 8 && slots.every(id =>
+        typeof id === 'string' && (id === '' || /^[a-zA-Z0-9_-]{1,40}$/.test(id)))) &&
+      players.some(slots => slots.some(Boolean));
+    const validNames = Array.isArray(playerNames) && playerNames.length === players?.length &&
+      playerNames.every(name => typeof name === 'string' && name.length <= playerNameMaxLength && !/[\u0000-\u001f\u007f]/.test(name));
+    if (typeof role !== 'string' || !Object.hasOwn(tournament.roles, role) ||
+      typeof map !== 'string' || !Object.hasOwn(tournament.mapProfiles, map) ||
+      typeof rulesVersion !== 'string' || !rulesVersion || rulesVersion.length > 64 || !validSlots || !validNames) {
+      throw new Error('共有する構成の内容か長さが、このページの対応範囲を外れています。');
+    }
+    return {role, map, rulesVersion, players, playerNames:playerNames.map(name => name.trim())};
+  }
+
+  function makeShareUrl(content, baseUrl) {
+    const payload = {version:shareVersion, tournamentId:tournament.tournamentId,
+      role:content.role, map:content.map, rulesVersion:content.rulesVersion, players:content.players, playerNames:content.playerNames};
+    readSharePayload(payload);
+    const token = encodeShareBytes(new TextEncoder().encode(JSON.stringify(payload)));
+    const url = new URL(baseUrl);
+    url.search = '';
+    url.hash = sharePrefix + token;
+    if (token.length > shareTokenLimit || url.href.length > shareUrlLimit) {
+      throw new Error('共有URLが長すぎます。選手名を短くしてからもう一度お試しください。');
+    }
+    return url.href;
+  }
+
+  function readShareHash(hash) {
+    const token = hash.slice(sharePrefix.length);
+    if (token.length > shareTokenLimit) throw new Error('共有URLが長すぎます。');
+    let payload;
+    try {
+      if (!/^[A-Za-z0-9_-]+$/.test(token)) throw new Error();
+      const binary = atob(token.replaceAll('-','+').replaceAll('_','/'));
+      const bytes = Uint8Array.from(binary, character => character.charCodeAt(0));
+      if (encodeShareBytes(bytes) !== token) throw new Error();
+      payload = JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes));
+    } catch {
+      throw new Error('共有リンクを読み込めません。URL全体がコピーされているか確認してください。');
+    }
+    return readSharePayload(payload);
+  }
+
+  function updateShareButton(used) {
+    copyShareUrl.disabled = !used;
+    shareFallback.hidden = true;
+    shareFeedback.textContent = '';
+  }
+
+  copyShareUrl.addEventListener('click', async () => {
+    let url;
+    try {
+      url = makeShareUrl(currentBuildContent(), location.href);
+    } catch (error) {
+      shareFeedback.textContent = error.message;
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      shareFeedback.textContent = '共有リンクをコピーしました。';
+    } catch {
+      shareUrl.value = url;
+      shareFallback.hidden = false;
+      shareUrl.focus();
+      shareUrl.select();
+      shareFeedback.textContent = '表示されたURLをコピーしてください。';
+    }
+  });
+
+  function pastedShareHash(value) {
+    const text = value.trim();
+    if (text.length > shareUrlLimit) throw new Error('共有URLが長すぎます。');
+    let url;
+    try { url = new URL(text); } catch { throw new Error('受け取った共有URLを最初から最後まで貼り付けてください。'); }
+    const localFile = location.protocol === 'file:' && url.protocol === 'file:' && url.pathname === location.pathname;
+    if ((!['https:', 'http:'].includes(url.protocol) && !localFile) || !url.hash.startsWith(sharePrefix)) {
+      throw new Error('パーク構成の共有URLを貼り付けてください。');
+    }
+    return url.hash;
+  }
+
+  document.getElementById('open-shared-build').addEventListener('click', () => {
+    openShareFeedback.textContent = '';
+    openShareUrl.removeAttribute('aria-invalid');
+    openShareDialog.showModal();
+  });
+  document.getElementById('cancel-open-share').addEventListener('click', () => openShareDialog.close());
+  openShareUrl.addEventListener('input', () => {
+    openShareFeedback.textContent = '';
+    openShareUrl.removeAttribute('aria-invalid');
+  });
+  document.getElementById('open-share-form').addEventListener('submit', event => {
+    event.preventDefault();
+    let hash;
+    let decoded;
+    try {
+      hash = pastedShareHash(openShareUrl.value);
+      decoded = readShareHash(hash);
+    } catch (error) {
+      openShareFeedback.textContent = error.message;
+      openShareUrl.setAttribute('aria-invalid','true');
+      openShareUrl.focus();
+      return;
+    }
+    const url = new URL(location.href);
+    url.hash = hash;
+    if (url.href !== location.href) history.pushState(history.state,'',url);
+    openShareDialog.close();
+    openShareUrl.value = '';
+    renderSharedBuild(decoded);
+    sharedTitle.focus();
+  });
+
+  function renderSharedBuild(decoded) {
+    sharedBuild = undefined;
+    resetSharedPng();
+    sharedSection.hidden = !location.hash.startsWith(sharePrefix);
+    importSharedDialog.close();
+    sharedVersion.hidden = sharedViolations.hidden = copySharedBuild.hidden = true;
+    compositionSignatures.delete(sharedPlayers);
+    sharedPlayers.replaceChildren();
+    sharedViolations.replaceChildren();
+    if (sharedSection.hidden) return;
+    try {
+      sharedBuild = decoded ?? readShareHash(location.hash);
+    } catch (error) {
+      sharedSummary.textContent = error.message;
+      return;
+    }
+    const {role, map, playerNames, rulesVersion} = sharedBuild;
+    const rows = restorePlayers(role, sharedBuild.players);
+    const verdict = evaluateComposition(rows, role, map, '', playerNames);
+    if (rulesVersion !== tournament.rulesVersion) {
+      sharedVersion.textContent = '作成時のルール版 ' + rulesVersion + ' ／ 現在は ' + tournament.rulesVersion +
+        '。現在のルールで再判定したため、作成時と判定が変わった可能性があります。';
+      sharedVersion.hidden = false;
+    }
+    renderCompositionTable({summary:sharedSummary, roster:sharedPlayers, violations:sharedViolations},
+      {...sharedBuild, players:rows}, verdict);
+    document.getElementById('shared-png-controls').hidden = false;
+    copySharedBuild.hidden = false;
+  }
+
+  function dismissSharedBuild() {
+    const url = new URL(location.href);
+    url.hash = '';
+    history.replaceState(history.state,'',url);
+    renderSharedBuild();
+    builderTitle.focus();
+  }
+
+  document.getElementById('dismiss-shared-build').addEventListener('click', dismissSharedBuild);
+
+  function importSharedBuild() {
+    if (!sharedBuild) return;
+    const {role, map, players: rows, playerNames} = sharedBuild;
+    const destination = draft(role,map);
+    Object.assign(destination, {players:restorePlayers(role,rows), playerNames:[...playerNames], saveName:''});
+    if (lastAddition?.role === role && lastAddition.map === map) clearUndo();
+    fields.namedItem('role').value = role;
+    fields.namedItem('map').value = map;
+    saveDraft();
+    updateCategoryOptions(role);
+    renderPlayerSlots();
+    render();
+    feedback.textContent = '共有構成を編集欄にコピーしました。';
+    if (destination.error) builderTitle.focus();
+    else dismissSharedBuild();
+  }
+
+  copySharedBuild.addEventListener('click', () => {
+    const {role, map} = sharedBuild;
+    const destination = draft(role,map);
+    if (!hasDraftContent(destination,role) && !destination.beforeClear) {
+      importSharedBuild();
+      return;
+    }
+    document.getElementById('import-shared-description').textContent =
+      '共有された構成で、編集中の構成' + savedBuildContext(sharedBuild) + 'を置き換えます。';
+    importSharedDialog.showModal();
+  });
+
+  importSharedDialog.querySelector('form').addEventListener('submit', event => {
+    event.preventDefault();
+    importSharedDialog.close();
+    if (event.submitter?.value === 'import') importSharedBuild();
+  });
+
+  const pngWidth = 1080;
+  const pngMargin = 40;
+  const pngGap = 16;
+  const pngSlotHeight = 140;
+  const pngFonts = '"Yu Gothic UI", Meiryo, system-ui, sans-serif';
+  const pngSegmenter = typeof Intl.Segmenter === 'function' ? new Intl.Segmenter() : null;
+  const pngColors = {paper:'#fbf2df', card:'#f5e9d0', navy:'#233745', text:'#24291d', border:'#beac8d', danger:'#812d25', green:'#36553b'};
+
+  function loadPngIcon(path) {
+    return new Promise(resolve => {
+      if (!path) { resolve(null); return; }
+      const image = new Image();
+      if (!path.startsWith('data:')) image.crossOrigin = 'anonymous';
+      const finish = result => {
+        clearTimeout(timer);
+        image.onload = image.onerror = null;
+        resolve(result);
+      };
+      const timer = setTimeout(() => { finish(null); image.removeAttribute('src'); }, 3500);
+      image.onload = () => finish(image.naturalWidth && image.naturalHeight ? image : null);
+      image.onerror = () => finish(null);
+      image.src = path;
+    });
+  }
+
+  function pngTextLayout(ctx, text, width, size, weight = 500) {
+    const font = `${weight} ${size}px ${pngFonts}`;
+    ctx.font = font;
+    const units = pngSegmenter ? Array.from(pngSegmenter.segment(text), part => part.segment) : Array.from(text);
+    const lines = [];
+    let line = '';
+    for (const unit of units) {
+      if (line && ctx.measureText(line + unit).width > width) {
+        lines.push(line.trimEnd());
+        line = unit.trimStart();
+      } else line += unit;
+    }
+    lines.push(line);
+    return {font,lines,lineHeight:Math.ceil(size * 1.3)};
+  }
+
+  function drawPngText(ctx, {font,lines,lineHeight}, x, y, color, align = 'left') {
+    ctx.font = font;
+    ctx.fillStyle = color;
+    ctx.textAlign = align;
+    ctx.textBaseline = 'top';
+    lines.forEach((line, index) => ctx.fillText(line,x,y + index * lineHeight));
+  }
+
+  function drawPngIcon(ctx, image, centerX, y) {
+    if (!image) return;
+    const size = 52;
+    ctx.fillStyle = pngColors.navy;
+    ctx.fillRect(centerX - size / 2,y,size,size);
+    const scale = size / Math.max(image.naturalWidth,image.naturalHeight);
+    const width = image.naturalWidth * scale;
+    const height = image.naturalHeight * scale;
+    ctx.drawImage(image,centerX - width / 2,y + (size - height) / 2,width,height);
+  }
+
+  async function makeCompositionPng(content) {
+    const {role,map,playerNames} = content;
+    const players = restorePlayers(role,content.players);
+    if (players.length > 8 || players.some(slots => slots.length > 8)) throw new Error('構成表に収まる枠数を超えています。');
+    const verdict = evaluateComposition(players,role,map,'',playerNames);
+    const invalid = new Set(verdict.issues.flatMap(issue => issue.items.map(item => `${item.playerIndex}:${item.slotIndex}`)));
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) throw new Error('このブラウザーで構成表を画像にできませんでした。');
+    const inside = pngWidth - pngMargin * 2;
+    const columns = Math.min(2,players.length);
+    const cardWidth = (inside - pngGap * (columns - 1)) / columns;
+    const slotWidth = (cardWidth - 32 - 6 * 3) / 4;
+    const title = pngTextLayout(ctx,tournament.name,inside,42,750);
+    const summary = pngTextLayout(ctx,savedBuildContext({role,map}) + '　合計 ' + verdict.used + ' / ' + verdict.maxTotal + '枠　' + compositionVerdictText(verdict),inside,26,700);
+    const warnings = verdict.issues.map(issue => pngTextLayout(ctx,'・' + issue.message,inside,21));
+    const footer = pngTextLayout(ctx,'ルール版 ' + tournament.rulesVersion,inside,18);
+    const slotLimit = tournament.roles[role].maxPerPlayer;
+    const cards = players.map((slots,index) => {
+      const name = pngTextLayout(ctx,labelPlayerName(role,index,playerNames[index] || defaultPlayerName(role,index)),cardWidth - 32,26,700);
+      const count = pngTextLayout(ctx,slots.filter(Boolean).length + ' / ' + slotLimit + '枠',cardWidth - 32,18);
+      const entries = slots.map((id, slotIndex) => {
+        const perk = byPerkId.get(id);
+        const label = id ? perk?.names.ja ?? id + '（辞書未登録）' : '空き枠';
+        return {id,label:pngTextLayout(ctx,label,slotWidth - 12,18,650),invalid:invalid.has(`${index}:${slotIndex}`)};
+      });
+      const rowHeights = [];
+      for (let i = 0; i < entries.length; i += 4) {
+        rowHeights.push(Math.max(pngSlotHeight,...entries.slice(i,i+4).map(({label})=>89 + label.lines.length * label.lineHeight)));
+      }
+      const slotTop = 24 + name.lines.length * name.lineHeight + count.lines.length * count.lineHeight;
+      return {name,count,entries,rowHeights,slotTop,height:slotTop + rowHeights.reduce((a,b)=>a+b+6,0) + 10};
+    });
+    const cardRowHeights = [];
+    for (let i = 0; i < cards.length; i += columns) cardRowHeights.push(Math.max(...cards.slice(i,i+columns).map(card => card.height)));
+    const summaryY = pngMargin + title.lines.length * title.lineHeight + 10;
+    const cardsY = summaryY + summary.lines.length * summary.lineHeight + 24;
+    const warningsY = cardsY + cardRowHeights.reduce((a,b)=>a+b+pngGap,0);
+    const footerY = warningsY + warnings.reduce((sum,line)=>sum + line.lines.length * line.lineHeight + 4,0) + 6;
+    const pngHeight = footerY + footer.lines.length * footer.lineHeight + 24;
+    if (pngHeight > 4096) throw new Error('構成表が画像の高さの上限を超えています。');
+
+    const ids = [...new Set(players.flat().filter(Boolean))];
+    const icons = new Map(await Promise.all(ids.map(async id => [id,await loadPngIcon(byPerkId.get(id)?.image?.path)])));
+    canvas.width = pngWidth;
+    canvas.height = pngHeight;
+    ctx.fillStyle = pngColors.paper;
+    ctx.fillRect(0,0,pngWidth,pngHeight);
+    ctx.fillStyle = pngColors.navy;
+    ctx.fillRect(0,0,pngWidth,summaryY - 8);
+    drawPngText(ctx,title,pngMargin,pngMargin - 6,pngColors.paper);
+    drawPngText(ctx,summary,pngMargin,summaryY,verdict.issues.length ? pngColors.danger : pngColors.green);
+
+    let rowY = cardsY;
+    for (const [row,height] of cardRowHeights.entries()) {
+      const group = cards.slice(row * columns,(row + 1) * columns);
+      group.forEach((card,column) => {
+        const x = pngMargin + column * (cardWidth + pngGap);
+        ctx.fillStyle = pngColors.card;
+        ctx.fillRect(x,rowY,cardWidth,height);
+        ctx.strokeStyle = pngColors.border;
+        ctx.strokeRect(x,rowY,cardWidth,height);
+        drawPngText(ctx,card.name,x + 16,rowY + 12,pngColors.text);
+        drawPngText(ctx,card.count,x + 16,rowY + 12 + card.name.lines.length * card.name.lineHeight,pngColors.green);
+        let slotY = rowY + card.slotTop;
+        card.rowHeights.forEach((slotHeight,slotRow) => {
+          card.entries.slice(slotRow * 4,(slotRow + 1) * 4).forEach((slot,column) => {
+            const slotX = x + 16 + column * (slotWidth + 6);
+            const center = slotX + slotWidth / 2;
+            const color = slot.invalid ? pngColors.danger : pngColors.text;
+            ctx.fillStyle = pngColors.paper;
+            ctx.fillRect(slotX,slotY,slotWidth,slotHeight);
+            ctx.strokeStyle = slot.invalid ? pngColors.danger : pngColors.border;
+            ctx.strokeRect(slotX,slotY,slotWidth,slotHeight);
+            drawPngText(ctx,pngTextLayout(ctx,String(slotRow * 4 + column + 1),24,14),slotX + 6,slotY + 4,color);
+            const icon = icons.get(slot.id);
+            drawPngIcon(ctx,icon,center,slotY + 22);
+            const labelY = icon ? slotY + 81 : slotY + (slotHeight - slot.label.lines.length * slot.label.lineHeight) / 2;
+            drawPngText(ctx,slot.label,center,labelY,color,'center');
+          });
+          slotY += slotHeight + 6;
+        });
+      });
+      rowY += height + pngGap;
+    }
+    let warningY = warningsY;
+    for (const warning of warnings) {
+      drawPngText(ctx,warning,pngMargin,warningY,pngColors.danger);
+      warningY += warning.lines.length * warning.lineHeight + 4;
+    }
+    drawPngText(ctx,footer,pngMargin,footerY,pngColors.green);
+    const blob = await new Promise(resolve => canvas.toBlob(resolve,'image/png'));
+    if (!blob) throw new Error('PNGを作成できませんでした。');
+    return {blob,missing:ids.filter(id => !icons.get(id)).length};
+  }
+
+  function pngExportControls(buttonId, linkId, statusId, getBuild) {
+    const button = document.getElementById(buttonId);
+    const link = document.getElementById(linkId);
+    const status = document.getElementById(statusId);
+    let active;
+    const reset = () => {
+      active = undefined;
+      if (link.hasAttribute('href')) URL.revokeObjectURL(link.href);
+      link.removeAttribute('href');
+      link.hidden = true;
+      status.textContent = '';
+    };
+    const update = used => { button.disabled = Boolean(active) || !used; };
+    const hasPerks = build => build?.players.some(slots => slots.some(Boolean));
+    button.addEventListener('click',async () => {
+      const build = getBuild();
+      if (!hasPerks(build) || active) return;
+      reset();
+      const job = {};
+      active = job;
+      update(true);
+      status.textContent = '構成表のPNGを作成中です。';
+      try {
+        const {blob,missing} = await makeCompositionPng(build);
+        if (active !== job) return;
+        link.href = URL.createObjectURL(blob);
+        link.download = tournament.tournamentId + '-perk-build-' + build.role + '-' + build.map + '.png';
+        link.hidden = false;
+        status.textContent = missing ? 'PNGを作成しました。画像を取得できないパークは名前で表示しています。' : 'PNGを作成しました。';
+        link.click();
+      } catch (error) {
+        if (active === job) status.textContent = error instanceof DOMException ? 'PNGを保存できませんでした。' : error.message;
+      } finally {
+        if (active === job) {
+          active = undefined;
+          update(hasPerks(getBuild()));
+        }
+      }
+    });
+    return {reset,update};
+  }
+
+  const currentPng = pngExportControls('save-composition-png','composition-png-link','composition-png-status',currentBuildContent);
+  const sharedPng = pngExportControls('save-shared-png','shared-png-link','shared-png-status',() => sharedBuild);
+
+  function updateCompositionPng(used) {
+    currentPng.update(used);
+  }
+
+  function resetSharedPng() {
+    sharedPng.reset();
+    sharedPng.update(true);
+    document.getElementById('shared-png-controls').hidden = true;
+  }
+
+  const moveDialog = document.getElementById('move-perk-dialog');
+  const moveTo = document.getElementById('move-perk-to');
+  const moveSubmit = document.getElementById('move-perk-submit');
+  const fixDialog = document.getElementById('fix-perk-dialog');
+  const fixSlot = document.getElementById('fix-perk-slot');
+  const compareDialog = document.getElementById('compare-saved-dialog');
+  const compareButton = document.getElementById('compare-saved');
+  const compareA = document.getElementById('comparison-a');
+  const compareB = document.getElementById('comparison-b');
+  const favoriteKey = 'frog-cup:perk-favorites:v1:' + tournament.tournamentId;
+  const favoriteFeedback = document.getElementById('favorite-feedback');
+  const moveButtons = new WeakMap();
+  let moveSource;
+  let moveTargets = [];
+  let fixTargets = [];
+  let comparableBuilds = [];
+
+  function perkName(id) {
+    return id ? byPerkId.get(id)?.names.ja ?? id : '空き枠';
+  }
+
+  function draftSlots() {
+    return draft().players.flatMap((slots, playerIndex) => slots.map((id, slotIndex) => ({id, playerIndex, slotIndex})));
+  }
+
+  function slotText({id, playerIndex, slotIndex}) {
+    return playerLabel(selectedRole(),playerIndex) + '・枠' + (slotIndex + 1) + '：' + perkName(id);
+  }
+
+  function slotEditor(label, control, playerIndex, slotIndex) {
+    const row = element('div','slot-edit-row');
+    const button = element('button','clear slot-tool','移動');
+    button.type = 'button';
+    button.addEventListener('click', () => openMoveDialog({id:control.value,playerIndex,slotIndex}));
+    moveButtons.set(control,button);
+    row.append(label,button);
+    return row;
+  }
+
+  function syncMoveButtons() {
+    for (const [playerIndex,controls] of slotControls.entries()) {
+      for (const [slotIndex,control] of controls.entries()) {
+        const button = moveButtons.get(control);
+        button.hidden = !control.value;
+        button.setAttribute('aria-label',slotText({id:control.value,playerIndex,slotIndex}) + 'を移動');
+      }
+    }
+  }
+
+  function openMoveDialog(source) {
+    moveSource = source;
+    moveTargets = draftSlots().filter(target => target.playerIndex !== source.playerIndex || target.slotIndex !== source.slotIndex);
+    document.getElementById('move-perk-from').textContent = slotText(source);
+    moveTo.replaceChildren(new Option('移動先を選ぶ',''), ...moveTargets.map((target,index) => new Option(slotText(target),String(index))));
+    describeMove();
+    moveDialog.showModal();
+    moveTo.focus();
+  }
+
+  function selectedMoveTarget() {
+    return moveTo.value === '' ? null : moveTargets[Number(moveTo.value)];
+  }
+
+  function describeMove() {
+    const target = selectedMoveTarget();
+    moveSubmit.disabled = !target;
+    moveSubmit.textContent = target?.id ? '入れ替える' : '移動する';
+    document.getElementById('move-perk-effect').textContent = target?.id ?
+      '移動先の「' + perkName(target.id) + '」は元の枠へ移ります。' : '';
+  }
+
+  function commitSlotEdit(destination, message) {
+    if (lastAdditionInCurrentDraft()) clearUndo();
+    saveDraft();
+    renderPlayerSlots();
+    render();
+    feedback.textContent = message;
+    slotControls[destination.playerIndex][destination.slotIndex].focus();
+  }
+
+  moveTo.addEventListener('change',describeMove);
+  document.getElementById('move-perk-form').addEventListener('submit', event => {
+    event.preventDefault();
+    const target = selectedMoveTarget();
+    if (!target) return;
+    const rows = draft().players;
+    rows[moveSource.playerIndex][moveSource.slotIndex] = target.id;
+    rows[target.playerIndex][target.slotIndex] = moveSource.id;
+    moveDialog.close();
+    commitSlotEdit(target,target.id ? 'パークを入れ替えました。' : 'パークを移動しました。');
+  });
+
+  function renderDraftWarnings(list, issues) {
+    list.replaceChildren(...issues.map(issue => {
+      const row = element('li');
+      const button = element('button','warning-target',issue.message);
+      button.type = 'button';
+      button.addEventListener('click', () => openFixDialog(issue));
+      row.append(button);
+      return row;
+    }));
+  }
+
+  function openFixDialog(issue) {
+    fixTargets = issue.items.length ? issue.items : draftSlots().filter(slot=>slot.id);
+    document.getElementById('fix-perk-issue').textContent = issue.message;
+    fixSlot.replaceChildren(...fixTargets.map((slot,index) => new Option(slotText(slot),String(index))));
+    fixDialog.showModal();
+    fixSlot.focus();
+  }
+
+  function selectedFixSlot() {
+    return fixTargets[Number(fixSlot.value)];
+  }
+
+  document.getElementById('jump-fix-perk').addEventListener('click', () => {
+    const slot = selectedFixSlot();
+    fixDialog.close();
+    slotControls[slot.playerIndex][slot.slotIndex].focus();
+  });
+  document.getElementById('remove-fix-perk').addEventListener('click', () => {
+    const slot = selectedFixSlot();
+    draft().players[slot.playerIndex][slot.slotIndex] = '';
+    fixDialog.close();
+    commitSlotEdit(slot,'「' + perkName(slot.id) + '」を外しました。');
+  });
+  document.getElementById('search-fix-perk').addEventListener('click', () => {
+    const slot = selectedFixSlot();
+    fixDialog.close();
+    fields.namedItem('query').value = '';
+    fields.namedItem('category').value = '';
+    fields.namedItem('availability').value = 'allowed';
+    fields.namedItem('favorites-only').checked = false;
+    additionPlayer.value = String(slot.playerIndex);
+    additionToggle.checked = false;
+    updateAdditionToggle();
+    render();
+    document.getElementById('results-title').focus();
+  });
+
+  for (const button of document.querySelectorAll('[data-close-tool]')) {
+    button.addEventListener('click', () => button.closest('dialog').close());
+  }
+
+  function readFavorites() {
+    const ids = JSON.parse(localStorage.getItem(favoriteKey) ?? '[]');
+    if (!Array.isArray(ids) || ids.some(id => typeof id !== 'string')) throw new Error('Invalid favorites');
+    return new Set(ids);
+  }
+
+  function loadFavorites() {
+    try { return readFavorites(); }
+    catch {
+      favoriteFeedback.textContent = 'お気に入りを読み込めませんでした。';
+      return new Set();
+    }
+  }
+
+  let favorites = loadFavorites();
+
+  function updateFavoriteButton(button, perk) {
+    const active = favorites.has(perk.id);
+    button.textContent = active ? '★ お気に入り登録済み' : '☆ お気に入りに登録';
+    button.setAttribute('aria-label',perk.names.ja + (active ? 'をお気に入りから解除' : 'をお気に入りに登録'));
+    button.setAttribute('aria-pressed',String(active));
+  }
+
+  function favoriteButton(perk) {
+    const button = element('button','clear favorite-button');
+    button.type = 'button';
+    updateFavoriteButton(button,perk);
+    button.addEventListener('click', () => {
+      try {
+        const next = readFavorites();
+        const remove = next.has(perk.id);
+        if (remove) next.delete(perk.id);
+        else next.add(perk.id);
+        localStorage.setItem(favoriteKey,JSON.stringify([...next]));
+        favorites = next;
+        favoriteFeedback.textContent = perk.names.ja + (remove ? 'をお気に入りから解除しました。' : 'をお気に入りに登録しました。');
+        if (fields.namedItem('favorites-only').checked && remove) {
+          render();
+          count.focus();
+        } else updateFavoriteButton(button,perk);
+      } catch {
+        favoriteFeedback.textContent = 'お気に入りを更新できませんでした。';
+      }
+    });
+    return button;
+  }
+
+  window.addEventListener('storage', event => {
+    if (event.key !== favoriteKey && event.key !== null) return;
+    favoriteFeedback.textContent = '';
+    favorites = loadFavorites();
+    render();
+  });
+
+  function updateSavedComparison(records) {
+    comparableBuilds = records;
+    compareButton.disabled = records.length < 2;
+    if (compareDialog.open) renderComparisonChoices();
+  }
+
+  function renderComparisonChoices() {
+    for (const select of [compareA,compareB]) {
+      const previous = select.value;
+      select.replaceChildren(new Option('構成を選ぶ',''),...comparableBuilds.map(build => new Option(savedBuildLabel(build),build.id)));
+      if (comparableBuilds.some(build => build.id === previous)) select.value = previous;
+    }
+    renderSavedComparison();
+  }
+
+  function comparisonTable(title, rows) {
+    const table = element('table','comparison-table');
+    table.append(element('caption','',title));
+    const head = table.createTHead().insertRow();
+    for (const label of ['項目','構成 A','構成 B']) {
+      const header = element('th','',label);
+      header.scope = 'col';
+      head.append(header);
+    }
+    const body = table.createTBody();
+    for (const [label,left,right,changed = left !== right] of rows) {
+      const row = body.insertRow();
+      const heading = element('th','',label + (changed ? '（差分）' : ''));
+      heading.scope = 'row';
+      row.append(heading,element('td',changed?'changed':'',left),element('td',changed?'changed':'',right));
+    }
+    return table;
+  }
+
+  function compareSlots(left,right) {
+    const rows = [];
+    const builds = [left,right];
+    for (let index=0; index<Math.max(left.players.length,right.players.length); index++) {
+      const names = builds.map(build => build.players[index] ? build.playerNames?.[index] || defaultPlayerName(build.role,index) : '—');
+      const slots = builds.map(build => build.players[index] ?? []);
+      rows.push([(index+1) + '人目の選手',...names]);
+      for (let position=0; position<Math.max(...slots.map(row=>row.length)); position++) {
+        const ids = slots.map(row=>row[position]);
+        rows.push([(index+1) + '人目・枠' + (position+1),...ids.map(id=>id === undefined ? '—' : perkName(id)),ids[0] !== ids[1]]);
+      }
+    }
+    return rows;
+  }
+
+  function renderSavedComparison() {
+    const left = comparableBuilds.find(build=>build.id === compareA.value);
+    const right = comparableBuilds.find(build=>build.id === compareB.value);
+    const status = document.getElementById('comparison-status');
+    const output = document.getElementById('comparison-output');
+    output.replaceChildren();
+    if (!left || !right || left.id === right.id) {
+      status.textContent = '比較する2つの保存構成を選んでください。';
+      return;
+    }
+    status.textContent = '';
+    const builds = [left,right];
+    const verdicts = builds.map(build => evaluateComposition(build.players,build.role,build.map,'',build.playerNames ?? []));
+    const categoryCounts = verdicts.map(result => new Map(result.categories.map(category => [category.id,
+      category.cap == null ? category.items.length + '個（総枠内）' : category.items.length + ' / ' + category.cap])));
+    const categories = [...new Set(categoryCounts.flatMap(counts=>[...counts.keys()]))];
+    output.append(comparisonTable('構成の概要',[
+      ['役割',...builds.map(build=>build.role === 'survivor' ? 'サバイバー' : defaultPlayerName(build.role,0))],
+      ['マップ区分',...builds.map(build=>tournament.mapProfiles[build.map].label)],
+      ['チーム合計',...verdicts.map(result=>result.used + ' / ' + result.maxTotal)],
+      ['現行ルール判定',...verdicts.map(compositionVerdictText)]
+    ]),comparisonTable('選手とパーク',compareSlots(left,right)));
+    if (categories.length) output.append(comparisonTable('カテゴリ使用数',categories.map(id=>[
+      tournament.categories[id],...categoryCounts.map(counts=>counts.get(id) ?? '—')
+    ])));
+  }
+
+  compareButton.addEventListener('click', () => {
+    if (comparableBuilds.length < 2) return;
+    renderComparisonChoices();
+    compareDialog.showModal();
+    compareA.focus();
+  });
+  compareA.addEventListener('change',renderSavedComparison);
+  compareB.addEventListener('change',renderSavedComparison);
 
 
   form.addEventListener('submit', event => event.preventDefault());
@@ -757,18 +2253,21 @@
       updateCategoryOptions(event.target.value);
       renderPlayerSlots();
     }
-    if (event.target.name === 'map') validateBuild();
+    if (event.target.name === 'addition-player') updateAdditionToggle();
+    if (event.target.name === 'map') renderPlayerSlots();
     render();
   });
   document.getElementById('clear').addEventListener('click', () => {
     fields.namedItem('query').value = '';
     fields.namedItem('category').value = '';
     fields.namedItem('availability').value = '';
+    fields.namedItem('favorites-only').checked = false;
+    additionPlayer.value = '';
+    updateAdditionToggle();
     render();
     fields.namedItem('query').focus();
   });
-  const initialRole = new URLSearchParams(location.search).get('role');
-  if (initialRole === 'survivor' || initialRole === 'killer') fields.namedItem('role').value = initialRole;
+  restoreDraftView(new URLSearchParams(location.search).get('role'));
   document.getElementById('rules').href =
     'https://soradbdkkp-lang.github.io/frog-good-guy-cup/perk-rules.html#perk-rules';
   document.getElementById('rules').textContent = '大会公式のパークルール';
@@ -780,6 +2279,8 @@
   renderPlayerSlots();
   refreshSavedBuilds();
   render();
+  renderSharedBuild();
+  window.addEventListener('hashchange', () => renderSharedBuild());
 </script>
 </body>
 </html>
