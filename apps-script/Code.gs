@@ -8,11 +8,12 @@ const FORMATS = {
 };
 const HEADERS = ['送信ID', '受付番号', '受付日時（UTC）', '区分', '応募形式', '連絡用Discord',
   '16時対応', '17時対応', 'クリップ提出', '共有URL', '注意事項同意', '選手情報（JSON）', '送信内容照合'];
+const EXTRA_HEADERS = ['連絡用X（Twitter）ID', 'チーム名'];
 const TAB = '応募一覧';
 const PLATFORMS = ['Steam', 'PlayStation 4', 'PlayStation 5', 'Nintendo Switch'];
 const ENTRY_START = Date.parse('2026-11-20T00:00:00+09:00');
-const ENTRY_END_EXCLUSIVE = Date.parse('2026-12-01T00:00:00+09:00');
-const ENTRY_PERIOD_LABEL = '2026年11月21日（土）～11月30日（月）23:59（日本時間）';
+const ENTRY_END_EXCLUSIVE = Date.parse('2026-12-13T00:00:00+09:00');
+const ENTRY_PERIOD_LABEL = '2026年11月21日（土）～12月12日（土）23:59（日本時間）';
 
 function doGet() {
   return ContentService.createTextOutput('Good Guy Cup');
@@ -123,16 +124,27 @@ function validate_(raw) {
       guardian: minor ? true : null
     };
   });
-  const clip = roles[0].startsWith('チャッキー') ? yesNo_(raw.clip, 'クリップ提出可否') : null;
+  const updated = raw.version === 2;
+  const club = raw.format === 'team' || raw.format === 'team4';
+  const clip = roles[0].startsWith('チャッキー') && !(updated && raw.clip == null)
+    ? yesNo_(raw.clip, 'クリップ提出可否') : null;
+  let twitter = '';
+  let teamName = '';
+  if (updated) {
+    twitter = requiredText_(raw.twitter, 16, '連絡用X（Twitter）ID').replace(/^@/, '');
+    if (!/^[a-zA-Z0-9_]{1,15}$/.test(twitter)) throw Error('連絡用X（Twitter）IDを確認してください。');
+    teamName = club ? requiredText_(raw.teamName, 80, 'チーム名') : '';
+  }
   if (clip && raw.clipConsent !== true) throw Error('提出クリップの選手紹介動画への利用同意が必要です。');
-  const url = clip && raw.url ? requiredText_(raw.url, 1000, '共有URL') : '';
+  const url = !updated && clip && raw.url ? requiredText_(raw.url, 1000, '共有URL') : '';
   if (url && !/^https?:\/\/[^\s/?#@]+(?:[/?#][^\s]*)?$/i.test(url)) throw Error('共有URLは http または https で入力してください。');
   return {
     format: raw.format,
-    discord: requiredText_(raw.discord, 100, '連絡用Discord'),
+    discord: updated ? '' : requiredText_(raw.discord, 100, '連絡用Discord'),
     early16: yesNo_(raw.early16, '16:00開始への対応可否'),
     early17: yesNo_(raw.early17, '17:00開始への対応可否'),
-    clip, url, players, clipConsent: clip ? true : null
+    clip, url, players, clipConsent: clip ? true : null,
+    ...(updated ? { twitter, teamName } : {})
   };
 }
 
@@ -167,9 +179,19 @@ function submitEntry_(raw) {
     const receipt = (raw.mode === 'test' ? 'TEST-' : 'GGC-') + Utilities.getUuid().toUpperCase();
     const row = [raw.id, receipt, new Date().toISOString(), raw.mode === 'test' ? '試験' : '本番',
       entry.format, entry.discord, entry.early16 ? '可' : '不可', entry.early17 ? '可' : '不可',
-      entry.clip === null ? '対象外' : entry.clip ? '可' : '不可', entry.url,
+      entry.clip === null ? (entry.twitter && entry.players[0].role.startsWith('チャッキー') ? '未回答' : '対象外')
+        : entry.clip ? '可' : '不可', entry.url,
       '参加条件確認・注意事項同意' + (entry.clipConsent ? '・クリップ利用同意' : ''),
       JSON.stringify(entry.players), digest];
+    if (entry.twitter) {
+      const headerRange = sheet.getRange(1, HEADERS.length + 1, 1, EXTRA_HEADERS.length);
+      const current = headerRange.getValues()[0];
+      if (current.every(value => value === '')) headerRange.setValues([EXTRA_HEADERS]);
+      else if (JSON.stringify(current) !== JSON.stringify(EXTRA_HEADERS)) {
+        throw Error('追加項目の見出しが一致しません。');
+      }
+      row.push('@' + entry.twitter, entry.teamName);
+    }
     const range = sheet.getRange(lastRow + 1, 1, 1, row.length);
     range.setNumberFormat('@');
     range.setValues([row.map(value => /^[=+\-@']/.test(value) ? "'" + value : value)]);

@@ -74,15 +74,17 @@ const formMarkup = form
   .replace(/<label class="field">応募形式[\s\S]+?<\/label>/, formatCards)
   .replace('<form id="application">', '<form id="application" hidden>');
 const applicationPeriod = `<aside class="notice" aria-label="応募期間">
-  <strong>応募期間　${ENTRY_PERIOD_LABEL}</strong>
-  <p>応募状況によっては、募集期間が前後する可能性があります。</p>
+  <p><strong>クリップの提出は必須ではありません。</strong></p>
+  <strong>応募期間を延長しました。締切は12月12日（土）23:59（日本時間）です。</strong>
+  <p>応募期間　${ENTRY_PERIOD_LABEL}</p>
+  <p>受付済みの応募はそのまま受理します。再応募は不要です。</p>
 </aside>`;
 const formPage = layout('応募フォーム | ふろぐ Good Guy Cup', `
   <header class="form-header"><h1>ふろぐ Good Guy Cup</h1><p>応募フォーム</p></header>
   <section id="entry">${applicationPeriod}${eligibility.replace('<h2>応募フォーム</h2>', '<h2>応募要項</h2>')}
   <p id="entry-state" class="notice" role="status">受付状況を確認しています。</p>
   ${formMarkup}<p id="message" role="status"></p>${completion}</section>
-  ${player}<script type="module" src="./entry.js"></script>`);
+  ${player}<script type="module" src="./entry.js?v=2"></script>`);
 
 const detailDefinitions = [
   ['game-rules', '大会ルール'],

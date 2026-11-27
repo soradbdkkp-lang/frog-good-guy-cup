@@ -179,7 +179,7 @@ details{margin-bottom:1rem}summary{cursor:pointer;font-weight:700;margin-bottom:
     <ol>
       <li>チャッキー担当を含む5人チームと4人チーム（チャッキー兼任）を同じ優先枠で選考します。</li>
       <li>次に、16:00・17:00それぞれの開始への対応可否を考慮します。</li>
-      <li>次に、チャッキー担当者本人のベストクリップの提出可否を考慮します。技術評価は行いません。</li>
+      <li>次に、チャッキー担当者本人のベストクリップの提出可否を考慮します。提出は任意で、クリップの内容による技術評価は行いません。</li>
       <li>同条件で定員を超える場合は抽選します。</li>
     </ol>
     <p>個人・サバイバー2人・サバイバー4人での応募は、運営の編成でチームが成立した場合に参加できます。</p>
@@ -201,8 +201,11 @@ details{margin-bottom:1rem}summary{cursor:pointer;font-weight:700;margin-bottom:
         </label>
         <fieldset id="details" hidden disabled>
           <legend>応募情報</legend>
-          <label class="field">連絡用Discordユーザー名（複数人応募は代表者）
-            <input id="discord" maxlength="100" required>
+          <label id="team-name-field" class="field" hidden>チーム名（必須）
+            <input id="team-name" maxlength="80" disabled required>
+          </label>
+          <label class="field">連絡用X（Twitter）ID（複数人応募は代表者）
+            <input id="twitter" maxlength="16" pattern="@?[A-Za-z0-9_]{1,15}" placeholder="@username" autocapitalize="none" spellcheck="false" required>
           </label>
           <div id="players"></div>
           <div class="grid">
@@ -214,16 +217,13 @@ details{margin-bottom:1rem}summary{cursor:pointer;font-weight:700;margin-bottom:
             </label>
           </div>
           <div id="clip-fields" hidden>
-            <p>提出していただいたクリップは、選手紹介動画に使用させていただく予定です。</p>
-            <label class="field">チャッキー担当者は、本人がチャッキーを使用したときのベストクリップを提出できますか
-              <select id="clip" disabled required><option value="">選択してください</option><option value="yes">提出できる</option><option value="no">提出できない</option></select>
-            </label>
-            <label id="url-field" class="field" hidden>クリップ共有URL（任意）
-              <input id="url" type="url" maxlength="1000" disabled>
+            <p>クリップの提出は任意です。提出されたクリップは、本大会の選手紹介動画にのみ使用します。</p>
+            <label class="field">チャッキー担当者は、本人がチャッキーを使用したときのベストクリップを提出できますか（任意）
+              <select id="clip" disabled><option value="">回答しない</option><option value="yes">提出できる</option><option value="no">提出できない</option></select>
             </label>
             <div id="clip-consent-field" hidden>
-              <p>ギガファイル便などの共有URL、または主催者への直接DMで提出できます。提出本数・期限・ファイル条件は別途案内します。</p>
-              <label class="check"><input id="clip-consent" type="checkbox" disabled required>提出するクリップを大会の選手紹介動画に使用することに同意します。</label>
+              <p>提出できる方は、応募後に<a href="https://x.com/sorafes_dbd">ふろぐCup公式X（@sorafes_dbd）</a>のDMへ、受付番号を添えてご連絡ください。</p>
+              <label class="check"><input id="clip-consent" type="checkbox" disabled required>提出するクリップを本大会の選手紹介動画にのみ使用することに同意します。</label>
             </div>
           </div>
           <p>入力情報は大会運営が選考、連絡、チーム編成、進行のために使用します。複数人での応募は、入力する選手全員に確認してください。</p>
@@ -268,8 +268,6 @@ let awaitingConfirmation = false;
 function updateClip() {
   const clip = get('clip');
   const enabled = !clip.disabled && clip.value === 'yes';
-  get('url-field').hidden = !enabled;
-  get('url').disabled = !enabled;
   get('clip-consent-field').hidden = !enabled;
   get('clip-consent').disabled = !enabled;
   if (!enabled) get('clip-consent').checked = false;
@@ -277,7 +275,11 @@ function updateClip() {
 get('clip').addEventListener('change', updateClip);
 
 get('format').addEventListener('change', () => {
-  const roles = formats[get('format').value] || [];
+  const format = get('format').value;
+  const roles = formats[format] || [];
+  const team = format === 'team' || format === 'team4';
+  get('team-name-field').hidden = !team;
+  get('team-name').disabled = !team;
   const players = get('players');
   players.replaceChildren();
   roles.forEach((role, index) => {
@@ -297,7 +299,6 @@ get('format').addEventListener('change', () => {
   get('clip-fields').hidden = !hasKiller;
   get('clip').disabled = !hasKiller;
   get('clip').value = '';
-  get('url').value = '';
   const details = get('details');
   details.hidden = roles.length === 0;
   details.disabled = details.hidden;
@@ -306,9 +307,10 @@ get('format').addEventListener('change', () => {
 
 function application() {
   return {
-    mode, format: get('format').value, discord: get('discord').value.trim(),
+    mode, version: 2, format: get('format').value, twitter: get('twitter').value.trim(),
+    teamName: get('team-name').disabled ? '' : get('team-name').value.trim(),
     early16: get('early16').value === 'yes', early17: get('early17').value === 'yes',
-    clip: get('clip').value === 'yes', url: get('url').disabled ? '' : get('url').value.trim(),
+    clip: get('clip').value ? get('clip').value === 'yes' : null,
     agree: get('agree').checked, eligible: get('eligible').checked,
     clipConsent: get('clip-consent').checked,
     players: Array.from(get('players').children, card => {

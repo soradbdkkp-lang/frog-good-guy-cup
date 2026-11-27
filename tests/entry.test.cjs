@@ -38,8 +38,11 @@ function runtime() {
               getRange(row, col, height, width) {
                 return {
                   setNumberFormat() {},
-                  setValues: values => { rows[row - 1] = Array.from(values[0]); },
-                  getValues: () => [rows[row - 1].slice(col - 1, col - 1 + width)],
+                  setValues: values => {
+                    const cells = rows[row - 1] ||= [];
+                    values[0].forEach((value, i) => { cells[col - 1 + i] = value; });
+                  },
+                  getValues: () => [Array.from({ length: width }, (_, i) => rows[row - 1]?.[col - 1 + i] ?? '')],
                   createTextFinder: value => ({ matchEntireCell: () => ({
                     findNext() {
                       const offset = rows.slice(row - 1, row - 1 + height).findIndex(cells => cells[col - 1] === value);
@@ -169,11 +172,34 @@ test('live submissions obey the Japan-time opening and closing boundaries', () =
   assert.ok(submit(live()).error);
   setTime('2026-11-20T00:00:00+09:00');
   assert.match(submit(live()).receipt, /^GGC-/);
-  setTime('2026-11-30T23:59:59.999+09:00');
+  setTime('2026-12-12T23:59:59.999+09:00');
   assert.match(submit(live()).receipt, /^GGC-/);
-  setTime('2026-12-01T00:00:00+09:00');
+  setTime('2026-12-13T00:00:00+09:00');
   assert.ok(submit(live()).error);
   assert.equal(tables.live.rows.length, 3);
+});
+
+test('updated entries preserve legacy rows and reuse receipts across retries', () => {
+  const { tables, submit } = runtime();
+  const older = entry('team', 5);
+  const oldReceipt = submit(older).receipt;
+  const oldRow = [...tables.test.rows[1]];
+  for (const [format, count] of [['team', 5], ['team4', 4]]) {
+    const data = { ...entry(format, count), version: 2, twitter: '@example_team',
+      teamName: 'テストチーム', clip: null, clipConsent: false };
+    assert.match(submit({ ...data, teamName: '' }).error, /チーム名/);
+    assert.match(submit({ ...data, twitter: 'invalid id' }).error, /Twitter/);
+    const result = submit(data);
+    assert.match(result.receipt, /^TEST-/);
+    assert.equal(submit(data).receipt, result.receipt);
+    assert.deepEqual(tables.test.rows.at(-1).slice(13), ["'@example_team", 'テストチーム']);
+    assert.equal(tables.test.rows.at(-1)[5], '');
+    assert.equal(tables.test.rows.at(-1)[8], '未回答');
+    assert.equal(tables.test.rows.at(-1)[9], '');
+  }
+  assert.equal(submit(older).receipt, oldReceipt);
+  assert.deepEqual(tables.test.rows[1], oldRow);
+  assert.deepEqual(tables.test.rows[0].slice(13), ['連絡用X（Twitter）ID', 'チーム名']);
 });
 
 test('browser script parses after Apps Script template substitution', () => {
@@ -194,8 +220,8 @@ test('built site links to the Worker, and form exposes six choices and four plat
   assert.equal(shareImage.readUInt32BE(16), 1200);
   assert.equal(shareImage.readUInt32BE(20), 630);
   for (const page of [website, form, files['dist/pages/entry-guide.html']]) {
-    assert.match(page, /2026年11月21日（土）～11月30日（月）23:59（日本時間）/);
-    assert.match(page, /応募状況によっては、募集期間が前後する可能性があります。/);
+    assert.match(page, /2026年11月21日（土）～12月12日（土）23:59（日本時間）/);
+    assert.match(page, /受付済みの応募はそのまま受理します。再応募は不要です。/);
   }
   assert.match(website, /href="http:\/\/127\.0\.0\.1:8787\/"/);
   assert.doesNotMatch(website, /<form/);
@@ -248,7 +274,7 @@ test('built site links to the Worker, and form exposes six choices and four plat
     assert.doesNotMatch(page, /個別禁止パーク|屋外では発電機系|吟遊詩人の鼓舞|地下室|最大2名までの重複|一覧にないパークは使用可/);
   }
   assert.match(form, /チャッキー担当者は、本人がチャッキーを使用したとき/);
-  assert.match(form, /提出していただいたクリップは、選手紹介動画に使用させていただく予定です。/);
+  assert.match(form, /提出されたクリップは、本大会の選手紹介動画にのみ使用します。/);
   assert.match(website, /aria-current="page">大会概要/);
   assert.match(files['dist/pages/ranking.html'], /aria-current="page">順位決定方法/);
   const cards = [...form.matchAll(/name="entry-format" value="([^"]+)"[^>]*>\s*<span>[^<]+<\/span>(<small>選考優先<\/small>)?/g)];
